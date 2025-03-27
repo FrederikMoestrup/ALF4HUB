@@ -1,0 +1,46 @@
+### A simple get request to the test endpoint. No need for login
+GET http://localhost:7070/api/auth/test/
+
+### Create a new user - this one will only get a USER role by default
+POST http://localhost:7070/api/auth/register/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+###
+POST http://localhost:7070/api/auth/login/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    //console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+###
+GET http://localhost:7070/api/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+###
+GET http://localhost:7070/api/protected/admin_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Add admin role to user
+POST http://localhost:7070/api/auth/user/addrole/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "admin"
+}
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+###

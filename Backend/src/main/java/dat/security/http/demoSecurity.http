@@ -1,0 +1,151 @@
+### A simple get request to the test endpoint. No need for login
+GET {{url}}/auth/test/
+
+### Create a new user - this one will only get a USER role by default
+POST {{url}}/auth/register/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+###
+POST {{url}}/auth/login/
+
+{
+    "username": "user",
+    "password": "test123"
+}
+
+> {%
+    client.global.set("jwt_token", response.body.token);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+###
+GET {{url}}/protected/user_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+###
+GET {{url}}/protected/admin_demo/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### Add admin role to user
+POST {{url}}/auth/user/addrole/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+    "role": "superman"
+}
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### UPDATE
+
+PUT  {{url}}/poem/1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "Summers's first soft snow",
+  "poem": "Summers's first soft snow, Blankets fields in quiet white, Footsteps lost below.",
+  "style": "Poetry Slam"
+}
+
+### GET request with a header
+GET {{url}}/poem/1
+Accept: application/json
+
+### DELETE
+DELETE {{url}}/poem/1/
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+### POST example
+POST {{url}}/poem/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "title": "Sunrise paints the sky",
+  "poem": "Sunrise paints the sky, Gentle waves kiss sandy shores, Day awakens slow.",
+  "style": "Haiku"
+}
+
+### POST example with multiple entries
+POST {{url}}/poems/
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+[
+  {
+    "title": "Sunrise paints the sky",
+    "poem": "Sunrise paints the sky, Gentle waves kiss sandy shores, Day awakens slow.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Whispers of the breeze",
+    "poem": "Whispers of the breeze, Autumn leaves dance on the ground, Silent moonrise glow.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Winter's first soft snow",
+    "poem": "Winter's first soft snow, Blankets fields in quiet white, Footsteps lost below.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Spring blossoms unfold",
+    "poem": "Spring blossoms unfold, Petals drift in morning light, Bees hum, day is bright.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Evening sky in red",
+    "poem": "Evening sky in red, Clouds float like soft cotton wool, Sun dips, shadows spread.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Morning dew sparkles",
+    "poem": "Morning dew sparkles, Grass glistens in soft sunlight, Day breaks, fresh and new.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Mountain peaks stand tall",
+    "poem": "Mountain peaks stand tall, Wrapped in mist and morning sun, Silence in the call.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Ocean waves crash loud",
+    "poem": "Ocean waves crash loud, Seagulls cry and salt air stings, Endless water shroud.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Autumn's golden hue",
+    "poem": "Autumn's golden hue, Leaves fall softly to the ground, Earth in warm embrace.",
+    "style": "Haiku"
+  },
+  {
+    "title": "Stars fill midnight sky",
+    "poem": "Stars fill midnight sky, Whispering tales of old light, Dreams take flight and fly.",
+    "style": "Haiku"
+  }
+]
+
+### Reset token
+GET {{url}}/auth/test/
+
+> {%
+    client.global.set("jwt_token", null);
+    console.log("JWT Token:", client.global.get("jwt_token"));
+%}
+
+### GET request with a header
+GET {{url}}/poems/
+Accept: application/json
+
+
