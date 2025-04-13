@@ -56,6 +56,40 @@ public class Team {
         this.teamAccounts = new ArrayList<>();
     }
 
+    public Team(TeamDTO teamDTO) {
+        if(teamDTO.getId()!= 0) {
+            this.id = teamDTO.getId();
+        }
+        this.teamName = teamDTO.getTeamName();
+        this.game = teamDTO.getGame();
+
+        if (teamDTO.getTeamCaptain() != null) {
+            this.teamCaptain = new User(teamDTO.getTeamCaptain());
+            this.teamCaptain.addTeam(this);
+        }
+
+        if (teamDTO.getTournament() != null) {
+            this.tournament = new Tournament(teamDTO.getTournament());
+            this.tournament.addTeam(this);
+        }
+
+        this.teamAccounts = new ArrayList<>();
+        if (teamDTO.getTeamAccounts() != null && !teamDTO.getTeamAccounts().isEmpty()) {
+            setTeamAccounts(teamDTO.getTeamAccounts().stream()
+                    .map(PlayerAccount::new)
+                    .toList());
+        }
+    }
+
+    public void setTeamAccounts(List<PlayerAccount> playerAccounts) {
+        if(playerAccounts != null) {
+            this.teamAccounts = playerAccounts;
+            for (PlayerAccount playerAccount : playerAccounts) {
+                playerAccount.addTeam(this);
+            }
+        }
+    }
+
     public void addPlayerAccount(PlayerAccount playerAccount) {
         if (playerAccount != null && !teamAccounts.contains(playerAccount)) {
             teamAccounts.add(playerAccount);

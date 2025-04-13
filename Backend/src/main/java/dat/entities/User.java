@@ -5,6 +5,7 @@ import dat.security.entities.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
+import dat.dtos.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -79,6 +81,31 @@ public class User implements Serializable, ISecurityUser {
         this.roles = roleEntityList;
     }
 
+    public User(UserDTO dto) {
+        this.username = dto.getUsername();
+        if (dto.getRoles() != null) {
+            this.roles = dto.getRoles().stream()
+                    .map(roleName -> new Role(roleName))
+                    .collect(Collectors.toSet());
+        }
+        if (dto.getPlayerAccounts() != null) {
+            setPlayerAccounts( dto.getPlayerAccounts().stream()
+                    .map(PlayerAccount::new)
+                    .collect(Collectors.toList()));
+        }
+        if (dto.getTournaments() != null) {
+            setTournaments(dto.getTournaments().stream()
+                    .map(Tournament::new)
+                    .collect(Collectors.toList()));
+        }
+        if (dto.getTeams() != null) {
+            setTeams(dto.getTeams().stream()
+                    .map(Team::new)
+                    .collect(Collectors.toList()));
+        }
+    }
+
+
     public void addRole(Role role) {
         if (role == null) {
             return;
@@ -106,7 +133,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void addPlayerAccount(PlayerAccount playerAccount) {
-        if (playerAccount != null) {
+        if (playerAccount != null && !playerAccounts.contains(playerAccount)) {
             this.playerAccounts.add(playerAccount);
             playerAccount.setUser(this);
         }
@@ -122,7 +149,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void addTournament(Tournament tournament) {
-        if (tournament != null) {
+        if (tournament != null && !tournaments.contains(tournament)) {
             this.tournaments.add(tournament);
             tournament.setHost(this);
         }
@@ -138,7 +165,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void addTeam(Team team) {
-        if (team != null) {
+        if (team != null && !teams.contains(team)) {
             this.teams.add(team);
             team.setTeamCaptain(this);
         }

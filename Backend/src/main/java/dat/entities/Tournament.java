@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -100,6 +101,36 @@ public class Tournament {
         this.host = host;
     }
 
+    public Tournament(TournamentDTO tournamentDTO) {
+        if(tournamentDTO.getId()!= 0) {
+            this.id = tournamentDTO.getId();
+        }
+        this.tournamentName = tournamentDTO.getTournamentName();
+        this.game = tournamentDTO.getGame();
+        this.tournamentSize = tournamentDTO.getTournamentSize();
+        this.teamSize = tournamentDTO.getTeamSize();
+        this.prizePool = tournamentDTO.getPrizePool();
+        this.rules = tournamentDTO.getRules();
+        this.entryRequirements = tournamentDTO.getEntryRequirements();
+        this.status = tournamentDTO.getStatus();
+        this.startDate = tournamentDTO.getStartDate();
+        this.startTime = tournamentDTO.getStartTime();
+        this.endDate = tournamentDTO.getEndDate();
+        this.endTime = tournamentDTO.getEndTime();
+
+        if (tournamentDTO.getHost() != null) {
+            this.host = new User(tournamentDTO.getHost());
+            this.host.addTournament(this);
+        }
+
+        this.teams = new ArrayList<>();
+        if(tournamentDTO.getTeams() != null){
+            setTeams(tournamentDTO.getTeams().stream()
+                    .map(Team::new)
+                    .collect(Collectors.toList()));
+        }
+    }
+
     public void setTeams(List<Team> teams) {
         if(teams != null) {
             this.teams = teams;
@@ -110,7 +141,7 @@ public class Tournament {
     }
 
     public void addTeam(Team team) {
-        if (team != null) {
+        if (team != null && !teams.contains(team)) {
             this.teams.add(team);
             team.setTournament(this);
         }

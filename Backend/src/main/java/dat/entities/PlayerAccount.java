@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor
@@ -44,12 +45,8 @@ public class PlayerAccount {
     private User user;
 
     @ManyToMany(mappedBy = "team_accounts", fetch = FetchType.LAZY)
-    private List<Team> teams = new ArrayList<>();
+    private List<Team> teams;
 
-    public PlayerAccount(String playAccountName, Game game) {
-        this.playAccountName = playAccountName;
-        this.game = game;
-    }
 
     public PlayerAccount(String playAccountName, boolean isActive, Game game, String rank, User user) {
         this.playAccountName = playAccountName;
@@ -57,6 +54,37 @@ public class PlayerAccount {
         this.game = game;
         this.rank = rank;
         this.user = user;
+        this.teams = new ArrayList<>();
+    }
+
+    public PlayerAccount(PlayerAccountDTO playerAccountDTO) {
+        if (playerAccountDTO.getId() != 0) {
+            this.id = playerAccountDTO.getId();
+        }
+        this.playAccountName = playerAccountDTO.getPlayAccountName();
+        this.isActive = playerAccountDTO.isActive();
+        this.game = playerAccountDTO.getGame();
+        this.rank = playerAccountDTO.getRank();
+
+        if (playerAccountDTO.getUser() != null) {
+            this.user = new User(playerAccountDTO.getUser());
+            this.user.addPlayerAccount(this);
+        }
+
+        if (playerAccountDTO.getTeams() != null) {
+            setTeam(playerAccountDTO.getTeams().stream()
+                    .map(Team::new)
+                    .collect(Collectors.toList()));
+        }
+    }
+
+    public void setTeam(List<Team> teams) {
+        if(teams != null) {
+            this.teams = teams;
+            for (Team team : teams) {
+                team.addPlayerAccount(this);
+            }
+        }
     }
 
     public void addTeam(Team team) {
