@@ -1,0 +1,104 @@
+package dat.entities;
+
+import dat.dtos.*;
+import dat.enums.Game;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.List;
+
+@Getter
+@NoArgsConstructor
+@Entity
+@Table(name = "tournament")
+public class Tournament {
+
+    //Attributes
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "tournament_id", nullable = false, unique = true)
+    private int id;
+
+    @Setter
+    @Column(name = "tournament_name", nullable = false)
+    private String tournamentName;
+
+    @Setter
+    @Column(name = "game", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Game game;
+
+    @Setter
+    @Column(name = "tournament_size", nullable = false)
+    private int tournamentSize;
+
+    @Setter
+    @Column(name = "team_size", nullable = false)
+    private int teamSize;
+
+    @Setter
+    @Column(name = "price_pool", nullable = false)
+    private double prizePool;
+
+    //The rest of the attributes should be changed to a different data type. String is just a placeholder. Use Enum, LocalDate, etc.
+    @Setter
+    @Column(name = "rules", nullable = false)
+    private String rules;
+
+    @Setter
+    @Column(name = "entry_requirements", nullable = false)
+    private String entryRequirements;
+
+    @Setter
+    @Column(name = "status", nullable = false)
+    private String status;
+
+    @Setter
+    @Column(name = "start_date", nullable = false)
+    private String startDate;
+
+    @Setter
+    @Column(name = "start_time", nullable = false)
+    private String startTime;
+
+    @Setter
+    @Column(name = "end_date", nullable = false)
+    private String endDate;
+
+    @Setter
+    @Column(name = "end_time", nullable = false)
+    private String endTime;
+
+
+
+    //Relations
+    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    private List<Team> teams;
+
+    @Setter
+    @ManyToOne
+    @JoinColumn(name = "host_id")
+    private User host;
+
+    public Tournament(String tournamentName, Game game) {
+        this.tournamentName = tournamentName;
+        this.game = game;
+    }
+
+    public void setTeams(List<Team> teams) {
+        if(teams != null) {
+            this.teams = teams;
+            for (Team team : teams) {
+                team.setTournament(this);
+            }
+        }
+    }
+
+    public void addTeam(Team team) {
+        if (team != null) {
+            this.teams.add(team);
+            team.setTournament(this);
+        }
+    }
+
+}

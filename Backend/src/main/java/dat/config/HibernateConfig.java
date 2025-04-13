@@ -1,10 +1,6 @@
 package dat.config;
 
 
-import dat.entities.Guide;
-import dat.entities.Trip;
-import dat.security.entities.Role;
-import dat.security.entities.User;
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;

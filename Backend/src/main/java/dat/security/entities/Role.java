@@ -1,5 +1,6 @@
 package dat.security.entities;
 
+import dat.entities.User;
 import jakarta.persistence.*;
 import lombok.ToString;
 
@@ -8,10 +9,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Purpose: To handle security in the API
- *  Author: Thomas Hartmann
- */
 @Entity
 @Table(name = "roles")
 @NamedQueries(@NamedQuery(name = "Role.deleteAllRows", query = "DELETE from Role"))
