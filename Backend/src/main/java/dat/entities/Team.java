@@ -49,12 +49,12 @@ public class Team {
     private List<PlayerAccount> teamAccounts = new ArrayList<>();
 
 
-    public Team(String teamName, Game game, Tournament tournament) {
+    public Team(String teamName, Game game, User teamCaptain) {
         this.teamName = teamName;
         this.game = game;
-        this.tournament = tournament;
+        this.teamCaptain = teamCaptain;
+        this.teamAccounts = new ArrayList<>();
     }
-
 
     public void addPlayerAccount(PlayerAccount playerAccount) {
         if (playerAccount != null && !teamAccounts.contains(playerAccount)) {

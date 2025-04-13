@@ -8,6 +8,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,15 +41,15 @@ public class User implements Serializable, ISecurityUser {
     private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<PlayerAccount> playerAccounts;
+    private List<PlayerAccount> playerAccounts = new ArrayList<>();
 
     //As a host
     @OneToMany(mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Tournament> tournaments;
+    private List<Tournament> tournaments = new ArrayList<>();;
 
     //As a team captain
     @OneToMany(mappedBy = "users", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Team> teams;
+    private List<Team> teams = new ArrayList<>();;
 
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {

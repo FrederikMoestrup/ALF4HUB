@@ -5,6 +5,7 @@ import dat.enums.Game;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -80,9 +81,23 @@ public class Tournament {
     @JoinColumn(name = "host_id")
     private User host;
 
-    public Tournament(String tournamentName, Game game) {
+    public Tournament(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
+                      String rules, String entryRequirements, String status,
+                      String startDate, String startTime, String endDate, String endTime, User host) {
         this.tournamentName = tournamentName;
         this.game = game;
+        this.tournamentSize = tournamentSize;
+        this.teamSize = teamSize;
+        this.prizePool = prizePool;
+        this.rules = rules;
+        this.entryRequirements = entryRequirements;
+        this.status = status;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endDate = endDate;
+        this.endTime = endTime;
+        this.teams = new ArrayList<>();
+        this.host = host;
     }
 
     public void setTeams(List<Team> teams) {

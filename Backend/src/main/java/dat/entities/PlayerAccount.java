@@ -46,11 +46,17 @@ public class PlayerAccount {
     @ManyToMany(mappedBy = "team_accounts", fetch = FetchType.LAZY)
     private List<Team> teams = new ArrayList<>();
 
-
-
     public PlayerAccount(String playAccountName, Game game) {
         this.playAccountName = playAccountName;
         this.game = game;
+    }
+
+    public PlayerAccount(String playAccountName, boolean isActive, Game game, String rank, User user) {
+        this.playAccountName = playAccountName;
+        this.isActive = isActive;
+        this.game = game;
+        this.rank = rank;
+        this.user = user;
     }
 
     public void addTeam(Team team) {
