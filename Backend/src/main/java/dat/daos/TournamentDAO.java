@@ -33,12 +33,9 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
     }
 
     @Override
-    public List<TournamentDTO> getAll() throws ApiException{
+    public List<TournamentDTO> getAll(){
         try (EntityManager em = emf.createEntityManager()) {
             List<Tournament> tournaments = em.createQuery("SELECT t FROM Tournament t", Tournament.class).getResultList();
-            if(tournaments.isEmpty()) {
-                throw new ApiException(404, "No tournaments found");
-            }
             return tournaments.stream().map(TournamentDTO::new).toList();
         }
     }

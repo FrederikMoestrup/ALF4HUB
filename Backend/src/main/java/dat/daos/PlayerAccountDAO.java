@@ -33,12 +33,9 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
     }
 
     @Override
-    public List<PlayerAccountDTO> getAll() throws ApiException {
+    public List<PlayerAccountDTO> getAll(){
         try (EntityManager em = emf.createEntityManager()) {
             List<PlayerAccount> playerAccounts = em.createQuery("SELECT p FROM PlayerAccount p", PlayerAccount.class).getResultList();
-            if (playerAccounts.isEmpty()) {
-                throw new ApiException(404, "No player accounts found");
-            }
             return playerAccounts.stream().map(PlayerAccountDTO::new).toList();
         }
     }

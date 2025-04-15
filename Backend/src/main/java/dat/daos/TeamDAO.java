@@ -33,12 +33,9 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
     }
 
     @Override
-    public List<TeamDTO> getAll() throws ApiException {
+    public List<TeamDTO> getAll(){
         try (EntityManager em = emf.createEntityManager()) {
             List<Team> teams = em.createQuery("SELECT t FROM Team t", Team.class).getResultList();
-            if (teams.isEmpty()) {
-                throw new ApiException(404, "No teams found");
-            }
             return teams.stream().map(TeamDTO::new).toList();
         }
     }

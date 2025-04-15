@@ -7,7 +7,7 @@ import dat.daos.TripDAO;
 import dat.dtos.*;
 import dat.enums.Category;
 import dat.exceptions.ApiException;
-import dat.services.ItemService;
+
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
