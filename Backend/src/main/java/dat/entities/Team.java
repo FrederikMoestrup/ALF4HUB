@@ -45,7 +45,6 @@ public class Team {
             joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "player_account_id", referencedColumnName = "player_account_id")
     )
-    @OrderColumn(name = "list_order")
     private List<PlayerAccount> teamAccounts = new ArrayList<>();
 
 
