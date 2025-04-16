@@ -44,7 +44,7 @@ public class PlayerAccount {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy = "team_accounts", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "teamAccounts", fetch = FetchType.LAZY)
     private List<Team> teams;
 
 

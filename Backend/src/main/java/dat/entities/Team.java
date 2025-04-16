@@ -41,9 +41,9 @@ public class Team {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "team_accounts", // Name of the join table
-            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "player_account_id", referencedColumnName = "id")
+            name = "team_accounts",
+            joinColumns = @JoinColumn(name = "team_id", referencedColumnName = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "player_account_id", referencedColumnName = "player_account_id")
     )
     @OrderColumn(name = "list_order")
     private List<PlayerAccount> teamAccounts = new ArrayList<>();

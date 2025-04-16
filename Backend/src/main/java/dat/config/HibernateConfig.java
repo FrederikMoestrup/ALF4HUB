@@ -1,5 +1,7 @@
 package dat.config;
 
+import dat.entities.*;
+import dat.security.entities.Role;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
@@ -39,8 +41,12 @@ public class HibernateConfig {
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-        //configuration.addAnnotatedClass(User.class);
-        //configuration.addAnnotatedClass(Role.class);
+        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Role.class);
+        configuration.addAnnotatedClass(PlayerAccount.class);
+        configuration.addAnnotatedClass(Team.class);
+        configuration.addAnnotatedClass(Tournament.class);
+
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String DBName) {
@@ -73,7 +79,7 @@ public class HibernateConfig {
     private static Properties setBaseProperties(Properties props) {
         props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        props.put("hibernate.hbm2ddl.auto", "update");
+        props.put("hibernate.hbm2ddl.auto", "create-drop");
         props.put("hibernate.current_session_context_class", "thread");
         props.put("hibernate.show_sql", "true");
         props.put("hibernate.format_sql", "true");
