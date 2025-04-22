@@ -38,6 +38,11 @@
             <version>${jbcrypt.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>9.0.1</version>
+        </dependency>
 
         <!-- SLF4J API -->
         <dependency>
