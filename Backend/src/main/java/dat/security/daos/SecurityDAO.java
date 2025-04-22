@@ -2,16 +2,15 @@ package dat.security.daos;
 
 
 import dat.security.entities.Role;
-import dat.security.entities.User;
+import dat.entities.User;
 import dat.security.exceptions.ApiException;
 import dat.security.exceptions.ValidationException;
-import dk.bugelhartmann.UserDTO;
+import dat.dtos.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -54,25 +53,21 @@ public class SecurityDAO implements ISecurityDAO {
             userEntity = new User(username, password);
             em.getTransaction().begin();
             Role userRole = em.find(Role.class, "user");
-            Role adminRole = em.find(Role.class, "admin");
-            if (username.equals("admin")) {
-                // Check if admin role exists, if not create it
-                if (adminRole == null) {
-                    adminRole = new Role("ADMIN");
-                    em.persist(adminRole);
-                }
-                userEntity.addRole(adminRole);
-            } else {
-                // Check if user role exists, if not create it
-                if (userRole == null) {
-                    userRole = new Role("user");
-                    em.persist(userRole);
-                }
-                userEntity.addRole(userRole);
+
+            // Check if user role exists, if not create it
+            if (userRole == null) {
+                userRole = new Role("user");
+                em.persist(userRole);
             }
+            userEntity.addRole(userRole);
 
             em.persist(userEntity);
             em.getTransaction().commit();
+
+            if(username.equals("admin")){
+                addRole(new UserDTO(username, password), "admin");
+            }
+
             return userEntity;
         }catch (Exception e){
             e.printStackTrace();
