@@ -5,7 +5,7 @@ import dat.security.entities.Role;
 import dat.entities.User;
 import dat.security.exceptions.ApiException;
 import dat.security.exceptions.ValidationException;
-import dk.bugelhartmann.UserDTO;
+import dat.dtos.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
