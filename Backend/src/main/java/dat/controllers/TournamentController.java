@@ -2,7 +2,9 @@ package dat.controllers;
 
 import dat.config.HibernateConfig;
 import dat.daos.TournamentDAO;
+import dat.dtos.BasicTournamentDTO;
 import dat.dtos.TournamentDTO;
+import dat.dtos.UserDTO;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
@@ -48,6 +50,7 @@ public class TournamentController {
         ctx.res().setStatus(201);
         ctx.json(createdTournamentDTO, TournamentDTO.class);
     }
+
 
     public void update(Context ctx) throws ApiException {
         try {
