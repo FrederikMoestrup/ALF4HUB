@@ -2,9 +2,7 @@ package dat.controllers;
 
 import dat.config.HibernateConfig;
 import dat.daos.TournamentDAO;
-import dat.dtos.BasicTournamentDTO;
 import dat.dtos.TournamentDTO;
-import dat.dtos.UserDTO;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;

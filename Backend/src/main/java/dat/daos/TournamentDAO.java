@@ -1,10 +1,7 @@
 package dat.daos;
 
-import dat.dtos.BasicTournamentDTO;
 import dat.dtos.TournamentDTO;
-import dat.dtos.UserDTO;
 import dat.entities.Tournament;
-import dat.entities.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import dat.exceptions.ApiException;
@@ -48,22 +45,6 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Tournament tournament = new Tournament(tournamentDTO);
-            em.persist(tournament);
-            em.getTransaction().commit();
-            return new TournamentDTO(tournament);
-        }
-    }
-
-    public TournamentDTO createBasic(BasicTournamentDTO dto, UserDTO hostDTO) throws ApiException {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            Tournament tournament = new Tournament();
-            tournament.setTournamentName(dto.getTournamentName());
-            tournament.setStartDate(dto.getStartDate());
-            tournament.setEndDate(dto.getEndDate());
-            tournament.setStatus("Upcoming");
-            tournament.setHost(new User(hostDTO));
-
             em.persist(tournament);
             em.getTransaction().commit();
             return new TournamentDTO(tournament);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Create Tournament</title>
@@ -32,6 +32,11 @@
             <li>Tournament 4</li>
         </ul>
     </aside>
+
+    <div th:if="${message != null}" class="error-message">
+        <p th:text="${message}"></p>
+    </div>
+
 </div>
 
 <footer class="infoFooter">
