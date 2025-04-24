@@ -13,10 +13,10 @@ public class BlogRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            get("/", blogController::getAll, Role.USER); // This could be admin depending on frontend layout
-            get("/{id}",blogController::getById, Role.USER);
-            get("/preview", blogController::getAllPreview, Role.USER); // This could be admin depending on frontend layout
-            post("/", blogController::create, Role.USER);
+            get("/", blogController::getAll, Role.ANYONE); // This could be admin depending on frontend layout
+            get("/preview", blogController::getAllPreview, Role.ANYONE); // This could be admin depending on frontend layout
+            get("/{id}",blogController::getById, Role.ANYONE);
+            post("/", blogController::create, Role.ANYONE);
         };
     }
 }
