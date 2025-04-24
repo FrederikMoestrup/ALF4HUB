@@ -3,6 +3,7 @@ package dat.daos;
 import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
 import dat.enums.BlogPostStatus;
+import dat.exceptions.ApiException;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -75,8 +76,25 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
     }
 
     @Override
-    public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) {
-        return null;
+    public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            BlogPost blogPost = em.find(BlogPost.class, id);
+            if (blogPost == null) {
+                throw new ApiException(404, "Blogpost med ID " + id + " blev ikke fundet.");
+            }
+
+            blogPost.setTitle(blogPostDTO.getTitle());
+            blogPost.setContent(blogPostDTO.getContent());
+
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(blogPost);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException(500,"Noget gik galt under opdateringen. Prøv igen");
+        }
     }
 
     @Override
@@ -84,3 +102,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         return null;
     }
 }
+
+
+
+
