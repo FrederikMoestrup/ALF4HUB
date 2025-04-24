@@ -20,6 +20,7 @@ public class TournamentDTO {
     private int teamSize;
     private double prizePool;
     private String rules;
+    private String requiredRank;
     private String entryRequirements;
     private String status;
     private String startDate;
@@ -30,7 +31,7 @@ public class TournamentDTO {
     private UserDTO host;
 
     public TournamentDTO(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
-                         String rules, String entryRequirements, String status,
+                         String rules,String requiredRank, String entryRequirements, String status,
                          String startDate, String startTime, String endDate, String endTime, UserDTO host) {
         this.tournamentName = tournamentName;
         this.game = game;
@@ -38,6 +39,7 @@ public class TournamentDTO {
         this.teamSize = teamSize;
         this.prizePool = prizePool;
         this.rules = rules;
+        this.requiredRank = requiredRank;
         this.entryRequirements = entryRequirements;
         this.status = status;
         this.startDate = startDate;
@@ -56,6 +58,7 @@ public class TournamentDTO {
         this.teamSize = tournament.getTeamSize();
         this.prizePool = tournament.getPrizePool();
         this.rules = tournament.getRules();
+        this.requiredRank = tournament.getRequiredRank();
         this.entryRequirements = tournament.getEntryRequirements();
         this.status = tournament.getStatus();
         this.startDate = tournament.getStartDate();

@@ -71,6 +71,9 @@ public class Tournament {
     @Column(name = "end_time", nullable = false)
     private String endTime;
 
+    @Setter
+    @Column(name = "required_rank", nullable = false)
+    private String requiredRank;
 
 
     //Relations
@@ -83,7 +86,7 @@ public class Tournament {
     private User host;
 
     public Tournament(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
-                      String rules, String entryRequirements, String status,
+                      String rules,String requiredRank, String entryRequirements, String status,
                       String startDate, String startTime, String endDate, String endTime, User host) {
         this.tournamentName = tournamentName;
         this.game = game;
@@ -91,6 +94,7 @@ public class Tournament {
         this.teamSize = teamSize;
         this.prizePool = prizePool;
         this.rules = rules;
+        this.requiredRank = requiredRank;
         this.entryRequirements = entryRequirements;
         this.status = status;
         this.startDate = startDate;
@@ -111,6 +115,7 @@ public class Tournament {
         this.teamSize = tournamentDTO.getTeamSize();
         this.prizePool = tournamentDTO.getPrizePool();
         this.rules = tournamentDTO.getRules();
+        this.requiredRank = tournamentDTO.getRequiredRank();
         this.entryRequirements = tournamentDTO.getEntryRequirements();
         this.status = tournamentDTO.getStatus();
         this.startDate = tournamentDTO.getStartDate();
@@ -144,6 +149,24 @@ public class Tournament {
         if (team != null && !teams.contains(team)) {
             this.teams.add(team);
             team.setTournament(this);
+        }
+    }
+
+    public void validatePlayerForTournament(String rank, Team team) {
+        if (rank == null || rank.isEmpty()) {
+            throw new IllegalArgumentException("Rank is required");
+        }
+
+        this.requiredRank = rank;
+
+        List<PlayerAccount> validPlayers = team.getTeamAccounts().stream()
+                .filter(PlayerAccount::isActive)
+                .filter(playerAccount -> playerAccount.getRank().equals(this.requiredRank))
+                .filter(playerAccount -> playerAccount.getGame().equals(this.game))
+                .collect(Collectors.toList());
+
+        if (validPlayers.isEmpty()) {
+             throw new IllegalArgumentException("No players meet the required rank and game for the tournament");
         }
     }
 
