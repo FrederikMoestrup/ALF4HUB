@@ -1,4 +1,4 @@
-package steps;
+package US3.steps;
 
 import dat.config.HibernateConfig;
 import dat.daos.BlogPostDAO;
@@ -23,7 +23,7 @@ public class BlogPostSteps {
     private final BlogPostDAO blogPostDAO;
     private BlogPostDTO blogPostDTO;
     private List<BlogPostDTO> blogPosts;
-    private List<BlogPostDTO> blogPostSummaries;
+    private List<BlogPostDTO> blogPostWithOnlyContentPreview;
 
     public BlogPostSteps() {
         blogPostDAO = BlogPostDAO.getInstance(emf);
@@ -138,16 +138,16 @@ public class BlogPostSteps {
 
     @When("I retrieve all blog posts with only preview of content")
     public void iRetrieveAllBlogPostsWithOnlyPreviewOfContent() {
-        blogPostSummaries = blogPostDAO.getAllWithOnlyContentPreview();
+        blogPostWithOnlyContentPreview = blogPostDAO.getAllWithOnlyContentPreview();
     }
 
     @Then("I should see a list of all blog posts with only a preview of their content")
     public void iShouldSeeAListOfAllBlogPostsWithOnlyAPreviewOfTheirContent() {
-        assertThat(blogPostSummaries, is(notNullValue()));
-        assertThat(blogPostSummaries.size(), is(3));
-        assertThat(blogPostSummaries.get(0).getContent(), is("This is the content of my first blog post as User 2."));
-        assertThat(blogPostSummaries.get(1).getContent(), is("This is the content of my second blog post as User 2."));
-        assertThat(blogPostSummaries.get(2).getContent(), is("This is the content of my first blog post as User 3. " +
+        assertThat(blogPostWithOnlyContentPreview, is(notNullValue()));
+        assertThat(blogPostWithOnlyContentPreview.size(), is(3));
+        assertThat(blogPostWithOnlyContentPreview.get(0).getContent(), is("This is the content of my first blog post as User 2."));
+        assertThat(blogPostWithOnlyContentPreview.get(1).getContent(), is("This is the content of my second blog post as User 2."));
+        assertThat(blogPostWithOnlyContentPreview.get(2).getContent(), is("This is the content of my first blog post as User 3. " +
                 "In today’s fast-paced digital world, having a space to share your thoughts, ideas, and stories is"));
     }
 }
