@@ -46,7 +46,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
 
     public List<BlogPostDTO> getAllWithOnlyContentPreview() {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<BlogPostDTO> blogPostDTOs = em.createNamedQuery("BlogPost.findAllSummariesWithPreview", BlogPostDTO.class);
+            TypedQuery<BlogPostDTO> blogPostDTOs = em.createNamedQuery("BlogPost.findAllWithOnlyContentPreview", BlogPostDTO.class);
 
             return blogPostDTOs.getResultStream()
                     .toList();
