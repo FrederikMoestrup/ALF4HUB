@@ -1,6 +1,7 @@
-package dat.daos;
+package US3.dat.daos;
 
 import dat.config.HibernateConfig;
+import dat.daos.BlogPostDAO;
 import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
 import dat.enums.BlogPostStatus;
