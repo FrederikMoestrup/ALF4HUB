@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
                 query = "SELECT bp FROM BlogPost bp"
         ),
         @NamedQuery(
-                name = "BlogPost.findAllSummariesWithPreview",
+                name = "BlogPost.findAllWithOnlyContentPreview",
                 query = "SELECT new dat.dtos.BlogPostDTO(bp.id, bp.userId, bp.title, SUBSTRING(bp.content, 1, 150), bp.createdAt, bp.updatedAt, bp.status) FROM BlogPost bp"
         )
 })
