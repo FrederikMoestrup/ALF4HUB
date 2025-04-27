@@ -28,7 +28,7 @@ const TeamPage = () => {
       setTeam(mockTeam);
       setLoading(false);
       
-      // For demo purposes, let's randomly set user roles
+      // For demo purposes
       const roles = ['visitor', 'member', 'captain'];
       const randomRole = roles[Math.floor(Math.random() * roles.length)];
       setUserRole(randomRole);

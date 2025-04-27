@@ -33,7 +33,7 @@ const TournamentPage = () => {
       setTeams(mockTournament.teams);
       setLoading(false);
       
-      // For demo purposes, let's set some random state
+      // For demo purposes.
       setHasTeam(Math.random() > 0.5);
       setIsInTournament(Math.random() > 0.5);
     }, 500);
