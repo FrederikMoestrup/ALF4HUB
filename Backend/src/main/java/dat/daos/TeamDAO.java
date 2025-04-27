@@ -1,6 +1,8 @@
 package dat.daos;
 
+import dat.dtos.PlayerAccountDTO;
 import dat.dtos.TeamDTO;
+import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
@@ -79,6 +81,26 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
 
             em.remove(team);
             em.getTransaction().commit();
+            return new TeamDTO(team);
+        }
+    }
+    public TeamDTO invitePlayer(Integer teamId, PlayerAccountDTO playerDTO) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            Team team = em.find(Team.class, teamId);
+            if (team == null) {
+                throw new ApiException(404, "Team not found");
+            }
+
+            PlayerAccount existingPlayer = em.find(PlayerAccount.class, playerDTO.getId());
+            if (existingPlayer == null) {
+                throw new ApiException(404, "Player not found");
+            }
+
+            team.addPlayerAccount(existingPlayer);
+            em.getTransaction().commit();
+
             return new TeamDTO(team);
         }
     }
