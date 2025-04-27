@@ -4,4 +4,4 @@ Patrick har lavet:
 Oliver har lavet:
 Michella har lavet:
 Sandra har lavet:
-Ferdinand har lavet: Figma mock-up
+Ferdinand har lavet: Figma mock-up 
