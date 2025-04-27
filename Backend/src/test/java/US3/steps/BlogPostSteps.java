@@ -12,11 +12,14 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class BlogPostSteps {
     private final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
@@ -24,6 +27,7 @@ public class BlogPostSteps {
     private BlogPostDTO blogPostDTO;
     private List<BlogPostDTO> blogPosts;
     private List<BlogPostDTO> blogPostWithOnlyContentPreview;
+    private String confirmationMessage;
 
     public BlogPostSteps() {
         blogPostDAO = BlogPostDAO.getInstance(emf);
@@ -110,14 +114,14 @@ public class BlogPostSteps {
         blogPostDTO.setTitle("My First Blog Post By User 3");
         blogPostDTO.setContent(
                 "This is the content of my first blog post as User 3. " +
-                "In today’s fast-paced digital world, " +
-                "having a space to share your thoughts, ideas, " +
-                "and stories is more important than ever. " +
-                "Blogging allows individuals to express themselves, " +
-                "connect with others, and build an audience around topics they care about. " +
-                "Whether you're sharing personal experiences, professional insights, " +
-                "or creative writing, a well-crafted blog post can inform, inspire, " +
-                "and entertain readers around the world");
+                        "In today’s fast-paced digital world, " +
+                        "having a space to share your thoughts, ideas, " +
+                        "and stories is more important than ever. " +
+                        "Blogging allows individuals to express themselves, " +
+                        "connect with others, and build an audience around topics they care about. " +
+                        "Whether you're sharing personal experiences, professional insights, " +
+                        "or creative writing, a well-crafted blog post can inform, inspire, " +
+                        "and entertain readers around the world");
         blogPostDTO.setStatus(BlogPostStatus.READY);
         blogPostDAO.create(blogPostDTO);
     }
@@ -150,4 +154,51 @@ public class BlogPostSteps {
         assertThat(blogPostWithOnlyContentPreview.get(2).getContent(), is("This is the content of my first blog post as User 3. " +
                 "In today’s fast-paced digital world, having a space to share your thoughts, ideas, and stories is"));
     }
+    @Given("the user is on their blog section and selects an existing blog post")
+    public void theUserSelectsAnExistingBlogPost() {
+        blogPostDTO = new BlogPostDTO();
+        blogPostDTO.setUserId(1L);
+        blogPostDTO.setTitle("New Title");
+        blogPostDTO.setContent("New content of the blog post.");
+        blogPostDTO.setStatus(BlogPostStatus.READY);
+        blogPostDTO = blogPostDAO.create(blogPostDTO);
+    }
+
+    @And("clicks the edit button")
+    public void clicksTheEditButton() {
+
+    }
+
+    @When("the user edits the title and content of the blog post and clicks Save")
+    public void userEditsTitleAndContentAndClicksSave() {
+        blogPostDTO.setTitle("Updated Title");
+        blogPostDTO.setContent("Updated content of the blog post.");
+        try {
+            blogPostDTO = blogPostDAO.update(blogPostDTO.getId(), blogPostDTO);
+            confirmationMessage = "Blogpostet er opdateret succesfuldt.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            confirmationMessage = "Noget gik galt under opdateringen. Prøv igen";
+        }
+    }
+
+    @Then("the changes are successfully saved")
+    public void theChangesAreSuccessfullySaved() {
+        BlogPostDTO updatedPost = blogPostDAO.getById(blogPostDTO.getId());
+        assertThat(updatedPost.getTitle(), is("Updated Title"));
+        assertThat(updatedPost.getContent(), is("Updated content of the blog post."));
+    }
+
+    @And("the user receives a confirmation message: {string}")
+    public void theUserReceivesAConfirmationMessage(String expectedMessage) {
+        assertEquals(expectedMessage, confirmationMessage);
+    }
+
+    @And("the timestamp of the last edit is updated and shown to the user")
+    public void theTimestampOfLastEditIsUpdated() {
+        BlogPostDTO updatedPost = blogPostDAO.getById(blogPostDTO.getId());
+        assertThat(updatedPost.getUpdatedAt(), is(notNullValue()));
+        System.out.println("Last edited at: " + updatedPost.getUpdatedAt());
+    }
 }
+
