@@ -15,7 +15,6 @@ const Navbar = ({ isLoggedIn, userTeam }) => {
         <Link to="/">Home</Link>
         <Link to="/teams">Teams</Link>
         <Link to="/tournaments">Tournaments</Link>
-        <Link to="/blog">Blog</Link>
         <Link to="/test">Test Features</Link>
       </div>
       <div className="auth-links">

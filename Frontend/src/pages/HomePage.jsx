@@ -29,10 +29,6 @@ const HomePage = () => {
 
       <div className="tournament-card">
         <div className="tournament-promo">
-          <div className="tournament-screenshot">
-            <h3>Screenshot from older tournament</h3>
-            {/* Image would be here */}
-          </div>
           <div className="tournament-join">
             <h3>Join a Tournament Today!</h3>
             <Link to="/tournaments" className="button-primary">
