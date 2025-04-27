@@ -3,6 +3,7 @@ package dat.daos;
 import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
 import dat.enums.BlogPostStatus;
+import dat.utils.ProfanityFilter;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -55,6 +56,11 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
 
     @Override
     public BlogPostDTO create(BlogPostDTO blogPostDTO) {
+        if (blogPostDTO != null && !blogPostDTO.getContent().isEmpty()) {
+            if (ProfanityFilter.containsProfanity(blogPostDTO.getContent())) {
+                throw new IllegalStateException("Blogpost contains profanity");
+            }
+        }
         try (EntityManager em = emf.createEntityManager()) {
 
             // If status is not READY, we should not save it,

@@ -1,7 +1,5 @@
 package dat.utils;
 
-import dat.entities.BlogPost;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,20 +9,9 @@ import java.util.Set;
 
 public class ProfanityFilter {
 
-    public static void main(String[] args) {
-        BlogPost blogpost = new BlogPost();
-        blogpost.setContent("shit and a ton of kittens also i want to say fuck");
-        ProfanityFilter.addWordsToFilter(Set.of("kittens"));
-        ProfanityFilter.removeWordsFromFilter(Set.of("fuck"));
-        String test = ProfanityFilter.censorText(blogpost.getContent());
-        System.out.println("raw content: " + blogpost.getContent());
-        System.out.println("filtered content: " + test);
-        System.out.println(ProfanityFilter.containsProfanity(blogpost.getContent()));
-    }
-
     private static final Set<String> BAD_WORDS = new HashSet<>();
 
-    // Load the bad words once at startup
+    // load the default filtered words once at startup
     static {
 //        try (InputStream inputStream = ProfanityFilter.class.getClassLoader().getResourceAsStream("en_badwords.txt");
 //             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -39,6 +26,7 @@ public class ProfanityFilter {
     }
 
     public static String censorText(String text) {
+        // replaces every char of a filtered word with * and returns a censored string
         String[] words = text.split("\\s+");
         StringBuilder censoredText = new StringBuilder();
 
@@ -56,8 +44,8 @@ public class ProfanityFilter {
     }
 
     public static boolean containsProfanity(String text) {
+        // easily lets you detect if a string contains filtered words
         String[] words = text.split("\\s+");
-
         for (String word : words) {
             String cleanWord = word.replaceAll("[^a-zA-Z]", "").toLowerCase();
             if (BAD_WORDS.contains(cleanWord)) {
@@ -68,19 +56,26 @@ public class ProfanityFilter {
     }
 
     public static void addWordsToFilter(Set<String> words) {
+        // allows you to add certain words to the filter
+        words.forEach(String::toLowerCase);
         BAD_WORDS.addAll(words);
     }
 
     public static void removeWordsFromFilter(Set<String> words) {
+        // allows you to remove certain words from the filter
+        words.forEach(String::toLowerCase);
         BAD_WORDS.removeAll(words);
     }
 
     public static void useCustomWordFilter(Set<String> words) {
+        // replace the entire default list of words to filter with your own set
         BAD_WORDS.clear();
         addWordsToFilter(words);
     }
 
     public static void useDefaultWordFilter() {
+        // resets the filter back to default
+        BAD_WORDS.clear();
         try (InputStream inputStream = ProfanityFilter.class.getClassLoader().getResourceAsStream("en_badwords.txt");
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
