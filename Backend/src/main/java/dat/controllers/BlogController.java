@@ -2,30 +2,30 @@ package dat.controllers;
 
 import dat.config.HibernateConfig;
 import dat.daos.BlogPostDAO;
-import dat.daos.TeamDAO;
 import dat.dtos.BlogPostDTO;
-import dat.dtos.PlayerAccountDTO;
-import dat.dtos.TeamDTO;
 import dat.exceptions.ApiException;
+import dat.service.BlogPostService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class BlogController {
 
     private final BlogPostDAO blogPostDAO;
+    private final BlogPostService blogPostService;
 
     public BlogController() {
+        EntityManagerFactory emf;
         if  (HibernateConfig.getTest()) {
-            EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-            this.blogPostDAO = BlogPostDAO.getInstance(emf);
+            emf = HibernateConfig.getEntityManagerFactoryForTest();
         } else {
-            EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
-            this.blogPostDAO = BlogPostDAO.getInstance(emf);
+            emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
         }
+
+        this.blogPostDAO = BlogPostDAO.getInstance(emf);
+        this.blogPostService = new BlogPostService(blogPostDAO);
     }
 
     public void getAll(Context ctx) {
@@ -61,7 +61,6 @@ public class BlogController {
     }
 
     public void create(Context ctx) throws ApiException {
-
         BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
 
         if (blogPostDTO == null || blogPostDTO.getTitle() == null || blogPostDTO.getContent() == null) {
@@ -69,13 +68,13 @@ public class BlogController {
         }
 
         try{
-        BlogPostDTO createdBlogPostDTO = blogPostDAO.create(blogPostDTO);
-        ctx.res().setStatus(201);
-        ctx.json(createdBlogPostDTO, BlogPostDTO.class);
-    } catch (Exception e) {
-        ctx.status(500).result("Internal server error: " + e.getMessage());
+            BlogPostDTO createdBlogPostDTO = blogPostService.createBlogPost(blogPostDTO);
+            ctx.res().setStatus(201);
+            ctx.json(createdBlogPostDTO, BlogPostDTO.class);
+        } catch (Exception e) {
+            ctx.status(500).result("Internal server error: " + e.getMessage());
+        }
     }
-}
 
     public void getAllPreview(Context ctx) {
         try {
