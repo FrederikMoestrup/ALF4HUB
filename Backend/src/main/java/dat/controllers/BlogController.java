@@ -9,6 +9,7 @@ import dat.dtos.TeamDTO;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -52,19 +53,22 @@ public class BlogController {
             ctx.json(blogPostDTO, BlogPostDTO.class);
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, "BlogPost not found");
         } catch (Exception e) {
             throw new ApiException(500, "Internal server error");
         }
     }
 
     public void create(Context ctx) throws ApiException {
-        try{
+
         BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
 
         if (blogPostDTO == null || blogPostDTO.getTitle() == null || blogPostDTO.getContent() == null) {
             throw new ApiException(400, "Missing required fields: title or content");
         }
 
+        try{
         BlogPostDTO createdBlogPostDTO = blogPostDAO.create(blogPostDTO);
         ctx.res().setStatus(201);
         ctx.json(createdBlogPostDTO, BlogPostDTO.class);
