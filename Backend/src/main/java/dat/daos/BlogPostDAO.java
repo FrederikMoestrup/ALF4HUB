@@ -59,9 +59,9 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
 
             // If status is not READY, we should not save it,
             // because the content needs to be checked first
-            if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
+           /* if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
                 throw new IllegalStateException("Blog post is not ready to be saved - it needs to be reviewed.");
-            }
+            }*/
 
             BlogPost newBlogPost = new BlogPost(blogPostDTO);
             // TODO: Set the new status to PUBLISHED or DRAFT depending on the context
