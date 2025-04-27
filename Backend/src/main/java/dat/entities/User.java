@@ -40,6 +40,9 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email", length = 50, nullable = false)
+    private String email;
+
     //Relations
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -82,6 +85,12 @@ public class User implements Serializable, ISecurityUser {
     public User(String userName, Set<Role> roleEntityList) {
         this.username = userName;
         this.roles = roleEntityList;
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public User(UserDTO dto) {
