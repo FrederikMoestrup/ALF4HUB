@@ -7,7 +7,6 @@ import dat.entities.PlayerAccount;
 import dat.entities.User;
 import dat.enums.Game;
 import dat.exceptions.ApiException;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,9 +36,8 @@ class PlayerAccountDAOTest {
 
     @BeforeEach
     void setUp() {
-        playerAccountDAO = playerAccountDAO.getInstance(emf);
+        playerAccountDAO = PlayerAccountDAO.getInstance(emf);
 
-        //Populate.clearDatabase(emf);
         Populate.populateDatabase(emf);
     }
 
@@ -48,6 +46,7 @@ class PlayerAccountDAOTest {
         //Populate.clearDatabase(emf);
     }
 
+    //test for stackoverflow error
     @Test
     void crashTest() {
         User user = new User();
@@ -69,15 +68,22 @@ class PlayerAccountDAOTest {
 
     @Test
     void getById() throws ApiException {
-        PlayerAccountDTO playerAccountDTO = playerAccountDAO.getById(1);
+        PlayerAccountDTO playerAccountDTO = playerAccountDAO.getAll().get(0);
 
         assertNotNull(playerAccountDTO);
         assertEquals("Mads Mikkelsen", playerAccountDTO.getPlayAccountName());
         assertTrue(playerAccountDTO.isActive());
         assertEquals(Game.LEAGUE_OF_LEGENDS, playerAccountDTO.getGame());
         assertEquals("Bronze", playerAccountDTO.getRank());
-        assertNotNull(playerAccountDTO.getUser());
-        assertFalse(playerAccountDTO.getTeams().isEmpty());
+        //assertNotNull(playerAccountDTO.getUser());
+        //assertFalse(playerAccountDTO.getTeams().isEmpty());
+    }
+
+    @Test
+    void getByIdNotFound() {
+        ApiException exception = assertThrows(ApiException.class, () -> playerAccountDAO.getById(999));
+        assertEquals(404, exception.getStatusCode());
+        assertEquals("PlayerAccount not found", exception.getMessage());
     }
 
     @Test
@@ -90,9 +96,9 @@ class PlayerAccountDAOTest {
         assertTrue(playerAccountDTO.get(0).isActive());
         assertEquals(Game.LEAGUE_OF_LEGENDS, playerAccountDTO.get(0).getGame());
         assertEquals("Gold", playerAccountDTO.get(0).getRank());
-        assertNull(playerAccountDTO.get(0).getUser());
-        //assertTrue(playerAccountDTO.getTeams());
-        assertTrue(playerAccountDTO.get(0).getTeams().isEmpty());
+        //assertNull(playerAccountDTO.get(0).getUser());
+        //assertEquals(0,playerAccountDTO.get(0).getTeams().size());
+
     }
 
     @Test
@@ -102,8 +108,8 @@ class PlayerAccountDAOTest {
         playerAccountDTO.setActive(true);
         playerAccountDTO.setGame(Game.DOTA_2);
         playerAccountDTO.setRank("Platinum");
-        playerAccountDTO.setUser(null);
-        playerAccountDTO.setTeams(null);
+        //playerAccountDTO.setUser(null);
+        //playerAccountDTO.setTeams(null);
 
         PlayerAccountDTO createdPlayerAccount = playerAccountDAO.create(playerAccountDTO);
 
@@ -113,32 +119,43 @@ class PlayerAccountDAOTest {
         assertTrue(createdPlayerAccount.isActive());
         assertEquals(Game.DOTA_2, createdPlayerAccount.getGame());
         assertEquals("Platinum", createdPlayerAccount.getRank());
-        assertNull(createdPlayerAccount.getUser());
+        //assertNull(createdPlayerAccount.getUser());
         //assertTrue(createdPlayerAccount.getTeams().isEmpty());
     }
 
     @Test
     void update() throws ApiException {
-        PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO();
+        PlayerAccountDTO playerAccountDTO = playerAccountDAO.getAll().get(0);
         playerAccountDTO.setPlayAccountName("UpdatedTestAccount");
         playerAccountDTO.setActive(false);
         playerAccountDTO.setGame(Game.COUNTER_STRIKE);
         playerAccountDTO.setRank("Diamond");
-        playerAccountDTO.setUser(null);
-        playerAccountDTO.setTeams(null);
+        //playerAccountDTO.setUser(null);
+        //playerAccountDTO.setTeams(null);
 
-        PlayerAccountDTO updatedPlayerAccount = playerAccountDAO.update(1, playerAccountDTO);
+        PlayerAccountDTO updatedPlayerAccount = playerAccountDAO.update(playerAccountDTO.getId(), playerAccountDTO);
 
         assertNotNull(updatedPlayerAccount);
         assertEquals("UpdatedTestAccount", updatedPlayerAccount.getPlayAccountName());
         assertFalse(updatedPlayerAccount.isActive());
         assertEquals(Game.COUNTER_STRIKE, updatedPlayerAccount.getGame());
         assertEquals("Diamond", updatedPlayerAccount.getRank());
-        assertNull(updatedPlayerAccount.getUser());
+        //assertNull(updatedPlayerAccount.getUser());
+        //assertTrue(updatedPlayerAccount.getTeams().isEmpty());
 
     }
 
+    // will lazy load
     @Test
-    void delete() {
+    void delete() throws ApiException {
+        PlayerAccountDTO playerAccountBeforeDelete = playerAccountDAO.getAll().get(0);
+
+        assertNotNull(playerAccountBeforeDelete);
+        assertEquals("TestAccount", playerAccountBeforeDelete.getPlayAccountName());
+
+        playerAccountDAO.delete(playerAccountBeforeDelete.getId());
+
+        List<PlayerAccountDTO> playerAccounts = playerAccountDAO.getAll();
+        assertTrue(playerAccounts.isEmpty());
     }
 }

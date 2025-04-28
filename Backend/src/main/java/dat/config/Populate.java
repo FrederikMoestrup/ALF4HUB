@@ -1,11 +1,10 @@
 package dat.config;
 
-import dat.dtos.PlayerAccountDTO;
+
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.entities.Tournament;
 import dat.entities.User;
-import dat.enums.Game;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,30 +20,7 @@ public class Populate {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
-            User user = new User();
-            user.setUsername("TestUser");
-            user.setPassword("TestPassword");
-
-            PlayerAccount playerAccount = new PlayerAccount();
-            playerAccount.setPlayAccountName("TestAccount");
-            playerAccount.setActive(true);
-            playerAccount.setGame(Game.LEAGUE_OF_LEGENDS);
-            playerAccount.setRank("Gold");
-
-            // Link them
-            playerAccount.setUser(user);
-            user.setPlayerAccounts(List.of(playerAccount)); // <-- CAUSES cycle
-            // Persist the user and player account
-            em.persist(user);
-            em.persist(playerAccount);
-
-            em.getTransaction().commit();
-
-            //PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO(playerAccount);
-
-
-
-           /* Tournament tournament1 = new Tournament();
+            Tournament tournament1 = new Tournament();
             tournament1.setTournamentName("League of Legends Championship");
             tournament1.setStartDate("2025-06-01");
             tournament1.setEndDate("2025-06-05");
@@ -126,33 +102,31 @@ public class Populate {
             }
 
             em.getTransaction().commit();
-
-            */
         }
     }
 
     @NotNull
-        private static List<Team> getLolTeam(){
-        Team t1 = new Team("Supra", LEAGUE_OF_LEGENDS, new User("Cap1","1234"));
-        Team t2 = new Team("Champions", LEAGUE_OF_LEGENDS, new User("Cap2","1234"));
-        Team t3 = new Team("Eagles", LEAGUE_OF_LEGENDS, new User("Cap3","1234"));
+    private static List<Team> getLolTeam() {
+        Team t1 = new Team("Supra", LEAGUE_OF_LEGENDS, new User("Cap1", "1234"));
+        Team t2 = new Team("Champions", LEAGUE_OF_LEGENDS, new User("Cap2", "1234"));
+        Team t3 = new Team("Eagles", LEAGUE_OF_LEGENDS, new User("Cap3", "1234"));
 
         Team[] arrayTeam = {t1, t2, t3};
         return List.of(arrayTeam);
     }
 
     @NotNull
-        private static List<Team> getDotaTeam(){
-        Team t1 = new Team("Brainstorm Titans", DOTA_2, new User("Cap4","1234"));
-        Team t2 = new Team("Alliance", DOTA_2, new User("Cap5","1234"));
-        Team t3 = new Team("The Caffeine crew", DOTA_2, new User("Cap6","1234"));
+    private static List<Team> getDotaTeam() {
+        Team t1 = new Team("Brainstorm Titans", DOTA_2, new User("Cap4", "1234"));
+        Team t2 = new Team("Alliance", DOTA_2, new User("Cap5", "1234"));
+        Team t3 = new Team("The Caffeine crew", DOTA_2, new User("Cap6", "1234"));
 
         Team[] arrayTeam = {t1, t2, t3};
         return List.of(arrayTeam);
     }
 
     @NotNull
-        private static List<PlayerAccount> getPlayerAcc1() {
+    private static List<PlayerAccount> getPlayerAcc1() {
         PlayerAccount p1 = new PlayerAccount("Mads Mikkelsen", true, LEAGUE_OF_LEGENDS, "Bronze", new User("User1", "1234"));
         PlayerAccount p2 = new PlayerAccount("Nikolaj Coster", true, LEAGUE_OF_LEGENDS, "Silver", new User("User2", "1234"));
         PlayerAccount p3 = new PlayerAccount("Pilou Asbæk", true, LEAGUE_OF_LEGENDS, "Gold", new User("User3", "1234"));
@@ -162,7 +136,7 @@ public class Populate {
     }
 
     @NotNull
-        private static List<PlayerAccount> getPlayerAcc2() {
+    private static List<PlayerAccount> getPlayerAcc2() {
         PlayerAccount p1 = new PlayerAccount("Anders Matthesen", true, DOTA_2, "Platinum", new User("User4", "1234"));
         PlayerAccount p2 = new PlayerAccount("Mick Øgendahl", true, DOTA_2, "Diamond", new User("User5", "1234"));
         PlayerAccount p3 = new PlayerAccount("Jonatan Spang", true, DOTA_2, "Challenger", new User("User6", "1234"));
@@ -176,7 +150,6 @@ public class Populate {
             em.getTransaction().begin();
 
             // delete from all tables
-            //em.createQuery("DELETE FROM TeamAccount").executeUpdate();
             em.createQuery("DELETE FROM Team").executeUpdate();
             em.createQuery("DELETE FROM Tournament").executeUpdate();
             em.createQuery("DELETE FROM PlayerAccount").executeUpdate();

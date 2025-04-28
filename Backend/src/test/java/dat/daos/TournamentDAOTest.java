@@ -1,11 +1,10 @@
 package dat.daos;
 
 import dat.config.HibernateConfig;
-import dat.dtos.TeamDTO;
+
 import dat.dtos.TournamentDTO;
 import dat.enums.Game;
 import dat.exceptions.ApiException;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,6 +33,8 @@ class TournamentDAOTest {
 
     @BeforeEach
     void setUp() {
+
+        //will refactor to use populate class after dto stack overflow fix
         tournamentDAO = TournamentDAO.getInstance(emf);
 
         TournamentDTO tournamentDTO = new TournamentDTO();
@@ -49,7 +50,7 @@ class TournamentDAOTest {
         tournamentDTO.setStartTime("10:00");
         tournamentDTO.setEndDate("2025-05-03");
         tournamentDTO.setEndTime("18:00");
-        tournamentDTO.setHost(null);
+        //tournamentDTO.setHost(null);
 
         tournamentDAO.create(tournamentDTO);
     }
@@ -67,12 +68,20 @@ class TournamentDAOTest {
 
     @Test
     void getById() throws ApiException {
-        TournamentDTO found = tournamentDAO.getById(1);
+        TournamentDTO tournamentDTO = tournamentDAO.getById(1);
 
-        assertNotNull(found);
-        assertEquals("TestTournament", found.getTournamentName());
-        assertEquals(Game.LEAGUE_OF_LEGENDS, found.getGame());
+        assertNotNull(tournamentDTO);
+        assertEquals("TestTournament", tournamentDTO.getTournamentName());
+        assertEquals(Game.LEAGUE_OF_LEGENDS, tournamentDTO.getGame());
     }
+
+    @Test
+    void getByIdNotFound() {
+        ApiException exception = assertThrows(ApiException.class, () -> tournamentDAO.getById(999));
+        assertEquals(404, exception.getStatusCode());
+        assertEquals("Tournament not found", exception.getMessage());
+    }
+
 
     @Test
     void getAll() {
@@ -128,17 +137,16 @@ class TournamentDAOTest {
         assertEquals("UpdatedTournament", updated.getTournamentName());
     }
 
+    //will lazy load
     @Test
     void delete() throws ApiException {
-        /*
-        TournamentDTO deleted = tournamentDAO.delete(1);
+        TournamentDTO tournamentBeforeDelete = tournamentDAO.getById(1);
+        assertNotNull(tournamentBeforeDelete);
 
-        assertNotNull(deleted);
-        assertEquals("TestTournament", deleted.getTournamentName());
+        assertEquals("TestTournament", tournamentBeforeDelete.getTournamentName());
+        tournamentDAO.delete(1);
 
         List<TournamentDTO> tournaments = tournamentDAO.getAll();
         assertTrue(tournaments.isEmpty());
-
-         */
     }
 }
