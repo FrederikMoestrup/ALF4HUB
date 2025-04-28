@@ -16,6 +16,7 @@ public class UserDTO {
     private int id;
     private String username;
     private String password;
+    private String email;
     private Set<String> roles = new HashSet();
     private List<PlayerAccountDTO> playerAccounts;
     private List<TournamentDTO> tournaments;
@@ -35,6 +36,7 @@ public class UserDTO {
     public UserDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
+        this.email = user.getEmail();
         this.roles = user.getRolesAsStrings();
 
         if (user.getPlayerAccounts() != null) {
