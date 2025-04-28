@@ -14,29 +14,24 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TeamDAOTest
-{
+class TeamDAOTest {
     private static EntityManagerFactory emf;
     private TeamDAO teamDAO;
 
     @BeforeAll
-    static void setupClass()
-    {
+    static void setupClass() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
     }
 
     @BeforeAll
-    static void tearDownClass()
-    {
-        if (emf != null)
-        {
+    static void tearDownClass() {
+        if (emf != null) {
             emf.close();
         }
     }
 
     @BeforeEach
-    void setUp()
-    {
+    void setUp() {
         teamDAO = TeamDAO.getInstance(emf);
 
         TeamDTO teamDTO = new TeamDTO();
@@ -47,12 +42,10 @@ class TeamDAOTest
         teamDTO.setTeamAccounts(null);
 
         teamDAO.create(teamDTO);
-
     }
 
     @AfterEach
-    void tearDown()
-    {
+    void tearDown() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM Team").executeUpdate();
@@ -63,24 +56,21 @@ class TeamDAOTest
     }
 
     @Test
-    void getById() throws ApiException
-    {
+    void getById() throws ApiException {
         TeamDTO teamDTO = teamDAO.getById(1);
         assertEquals("TestTeam", teamDTO.getTeamName());
         assertEquals(Game.LEAGUE_OF_LEGENDS, teamDTO.getGame());
     }
 
     @Test
-    void getAll()
-    {
+    void getAll() {
         TeamDTO teamDTO = teamDAO.getAll().get(0);
         assertEquals("TestTeam", teamDTO.getTeamName());
         assertEquals(Game.LEAGUE_OF_LEGENDS, teamDTO.getGame());
     }
 
     @Test
-    void create()
-    {
+    void create() {
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setTeamName("NewTestTeam");
         teamDTO.setGame(Game.COUNTER_STRIKE);
@@ -96,13 +86,12 @@ class TeamDAOTest
     }
 
     @Test
-    void update() throws ApiException
-    {
+    void update() throws ApiException {
         TeamDTO teamDTO = teamDAO.getById(1);
         teamDTO.setTeamName("UpdatedTestTeam");
         teamDTO.setGame(Game.COUNTER_STRIKE);
 
-        TeamDTO updatedTeam = teamDAO.update(1,teamDTO);
+        TeamDTO updatedTeam = teamDAO.update(1, teamDTO);
 
         assertNotNull(updatedTeam);
         assertEquals("UpdatedTestTeam", updatedTeam.getTeamName());
@@ -110,7 +99,6 @@ class TeamDAOTest
     }
 
     @Test
-    void delete()
-    {
+    void delete() {
     }
 }

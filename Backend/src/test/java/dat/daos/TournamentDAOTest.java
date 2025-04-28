@@ -16,29 +16,24 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TournamentDAOTest
-{
+class TournamentDAOTest {
     private static EntityManagerFactory emf;
     private TournamentDAO tournamentDAO;
 
     @BeforeAll
-    static void setupClass()
-    {
+    static void setupClass() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
     }
 
     @BeforeAll
-    static void tearDownClass()
-    {
-        if (emf != null)
-        {
+    static void tearDownClass() {
+        if (emf != null) {
             emf.close();
         }
     }
 
     @BeforeEach
-    void setUp()
-    {
+    void setUp() {
         tournamentDAO = TournamentDAO.getInstance(emf);
 
         TournamentDTO tournamentDTO = new TournamentDTO();
@@ -71,8 +66,7 @@ class TournamentDAOTest
 
 
     @Test
-    void getById() throws ApiException
-    {
+    void getById() throws ApiException {
         TournamentDTO found = tournamentDAO.getById(1);
 
         assertNotNull(found);
@@ -81,8 +75,7 @@ class TournamentDAOTest
     }
 
     @Test
-    void getAll()
-    {
+    void getAll() {
         List<TournamentDTO> tournaments = tournamentDAO.getAll();
 
         assertNotNull(tournaments);
@@ -90,8 +83,7 @@ class TournamentDAOTest
     }
 
     @Test
-    void create()
-    {
+    void create() {
         TournamentDTO newTournament = new TournamentDTO();
         newTournament.setTournamentName("NewTournament");
         newTournament.setGame(Game.COUNTER_STRIKE);
@@ -114,8 +106,7 @@ class TournamentDAOTest
     }
 
     @Test
-    void update() throws ApiException
-    {
+    void update() throws ApiException {
         TournamentDTO tournamentToUpdate = new TournamentDTO();
         tournamentToUpdate.setTournamentName("UpdatedTournament");
         tournamentToUpdate.setGame(Game.DOTA_2);
@@ -138,8 +129,7 @@ class TournamentDAOTest
     }
 
     @Test
-    void delete() throws ApiException
-    {
+    void delete() throws ApiException {
         /*
         TournamentDTO deleted = tournamentDAO.delete(1);
 

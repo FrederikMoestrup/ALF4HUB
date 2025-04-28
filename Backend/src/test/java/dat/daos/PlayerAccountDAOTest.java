@@ -1,4 +1,5 @@
 package dat.daos;
+
 import dat.config.HibernateConfig;
 import dat.dtos.PlayerAccountDTO;
 import dat.enums.Game;
@@ -13,28 +14,25 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 class PlayerAccountDAOTest {
     private static EntityManagerFactory emf;
     private PlayerAccountDAO playerAccountDAO;
 
     @BeforeAll
-    static void setupClass()
-    {
+    static void setupClass() {
         emf = HibernateConfig.getEntityManagerFactoryForTest();
     }
 
     @BeforeAll
-    static void tearDownClass()
-    {
-        if (emf != null)
-        {
+    static void tearDownClass() {
+        if (emf != null) {
             emf.close();
         }
     }
 
     @BeforeEach
-    void setUp()
-    {
+    void setUp() {
         playerAccountDAO = playerAccountDAO.getInstance(emf);
 
         PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO();
@@ -49,8 +47,7 @@ class PlayerAccountDAOTest {
     }
 
     @AfterEach
-    void tearDown()
-    {
+    void tearDown() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM PlayerAccount").executeUpdate();
@@ -60,8 +57,7 @@ class PlayerAccountDAOTest {
     }
 
     @Test
-    void getById() throws ApiException
-    {
+    void getById() throws ApiException {
         PlayerAccountDTO playerAccountDTO = playerAccountDAO.getById(1);
 
         assertNotNull(playerAccountDTO);
@@ -75,8 +71,7 @@ class PlayerAccountDAOTest {
     }
 
     @Test
-    void getAll()
-    {
+    void getAll() {
         List<PlayerAccountDTO> playerAccountDTO = playerAccountDAO.getAll();
 
         assertNotNull(playerAccountDTO);
@@ -91,8 +86,7 @@ class PlayerAccountDAOTest {
     }
 
     @Test
-    void create()
-    {
+    void create() {
         PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO();
         playerAccountDTO.setPlayAccountName("NewTestAccount");
         playerAccountDTO.setActive(true);
@@ -114,8 +108,7 @@ class PlayerAccountDAOTest {
     }
 
     @Test
-    void update() throws ApiException
-    {
+    void update() throws ApiException {
         PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO();
         playerAccountDTO.setPlayAccountName("UpdatedTestAccount");
         playerAccountDTO.setActive(false);
@@ -136,7 +129,6 @@ class PlayerAccountDAOTest {
     }
 
     @Test
-    void delete()
-    {
+    void delete() {
     }
 }
