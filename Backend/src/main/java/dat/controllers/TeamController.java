@@ -105,13 +105,10 @@ public class TeamController {
             ctx.status(200).json(updatedTeamDTO);
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Invalid team ID format.");
-        } catch (ApiException e) {
-            ctx.status(e.getStatusCode()).result("Error: " + e.getMessage());
         } catch (Exception e) {
-            ctx.status(500).result("Unexpected error: " + e.getMessage());
+            throw new ApiException(500, "Unexpected error: " + e.getMessage());
         }
     }
-
 
     public TeamDTO validateEntity(Context ctx) {
         return ctx.bodyValidator(TeamDTO.class)
