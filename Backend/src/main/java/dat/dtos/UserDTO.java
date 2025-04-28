@@ -1,13 +1,10 @@
 package dat.dtos;
 
 import dat.entities.User;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Getter
 @Setter
@@ -16,7 +13,7 @@ public class UserDTO {
     private int id;
     private String username;
     private String password;
-    private Set<String> roles = new HashSet();
+    private Set<String> roles = new HashSet<>();
     private List<PlayerAccountDTO> playerAccounts;
     private List<TournamentDTO> tournaments;
     private List<TeamDTO> teams;
@@ -37,31 +34,10 @@ public class UserDTO {
         this.username = user.getUsername();
         this.roles = user.getRolesAsStrings();
 
-        if (user.getPlayerAccounts() != null) {
-            this.playerAccounts = user.getPlayerAccounts().stream()
-                    .map(PlayerAccountDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTournaments() != null) {
-            this.tournaments = user.getTournaments().stream()
-                    .map(TournamentDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTeams() != null) {
-            this.teams = user.getTeams().stream()
-                    .map(TeamDTO::new)
-                    .collect(Collectors.toList());
-        }
+        this.playerAccounts = new ArrayList<>();
+        this.tournaments = new ArrayList<>();
+        this.teams = new ArrayList<>();
     }
-
-
-
-
-
-
-
 
     public boolean equals(Object o) {
         if (this == o) {
@@ -92,21 +68,9 @@ public class UserDTO {
         return new UserDTOBuilder();
     }
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public Set<String> getRoles() {
-        return this.roles;
-    }
-
     public String toString() {
         String var10000 = this.getUsername();
-        return "UserDTO(username=" + var10000 + ", password=" + this.getPassword() + ", roles=" + this.getRoles() + ")";
+        return "UserDTO(id=" + id + ", username=" + var10000 + ", password=" + this.getPassword() + ", roles=" + this.getRoles() + ")";
     }
 
     public UserDTO(String username, String password, Set<String> roles) {
