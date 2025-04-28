@@ -35,7 +35,7 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
     }
 
     @Override
-    public List<TeamDTO> getAll(){
+    public List<TeamDTO> getAll() {
         try (EntityManager em = emf.createEntityManager()) {
             List<Team> teams = em.createQuery("SELECT t FROM Team t", Team.class).getResultList();
             return teams.stream().map(TeamDTO::new).toList();
@@ -84,6 +84,7 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
             return new TeamDTO(team);
         }
     }
+
     public TeamDTO invitePlayer(Integer teamId, PlayerAccountDTO playerDTO) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -100,6 +101,30 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
 
             team.addPlayerAccount(existingPlayer);
             em.getTransaction().commit();
+
+            return new TeamDTO(team);
+        }
+    }
+
+    //Ift. spilleren får en email notifikation, skal email være en del af enten user eller playeraccount entititer
+    public TeamDTO removePlayer(Integer teamId, PlayerAccountDTO playerDTO) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            Team team = em.find(Team.class, teamId);
+            if (team == null) {
+                throw new ApiException(404, "Team not found");
+            }
+
+            PlayerAccount existingPlayer = em.find(PlayerAccount.class, playerDTO.getId());
+            if (existingPlayer == null) {
+                throw new ApiException(404, "Player not found");
+            }
+
+            team.removePlayerAccount(existingPlayer);
+            em.getTransaction().commit();
+
+            //email notifikation system/metode
 
             return new TeamDTO(team);
         }
