@@ -57,14 +57,15 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
     public BlogPostDTO create(BlogPostDTO blogPostDTO) {
         try (EntityManager em = emf.createEntityManager()) {
 
-            // If status is not READY, we should not save it,
-            // because the content needs to be checked first
-           /* if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
+            if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
                 throw new IllegalStateException("Blog post is not ready to be saved - it needs to be reviewed.");
-            }*/
+            }
 
             BlogPost newBlogPost = new BlogPost(blogPostDTO);
             // TODO: Set the new status to PUBLISHED or DRAFT depending on the context
+            // Currently we're only able to publish in our given US
+            // We might have to take in status in the param in the future
+            newBlogPost.setStatus(BlogPostStatus.PUBLISHED);
 
             em.getTransaction().begin();
             em.persist(newBlogPost);

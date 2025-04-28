@@ -1,6 +1,7 @@
-package dat.utils;
+package US3.dat.utils;
 
 import dat.entities.BlogPost;
+import dat.utils.ProfanityFilter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
