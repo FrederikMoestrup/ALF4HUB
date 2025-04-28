@@ -1,32 +1,32 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-function InactiveButton({ userId, user_activeStatus }) {
+function InactiveButton({ user }) {
     // useState to manage the active status of the user, so it can be toggled
-    const [isActive, setIsActive] = useState(user_activeStatus)
+    const [isActive, setIsActive] = useState(user.isActive)
     const [errorMessage, setErrorMessage] = useState('');
 
     // useEffect to change the status if prop changes, for example if somehow someone else changes the status externally
     useEffect(() => {
-        setIsActive(user_activeStatus);
-    }, [user_activeStatus]);
+        setIsActive(user.isActive);
+    }, [user]);
 
     const toggleActive = async () => {
         // Toggle the active status. If it's true, set it to false and vice versa
         setIsActive(!isActive);
 
-        // Status for errorHandling. If the api call fails, we will set isActive back to the previous state
-    
-
         //API call to update the active status
         try {
             // Change the URL to the correct endpoint for the API
-            const response = await fetch(`http://localhost:8080/api/player-accounts/${userId}/status`, {
+            const response = await fetch(`http://localhost:8080/api/player-accounts/${user.id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({active: isActive}),
+                body: JSON.stringify({
+                    ...user,
+                    isActive: !isActive // Send the new status
+                }),
             });
 
             if (response.ok) {
