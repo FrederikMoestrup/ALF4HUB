@@ -2,13 +2,12 @@ package dat.dtos;
 
 import dat.entities.PlayerAccount;
 import dat.enums.Game;
-import lombok.*;
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
 public class PlayerAccountDTO {
 
     private int id;
@@ -40,10 +39,6 @@ public class PlayerAccountDTO {
             this.user = new UserDTO(playerAccount.getUser());
         }
 
-        if (playerAccount.getTeams() != null) {
-            this.teams = playerAccount.getTeams().stream()
-                    .map(TeamDTO::new)
-                    .collect(Collectors.toList());
-        }
+        this.teams = new ArrayList<>();
     }
 }
