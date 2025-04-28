@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-function InactiveButton({ user }) {
+function InactiveButton({ playerAccount }) {
     // useState to manage the active status of the user, so it can be toggled
-    const [isActive, setIsActive] = useState(user.isActive)
+    const [isActive, setIsActive] = useState(playerAccount.isActive)
     const [errorMessage, setErrorMessage] = useState('');
 
     // useEffect to change the status if prop changes, for example if somehow someone else changes the status externally
     useEffect(() => {
-        setIsActive(user.isActive);
-    }, [user]);
+        setIsActive(playerAccount.isActive);
+    }, [playerAccount]);
 
     const toggleActive = async () => {
         // Toggle the active status. If it's true, set it to false and vice versa
@@ -18,13 +18,13 @@ function InactiveButton({ user }) {
         //API call to update the active status
         try {
             // Change the URL to the correct endpoint for the API
-            const response = await fetch(`http://localhost:8080/api/player-accounts/${user.id}/status`, {
+            const response = await fetch(`http://localhost:8080/api/player-accounts/${playerAccount.id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    ...user,
+                    ...playerAccount,
                     isActive: !isActive // Send the new status
                 }),
             });
