@@ -1,16 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { createBrowserRouter,createRoutesFromElements, Route, RouterProvider,} from "react-router-dom";
-import TeamDashBoard from "./pages/TeamDashBoard";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router";
+import "./index.css";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<TeamDashBoard />}> </Route>
-  )
-);
+import App from "./App.jsx";
+import TestPage from "./pages/TestPage.jsx";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+createRoot(document.getElementById("root")).render(
+    <StrictMode>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<App />} />
+                <Route path="test" element={<TestPage />} />
+            </Routes>
+        </BrowserRouter>
+    </StrictMode>
 );
