@@ -1,9 +1,11 @@
 package dat.config;
 
+import dat.dtos.PlayerAccountDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.entities.Tournament;
 import dat.entities.User;
+import dat.enums.Game;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +21,30 @@ public class Populate {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
-            Tournament tournament1 = new Tournament();
+            User user = new User();
+            user.setUsername("TestUser");
+            user.setPassword("TestPassword");
+
+            PlayerAccount playerAccount = new PlayerAccount();
+            playerAccount.setPlayAccountName("TestAccount");
+            playerAccount.setActive(true);
+            playerAccount.setGame(Game.LEAGUE_OF_LEGENDS);
+            playerAccount.setRank("Gold");
+
+            // Link them
+            playerAccount.setUser(user);
+            user.setPlayerAccounts(List.of(playerAccount)); // <-- CAUSES cycle
+            // Persist the user and player account
+            em.persist(user);
+            em.persist(playerAccount);
+
+            em.getTransaction().commit();
+
+            //PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO(playerAccount);
+
+
+
+           /* Tournament tournament1 = new Tournament();
             tournament1.setTournamentName("League of Legends Championship");
             tournament1.setStartDate("2025-06-01");
             tournament1.setEndDate("2025-06-05");
@@ -101,6 +126,8 @@ public class Populate {
             }
 
             em.getTransaction().commit();
+
+            */
         }
     }
 

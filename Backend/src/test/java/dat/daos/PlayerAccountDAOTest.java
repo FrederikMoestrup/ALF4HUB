@@ -3,6 +3,8 @@ package dat.daos;
 import dat.config.HibernateConfig;
 import dat.config.Populate;
 import dat.dtos.PlayerAccountDTO;
+import dat.entities.PlayerAccount;
+import dat.entities.User;
 import dat.enums.Game;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
@@ -47,6 +49,25 @@ class PlayerAccountDAOTest {
     }
 
     @Test
+    void crashTest() {
+        User user = new User();
+        user.setUsername("TestUser");
+
+        PlayerAccount playerAccount = new PlayerAccount();
+        playerAccount.setPlayAccountName("TestAccount");
+        playerAccount.setActive(true);
+        playerAccount.setGame(Game.LEAGUE_OF_LEGENDS);
+        playerAccount.setRank("Gold");
+
+        // Link them
+        playerAccount.setUser(user);
+        user.setPlayerAccounts(List.of(playerAccount)); // <-- CAUSES cycle
+
+        // Create a PlayerAccountDTO, which will trigger infinite recursion
+        PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO(playerAccount);
+    }
+
+    @Test
     void getById() throws ApiException {
         PlayerAccountDTO playerAccountDTO = playerAccountDAO.getById(1);
 
@@ -57,7 +78,6 @@ class PlayerAccountDAOTest {
         assertEquals("Bronze", playerAccountDTO.getRank());
         assertNotNull(playerAccountDTO.getUser());
         assertFalse(playerAccountDTO.getTeams().isEmpty());
-
     }
 
     @Test
