@@ -1,6 +1,7 @@
 package dat.daos;
 
 import dat.config.HibernateConfig;
+import dat.config.Populate;
 import dat.dtos.PlayerAccountDTO;
 import dat.enums.Game;
 import dat.exceptions.ApiException;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlayerAccountDAOTest {
+
     private static EntityManagerFactory emf;
     private PlayerAccountDAO playerAccountDAO;
 
@@ -35,25 +37,13 @@ class PlayerAccountDAOTest {
     void setUp() {
         playerAccountDAO = playerAccountDAO.getInstance(emf);
 
-        PlayerAccountDTO playerAccountDTO = new PlayerAccountDTO();
-        playerAccountDTO.setPlayAccountName("TestAccount");
-        playerAccountDTO.setActive(true);
-        playerAccountDTO.setGame(Game.LEAGUE_OF_LEGENDS);
-        playerAccountDTO.setRank("Gold");
-        playerAccountDTO.setUser(null);
-        playerAccountDTO.setTeams(null);
-        playerAccountDAO.create(playerAccountDTO);
-
+        Populate.clearDatabase(emf);
+        Populate.populateDatabase(emf);
     }
 
     @AfterEach
     void tearDown() {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            em.createQuery("DELETE FROM PlayerAccount").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE player_account_player_account_id_seq RESTART WITH 1").executeUpdate();
-            em.getTransaction().commit();
-        }
+        Populate.clearDatabase(emf);
     }
 
     @Test
@@ -61,12 +51,12 @@ class PlayerAccountDAOTest {
         PlayerAccountDTO playerAccountDTO = playerAccountDAO.getById(1);
 
         assertNotNull(playerAccountDTO);
-        assertEquals("TestAccount", playerAccountDTO.getPlayAccountName());
+        assertEquals("Mads Mikkelsen", playerAccountDTO.getPlayAccountName());
         assertTrue(playerAccountDTO.isActive());
         assertEquals(Game.LEAGUE_OF_LEGENDS, playerAccountDTO.getGame());
-        assertEquals("Gold", playerAccountDTO.getRank());
-        assertNull(playerAccountDTO.getUser());
-        assertTrue(playerAccountDTO.getTeams().isEmpty());
+        assertEquals("Bronze", playerAccountDTO.getRank());
+        assertNotNull(playerAccountDTO.getUser());
+        assertFalse(playerAccountDTO.getTeams().isEmpty());
 
     }
 

@@ -14,11 +14,7 @@ import static dat.enums.Game.LEAGUE_OF_LEGENDS;
 
 public class Populate {
 
-    public static void main(String[] args) {
-
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
-
-
+    public static void populateDatabase(EntityManagerFactory emf) {
 
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -146,5 +142,26 @@ public class Populate {
 
         PlayerAccount[] arrayPlayAccount = {p1, p2, p3};
         return List.of(arrayPlayAccount);
+    }
+
+    public static void clearDatabase(EntityManagerFactory emf) {
+        try (var em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            // delete from all tables
+            //em.createQuery("DELETE FROM TeamAccount").executeUpdate();
+            em.createQuery("DELETE FROM Team").executeUpdate();
+            em.createQuery("DELETE FROM Tournament").executeUpdate();
+            em.createQuery("DELETE FROM PlayerAccount").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
+
+            // reset sequences
+            em.createNativeQuery("ALTER SEQUENCE player_account_player_account_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE team_team_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE tournament_tournament_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE users_id_seq RESTART WITH 1").executeUpdate();
+
+            em.getTransaction().commit();
+        }
     }
 }
