@@ -98,8 +98,23 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
     }
 
     @Override
-    public BlogPostDTO delete(Long id) {
-        return null;
+    public BlogPostDTO delete(Long id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            BlogPost blogPost = em.find(BlogPost.class, id);
+            if (blogPost == null) {
+                throw new ApiException(404, "Blogpost med ID " + id + " blev ikke fundet.");
+            }
+
+            em.remove(blogPost);
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(blogPost);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException(500, "Noget gik galt under sletningen. Prøv igen.");
+        }
     }
 }
 
