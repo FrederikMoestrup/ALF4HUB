@@ -97,6 +97,22 @@ public class TeamController {
         }
     }
 
+    public void removePlayer(Context ctx) throws ApiException {
+        try {
+            int teamId = Integer.parseInt(ctx.pathParam("id"));
+            PlayerAccountDTO playerAccountDTO = ctx.bodyAsClass(PlayerAccountDTO.class);
+            TeamDTO updatedTeamDTO = teamDAO.removePlayer(teamId, playerAccountDTO);
+            ctx.status(200).json(updatedTeamDTO);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Invalid team ID format.");
+        } catch (ApiException e) {
+            ctx.status(e.getStatusCode()).result("Error: " + e.getMessage());
+        } catch (Exception e) {
+            ctx.status(500).result("Unexpected error: " + e.getMessage());
+        }
+    }
+
+
     public TeamDTO validateEntity(Context ctx) {
         return ctx.bodyValidator(TeamDTO.class)
                 .check(t -> t.getTeamName() != null && !t.getTeamName().isEmpty(), "Team name must be set")
