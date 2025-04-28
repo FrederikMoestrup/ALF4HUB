@@ -1,5 +1,6 @@
 package dat.populator;
 
+import dat.config.HibernateConfig;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.entities.Tournament;
@@ -142,5 +143,12 @@ public class Populator {
             em.createQuery("DELETE FROM " + entityClazz.getSimpleName()).executeUpdate();
             em.getTransaction().commit();
         }
+    }
+
+    public static void main(String[] args) {
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
+        Populator populator = Populator.getInstance(emf);
+
+        populator.populateTestData();
     }
 }
