@@ -83,4 +83,19 @@ public class PlayerAccountController {
                 .get();
     }
 
+    public void leaveTeam(Context ctx) throws ApiException {
+        try {
+            int playerAccountId = Integer.parseInt(ctx.pathParam("playerAccountId"));
+            int teamId = Integer.parseInt(ctx.pathParam("teamId"));
+            playerAccountDAO.leaveTeam(playerAccountId, teamId);
+            ctx.res().setStatus(200);
+            ctx.result("Player has successfully left the team.");
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Missing or invalid parameter: playerAccountId or teamId");
+        } catch (ApiException e) {
+            throw new ApiException(e.getStatusCode(), e.getMessage());
+        }
+    }
+
+
 }
