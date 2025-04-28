@@ -2,13 +2,12 @@ package dat.dtos;
 
 import dat.entities.Team;
 import dat.enums.Game;
-import lombok.*;
+import lombok.Data;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class TeamDTO {
 
     private int id;
