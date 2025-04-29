@@ -34,7 +34,7 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "username", length = 25)
+    @Column(name = "username", length = 25, nullable = false, unique = true)
     private String username;
     @Basic(optional = false)
     @Column(name = "password")

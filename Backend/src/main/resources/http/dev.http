@@ -33,7 +33,7 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### Add admin role to user
-POST http://localhost:7070/api/auth/user/addrole/
+POST http://localhost:7070/api/auth/user/1/addrole/
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
