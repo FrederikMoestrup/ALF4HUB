@@ -78,7 +78,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             if (playerAccount == null) {
                 throw new ApiException(404, "PlayerAccount not found");
             }
-
+            playerAccount.getTeams().size();
             em.remove(playerAccount);
             em.getTransaction().commit();
             return new PlayerAccountDTO(playerAccount);
