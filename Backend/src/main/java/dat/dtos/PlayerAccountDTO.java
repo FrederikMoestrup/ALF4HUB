@@ -40,10 +40,5 @@ public class PlayerAccountDTO {
             this.user = new UserDTO(playerAccount.getUser());
         }
 
-        if (playerAccount.getTeams() != null) {
-            this.teams = playerAccount.getTeams().stream()
-                    .map(TeamDTO::new)
-                    .collect(Collectors.toList());
-        }
     }
 }
