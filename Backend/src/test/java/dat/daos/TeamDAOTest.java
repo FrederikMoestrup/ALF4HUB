@@ -3,6 +3,7 @@ package dat.daos;
 import dat.config.HibernateConfig;
 import dat.dtos.PlayerAccountDTO;
 import dat.dtos.TeamDTO;
+import dat.dtos.UserDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.entities.User;
@@ -42,10 +43,11 @@ class TeamDAOTest {
     void setUp() {
         List<Role> roles = populator.createRoles();
         List<User> users = populator.createUsers(roles);
-        populator.persist(users);
 
         List<PlayerAccount> playerAccounts = populator.createPlayerAccounts(users);
-        List<Team> teams = populator.createTeams(playerAccounts);
+        List<Team> teams = populator.createTeams(roles, playerAccounts);
+
+        populator.persist(users);
         populator.persist(teams);
 
         playerAccountDTOList = playerAccounts.stream().map(PlayerAccountDTO::new).toList();
@@ -80,11 +82,14 @@ class TeamDAOTest {
     @Test
     void create() {
         List<PlayerAccountDTO> teamAccounts = playerAccountDTOList.subList(19, 22);
+        UserDTO teamCaptain = teamAccounts.get(0).getUser();
+
+        teamCaptain.getRoles().add("team_captain");
 
         TeamDTO expected = new TeamDTO(
                 "BC94",
                 Game.ROCKET_LEAGUE,
-                teamAccounts.get(0).getUser(),
+                teamCaptain,
                 null,
                 teamAccounts
         );
