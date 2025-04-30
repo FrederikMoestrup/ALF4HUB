@@ -17,6 +17,11 @@ public class BlogRoute {
             get("/preview", blogController::getAllPreview, Role.ANYONE); // This could be admin depending on frontend layout
             get("/{id}",blogController::getById, Role.ANYONE);
             post("/", blogController::create, Role.ANYONE);
+
+
+            // New draft-related routes
+            get("/drafts/me", blogController::getMyDrafts);    // Get my drafts
+            put("/{id}/publish", blogController::publishDraft); // Publish draft
         };
     }
 }

@@ -3,6 +3,7 @@ package dat.controllers;
 import dat.config.HibernateConfig;
 import dat.daos.BlogPostDAO;
 import dat.dtos.BlogPostDTO;
+import dat.enums.BlogPostStatus;
 import dat.exceptions.ApiException;
 import dat.service.BlogPostService;
 import io.javalin.http.Context;
@@ -87,5 +88,59 @@ public class BlogController {
         } catch (Exception e) {
             ctx.status(500).result("Internal server error: " + e.getMessage());
         }
+    }
+
+    // Create new draft post (Det her er Juvenas del har dog ikke lavet noget endnu)
+
+
+    // Get all drafts for current user
+    public void getMyDrafts(Context ctx) throws ApiException {
+        try {
+            Long currentUserId = getAuthenticatedUserId(ctx);
+            if (currentUserId == null) {
+                throw new ApiException(401, "Authentication required");
+            }
+
+            List<BlogPostDTO> drafts = blogPostDAO.getDraftsByUser(currentUserId);
+            ctx.json(drafts);
+        } catch (ApiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ApiException(500, "Error retrieving drafts");
+        }
+    }
+
+    // Publish a draft
+    public void publishDraft(Context ctx) throws ApiException {
+        try {
+            Long postId = Long.parseLong(ctx.pathParam("id"));
+            Long currentUserId = getAuthenticatedUserId(ctx);
+
+            // First verify the post exists and belongs to the user
+            BlogPostDTO post = blogPostDAO.getById(postId);
+            if (!post.getUserId().equals(currentUserId)) {
+                throw new ApiException(403, "You can only publish your own drafts");
+            }
+
+            BlogPostDTO updatedPost = blogPostDAO.updateStatus(postId, BlogPostStatus.PUBLISHED);
+            ctx.json(updatedPost);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Invalid post ID");
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, "Post not found");
+        } catch (ApiException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ApiException(500, "Error publishing draft");
+        }
+    }
+
+    // Helper method - returns just the user ID
+    private Long getAuthenticatedUserId(Context ctx) {
+        // Example implementations:
+        // 1. From session: return ctx.sessionAttribute("userId");
+        // 2. From JWT: return getUserIdFromJwt(ctx.header("Authorization"));
+        // Implement according to your auth system
+        return 1L; // placeholder - replace with actual implementation
     }
 }

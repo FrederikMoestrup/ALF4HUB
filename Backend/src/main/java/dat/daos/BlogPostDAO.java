@@ -5,6 +5,7 @@ import dat.entities.BlogPost;
 import dat.enums.BlogPostStatus;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
@@ -65,6 +66,10 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             // TODO: Set the new status to PUBLISHED or DRAFT depending on the context
             // Currently we're only able to publish in our given US
             // We might have to take in status in the param in the future
+
+            //// If status isn't provided, it will default to DRAFT from entity
+            //If you want to force DRAFT status for certain operations:
+            //newBlogPost.setStatus(BlogPostStatus.DRAFT);
             newBlogPost.setStatus(BlogPostStatus.PUBLISHED);
 
             em.getTransaction().begin();
@@ -74,6 +79,43 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             return new BlogPostDTO(newBlogPost);
         }
     }
+
+    // new method to get drafts by user ID
+    public List<BlogPostDTO> getDraftsByUser(Long userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.findDraftsByUser", BlogPost.class);
+            query.setParameter("userId", userId);
+            List<BlogPost> drafts = query.getResultList();
+
+            return drafts.stream()
+                    .map(BlogPostDTO::new)
+                    .toList();
+        }
+    }
+
+    // new method to update status (draft -> published)
+    public BlogPostDTO updateStatus(Long id, BlogPostStatus newStatus) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            BlogPost blogPost = em.find(BlogPost.class, id);
+            if (blogPost == null) {
+                throw new EntityNotFoundException("Blog post not found");
+            }
+
+            // Basic status transition validation
+            if (blogPost.getStatus() == BlogPostStatus.PUBLISHED && newStatus == BlogPostStatus.DRAFT) {
+                throw new IllegalStateException("Cannot revert published post to draft");
+            }
+
+            blogPost.setStatus(newStatus);
+            blogPost.setUpdatedAt(LocalDateTime.now());
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(blogPost);
+        }
+    }
+
+
 
     @Override
     public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) {

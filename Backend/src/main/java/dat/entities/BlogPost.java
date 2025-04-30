@@ -25,7 +25,11 @@ import java.time.LocalDateTime;
         @NamedQuery(
                 name = "BlogPost.findAllWithOnlyContentPreview",
                 query = "SELECT new dat.dtos.BlogPostDTO(bp.id, bp.userId, bp.title, SUBSTRING(bp.content, 1, 150), bp.createdAt, bp.updatedAt, bp.status) FROM BlogPost bp"
-        )
+        ),
+        // New Query for finding drafts by user
+        @NamedQuery(
+                name = "BlogPost.findDraftsByUser",
+                query = "SELECT bp FROM BlogPost bp WHERE bp.userId = :userId AND bp.status = 'DRAFT'")
 })
 @Table(name = "blog_post")
 public class BlogPost {
@@ -55,8 +59,10 @@ public class BlogPost {
     private LocalDateTime updatedAt;
 
     // Should there be a default, perhaps PENDING_REVIEW or DRAFT?
+    // I added DRAFT as default
     @Enumerated(EnumType.STRING)
-    private BlogPostStatus status;
+    @Column(name = "status", nullable = false)
+    private BlogPostStatus status= BlogPostStatus.DRAFT ;
 
     public BlogPost(BlogPostDTO blogPostDTO) {
         this.id = blogPostDTO.getId();
@@ -65,7 +71,8 @@ public class BlogPost {
         this.content = blogPostDTO.getContent();
         this.createdAt = blogPostDTO.getCreatedAt();
         this.updatedAt = blogPostDTO.getUpdatedAt();
-        this.status = blogPostDTO.getStatus();
+        // Set status, default to DRAFT if not provided
+        this.status = blogPostDTO.getStatus() != null ? blogPostDTO.getStatus() : BlogPostStatus.DRAFT;
     }
 
 }
