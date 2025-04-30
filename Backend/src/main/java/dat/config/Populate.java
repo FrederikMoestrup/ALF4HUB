@@ -13,140 +13,105 @@ import java.util.List;
 import static dat.enums.Game.DOTA_2;
 import static dat.enums.Game.LEAGUE_OF_LEGENDS;
 
-public class Populate {
+public class Populate
+{
 
-    public static void populateDatabase(EntityManagerFactory emf) {
+    public static void populateDatabase(EntityManagerFactory emf)
+    {
 
-        try (var em = emf.createEntityManager()) {
+        try (var em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
-            Tournament tournament1 = new Tournament();
-            tournament1.setTournamentName("League of Legends Championship");
-            tournament1.setStartDate("2025-06-01");
-            tournament1.setEndDate("2025-06-05");
-            tournament1.setStartTime("10:00");
-            tournament1.setEndTime("18:00");
-            tournament1.setGame(LEAGUE_OF_LEGENDS);
-            tournament1.setStatus("UPCOMING");
-            tournament1.setRules("Standard rules apply");
-            tournament1.setEntryRequirements("None");
-            tournament1.setPrizePool(5000.0);
-            tournament1.setTeamSize(5);
-            tournament1.setTournamentSize(16);
+            User cap1 = new User("Cap1", "1234");
+            User cap2 = new User("Cap2", "1234");
+            User cap3 = new User("Cap3", "1234");
+            User cap4 = new User("Cap4", "1234");
+            User cap5 = new User("Cap5", "1234");
+            User cap6 = new User("Cap6", "1234");
 
-            Tournament tournament2 = new Tournament();
-            tournament2.setTournamentName("DOTA 2 International");
-            tournament2.setStartDate("2025-07-01");
-            tournament2.setEndDate("2025-07-10");
-            tournament2.setStartTime("11:00");
-            tournament2.setEndTime("20:00");
-            tournament2.setGame(DOTA_2);
-            tournament2.setStatus("UPCOMING");
-            tournament2.setRules("DOTA 2 rules");
-            tournament2.setEntryRequirements("Invite only");
-            tournament2.setPrizePool(10000.0);
-            tournament2.setTeamSize(5);
-            tournament2.setTournamentSize(16);
+            User user1 = new User("User1", "1234");
+            User user2 = new User("User2", "1234");
+            User user3 = new User("User3", "1234");
+            User user4 = new User("User4", "1234");
+            User user5 = new User("User5", "1234");
+            User user6 = new User("User6", "1234");
 
-            // Create teams and players
-            List<Team> lolTeam = getLolTeam();
-            List<Team> dotaTeam = getDotaTeam();
-            List<PlayerAccount> playeracc1 = getPlayerAcc1();
-            List<PlayerAccount> playeracc2 = getPlayerAcc2();
+            PlayerAccount playerAccountCap1 = new PlayerAccount("Cap1Account", true, LEAGUE_OF_LEGENDS, "Platinum", cap1);
+            PlayerAccount playerAccountCap2 = new PlayerAccount("Cap2Account", true, LEAGUE_OF_LEGENDS, "Gold", cap2);
+            PlayerAccount playerAccountCap3 = new PlayerAccount("Cap3Account", true, LEAGUE_OF_LEGENDS, "Diamond", cap3);
+            PlayerAccount playerAccountCap4 = new PlayerAccount("Cap4Account", true, DOTA_2, "Platinum", cap4);
+            PlayerAccount playerAccountCap5 = new PlayerAccount("Cap5Account", true, DOTA_2, "Gold", cap5);
+            PlayerAccount playerAccountCap6 = new PlayerAccount("Cap6Account", true, DOTA_2, "Diamond", cap6);
 
-            // Persist
-            for (Team team : lolTeam) {
-                em.persist(team.getTeamCaptain());
-            }
-            for (Team team : dotaTeam) {
-                em.persist(team.getTeamCaptain());
-            }
-            for (PlayerAccount player : playeracc1) {
-                em.persist(player.getUser());
-            }
-            for (PlayerAccount player : playeracc2) {
-                em.persist(player.getUser());
-            }
+            PlayerAccount playerAccount1 = new PlayerAccount("Mads Mikkelsen", true, LEAGUE_OF_LEGENDS, "Bronze", user1);
+            PlayerAccount playerAccount2 = new PlayerAccount("Nikolaj Coster", true, LEAGUE_OF_LEGENDS, "Silver", user2);
+            PlayerAccount playerAccount3 = new PlayerAccount("Pilou Asbæk", true, LEAGUE_OF_LEGENDS, "Gold", user3);
+            PlayerAccount playerAccount4 = new PlayerAccount("Anders Matthesen", true, DOTA_2, "Platinum", user4);
+            PlayerAccount playerAccount5 = new PlayerAccount("Mick Øgendahl", true, DOTA_2, "Diamond", user5);
+            PlayerAccount playerAccount6 = new PlayerAccount("Jonatan Spang", true, DOTA_2, "Challenger", user6);
 
-            // Assign teams to tournaments
-            tournament1.setTeams(lolTeam);
-            tournament2.setTeams(dotaTeam);
+            Team team1 = new Team("Supra", LEAGUE_OF_LEGENDS, cap1);
+            Team team2 = new Team("Champions", LEAGUE_OF_LEGENDS, cap2);
+            Team team3 = new Team("Eagles", LEAGUE_OF_LEGENDS, cap3);
 
-            // Assign players to teams
-            playeracc1.get(0).setTeam(List.of(lolTeam.get(0)));
-            playeracc1.get(1).setTeam(List.of(lolTeam.get(1)));
-            playeracc1.get(2).setTeam(List.of(lolTeam.get(2)));
+            Team team4 = new Team("Brainstorm Titans", DOTA_2, cap4);
+            Team team5 = new Team("Alliance", DOTA_2, cap5);
+            Team team6 = new Team("The Caffeine Crew", DOTA_2, cap6);
 
-            playeracc2.get(0).setTeam(List.of(dotaTeam.get(0)));
-            playeracc2.get(1).setTeam(List.of(dotaTeam.get(1)));
-            playeracc2.get(2).setTeam(List.of(dotaTeam.get(2)));
+            team1.addPlayerAccount(playerAccountCap1);
+            team1.addPlayerAccount(playerAccount1);
+            team2.addPlayerAccount(playerAccountCap2);
+            team2.addPlayerAccount(playerAccount2);
+            team3.addPlayerAccount(playerAccountCap3);
 
-            // Persist teams
-            for (Team team : lolTeam) {
-                em.persist(team);
-            }
-            for (Team team : dotaTeam) {
-                em.persist(team);
-            }
+            team4.addPlayerAccount(playerAccountCap4);
+            team4.addPlayerAccount(playerAccount4);
+            team5.addPlayerAccount(playerAccountCap5);
+            team5.addPlayerAccount(playerAccount5);
+            team6.addPlayerAccount(playerAccountCap6);
 
-            // Persist tournaments
-            em.persist(tournament1);
-            em.persist(tournament2);
 
-            // Persist players
-            for (PlayerAccount player : playeracc1) {
-                em.persist(player);
-            }
-            for (PlayerAccount player : playeracc2) {
-                em.persist(player);
-            }
+            Tournament tournament1 = new Tournament("League of Legends Championship", LEAGUE_OF_LEGENDS,
+                    16, 5, 5000.0, "Standard rules apply", "None", "UPCOMING",
+                    "2025-06-01", "10:00", "2025-06-05", "18:00", cap1);
+
+            Tournament tournament2 = new Tournament("DOTA 2 International", DOTA_2,
+                    16, 5, 10000.0, "DOTA 2 rules", "Invite only", "UPCOMING",
+                    "2025-07-01", "11:00", "2025-07-10", "20:00", cap2);
+
+            team1.setTournament(tournament1);
+            team2.setTournament(tournament2);
+
+            List<User> users = List.of(cap1, cap2, cap3, cap4, cap5, cap6, user1, user2, user3, user4, user5, user6);
+            users.forEach(em::persist);
+
+            // Persist all player accounts
+            List<PlayerAccount> playerAccounts = List.of(
+                    playerAccountCap1, playerAccountCap2, playerAccountCap3,
+                    playerAccountCap4, playerAccountCap5, playerAccountCap6,
+                    playerAccount1, playerAccount2, playerAccount3,
+                    playerAccount4, playerAccount5, playerAccount6
+            );
+            playerAccounts.forEach(em::persist);
+
+            // Persist all teams
+            List<Team> teams = List.of(team1, team2, team3, team4, team5, team6);
+            teams.forEach(em::persist);
+
+            // Persist all tournaments
+            List<Tournament> tournaments = List.of(tournament1, tournament2);
+            tournaments.forEach(em::persist);
 
             em.getTransaction().commit();
         }
     }
 
-    @NotNull
-    private static List<Team> getLolTeam() {
-        Team t1 = new Team("Supra", LEAGUE_OF_LEGENDS, new User("Cap1", "1234"));
-        Team t2 = new Team("Champions", LEAGUE_OF_LEGENDS, new User("Cap2", "1234"));
-        Team t3 = new Team("Eagles", LEAGUE_OF_LEGENDS, new User("Cap3", "1234"));
 
-        Team[] arrayTeam = {t1, t2, t3};
-        return List.of(arrayTeam);
-    }
-
-    @NotNull
-    private static List<Team> getDotaTeam() {
-        Team t1 = new Team("Brainstorm Titans", DOTA_2, new User("Cap4", "1234"));
-        Team t2 = new Team("Alliance", DOTA_2, new User("Cap5", "1234"));
-        Team t3 = new Team("The Caffeine crew", DOTA_2, new User("Cap6", "1234"));
-
-        Team[] arrayTeam = {t1, t2, t3};
-        return List.of(arrayTeam);
-    }
-
-    @NotNull
-    private static List<PlayerAccount> getPlayerAcc1() {
-        PlayerAccount p1 = new PlayerAccount("Mads Mikkelsen", true, LEAGUE_OF_LEGENDS, "Bronze", new User("User1", "1234"));
-        PlayerAccount p2 = new PlayerAccount("Nikolaj Coster", true, LEAGUE_OF_LEGENDS, "Silver", new User("User2", "1234"));
-        PlayerAccount p3 = new PlayerAccount("Pilou Asbæk", true, LEAGUE_OF_LEGENDS, "Gold", new User("User3", "1234"));
-
-        PlayerAccount[] arrayPlayAccount = {p1, p2, p3};
-        return List.of(arrayPlayAccount);
-    }
-
-    @NotNull
-    private static List<PlayerAccount> getPlayerAcc2() {
-        PlayerAccount p1 = new PlayerAccount("Anders Matthesen", true, DOTA_2, "Platinum", new User("User4", "1234"));
-        PlayerAccount p2 = new PlayerAccount("Mick Øgendahl", true, DOTA_2, "Diamond", new User("User5", "1234"));
-        PlayerAccount p3 = new PlayerAccount("Jonatan Spang", true, DOTA_2, "Challenger", new User("User6", "1234"));
-
-        PlayerAccount[] arrayPlayAccount = {p1, p2, p3};
-        return List.of(arrayPlayAccount);
-    }
-
-    public static void clearDatabase(EntityManagerFactory emf) {
-        try (var em = emf.createEntityManager()) {
+    public static void clearDatabase(EntityManagerFactory emf)
+    {
+        try (var em = emf.createEntityManager())
+        {
             em.getTransaction().begin();
 
             // delete from all tables
