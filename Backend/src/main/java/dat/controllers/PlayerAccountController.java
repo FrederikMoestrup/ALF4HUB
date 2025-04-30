@@ -6,6 +6,7 @@ import dat.dtos.PlayerAccountDTO;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -96,6 +97,4 @@ public class PlayerAccountController {
             throw new ApiException(e.getStatusCode(), e.getMessage());
         }
     }
-
-
 }
