@@ -36,29 +36,7 @@ public class UserDTO {
         this.id = user.getId();
         this.username = user.getUsername();
         this.roles = user.getRolesAsStrings();
-
-        if (user.getPlayerAccounts() != null) {
-            this.playerAccounts = user.getPlayerAccounts().stream()
-                    .map(PlayerAccountDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTournaments() != null) {
-            this.tournaments = user.getTournaments().stream()
-                    .map(TournamentDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTeams() != null) {
-            this.teams = user.getTeams().stream()
-                    .map(TeamDTO::new)
-                    .collect(Collectors.toList());
-        }
     }
-
-
-
-
 
 
 

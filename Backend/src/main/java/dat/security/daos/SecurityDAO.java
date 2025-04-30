@@ -11,6 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -34,7 +35,8 @@ public class SecurityDAO implements ISecurityDAO {
     @Override
     public UserDTO getVerifiedUser(String username, String password) throws ValidationException {
         try (EntityManager em = getEntityManager()) {
-            User user = em.find(User.class, username);
+            List<User> users = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", username).getResultList();
+            User user = users.get(0);
             if (user == null)
                 throw new EntityNotFoundException("No user found with username: " + username); //RuntimeException
             user.getRoles().size(); // force roles to be fetched from db
@@ -47,10 +49,13 @@ public class SecurityDAO implements ISecurityDAO {
     @Override
     public User createUser(String username, String password) {
         try (EntityManager em = getEntityManager()) {
-            User userEntity = em.find(User.class, username);
-            if (userEntity != null)
+            List<User> users = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", username).getResultList();
+
+            if (!users.isEmpty()) {
                 throw new EntityExistsException("User with username: " + username + " already exists");
-            userEntity = new User(username, password);
+            }
+
+            User userEntity = new User(username, password);
             em.getTransaction().begin();
             Role userRole = em.find(Role.class, "user");
 
@@ -65,7 +70,7 @@ public class SecurityDAO implements ISecurityDAO {
             em.getTransaction().commit();
 
             if(username.equals("admin")){
-                addRole(new UserDTO(username, password), "admin");
+                addRole(users.get(0).getId(), "admin");
             }
 
             return userEntity;
@@ -76,11 +81,11 @@ public class SecurityDAO implements ISecurityDAO {
     }
 
     @Override
-    public User addRole(UserDTO userDTO, String newRole) {
+    public User addRole(int id, String newRole) {
         try (EntityManager em = getEntityManager()) {
-            User user = em.find(User.class, userDTO.getUsername());
+            User user = em.find(User.class, id);
             if (user == null)
-                throw new EntityNotFoundException("No user found with username: " + userDTO.getUsername());
+                throw new EntityNotFoundException("No user found with user id: " + id);
             em.getTransaction().begin();
             Role role = em.find(Role.class, newRole);
             if (role == null) {
