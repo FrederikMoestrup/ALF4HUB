@@ -137,7 +137,7 @@ class TournamentDAOTest {
         assertEquals("UpdatedTournament", updated.getTournamentName());
     }
 
-    //will lazy load
+
     @Test
     void delete() throws ApiException {
         TournamentDTO tournamentBeforeDelete = tournamentDAO.getById(1);
