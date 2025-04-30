@@ -35,18 +35,16 @@ const PlayerName = styled.div`
 `;
 
 
-const RankCircle = styled.div`
-  margin-top: 10px;
-  width: 40px;
-  height: 40px;
+const RankRectangle  = styled.div`
+margin-top: 10px;
+  padding: 6px 12px;
   border: 2px solid black;
-  border-radius: 50%;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
   color: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: inline-block;
+  white-space: nowrap;
 `;
 
 const RemoveButton = styled.button`
@@ -59,14 +57,15 @@ const RemoveButton = styled.button`
   cursor: pointer;
 `;
 
-const ShowTeamInfo = ({player, isCaptain}) =>{
+const ShowTeamInfo = ({team, teamCaptain}) =>{
+
     
     return (
-        <PlayerCard isActive={player.isActive}>
-          {isCaptain && <Crown>👑</Crown>}
+        <PlayerCard >
+          {teamCaptain && <Crown>👑</Crown>}
           <PlayerImage img="./" alt="" />
-          <PlayerName>{player.playAccountName}</PlayerName>
-          <RankCircle>{player.rank}</RankCircle>
+          <PlayerName>{team.userName}</PlayerName>
+          <RankRectangle>{team.rank}</RankRectangle>
           <RemoveButton>Remove</RemoveButton>
         </PlayerCard>
       );

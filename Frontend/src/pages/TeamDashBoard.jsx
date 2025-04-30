@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ShowTeamInfo from "../components/ShowTeamInfo.jsx";
 import React, { useEffect, useState } from "react";
+import apiFacade from "../util/apiFacade.js";
 
 const HeaderSection = styled.div`
   display: flex;
@@ -84,62 +85,53 @@ const GameBox = styled.div`
 `;
 
 function TeamDashBoard() {
-  const [players, setPlayers] = useState([]);
+  const [team, setTeam] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null)
 
+  
   useEffect(() => {
-    const playersData = [
-      {
-        id: 1,
-        playAccountName: "Pizza Time",
-        game: "CS2",
-        rank: "8.5",
-        team : "HotChilliPeppers",
-        isCaptain: false,
-        isActive: true
-      },
-      {
-        id: 2,
-        playAccountName: "Stal",
-        game: "CS2",
-        rank: "6.2",
-        team : "HotChilliPeppers",
-        isCaptain: true,
-        isActive: false
-      },
-      {
-        id: 3,
-        playAccountName: "bing_bong",
-        game: "CS2",
-        rank: "5.6",
-        team : "BestOfTheBest",
-        isCaptain: false,
-        isActive: true
-      },
-      {
-        id: 4,
-        playAccountName: "Orson",
-        game: "CS2",
-        rank: "4.8",
-        team : "HotChilliPeppers",
-        isCaptain: false,
-        isActive: true
+    const fetchTeams = async () => {
+      try {
+        const teamsData = await apiFacade.getAllTeams();
+  
+        if (teamsData.length > 0) {
+          const team = teamsData[0];
+          setTeam(team);
+          setCurrentUser(team.teamCaptain);  
+        }
+  
+      } catch (error) {
+        console.error('Failed to fetch teams:', error);
       }
-    ];
-
-    setPlayers(playersData);
+    };
+  
+    fetchTeams();
   }, []);
+  
+
+  if (!team) {
+    return <Container><Title>No teams for the captain.</Title></Container>;
+  }
 
   const renderPlayers = () => {
-    const captain = players.find(player => player.isCaptain);
-    const currentTeam = captain ? captain.team : "";
-  
-    const teamPlayers = players.filter(player => player.team === currentTeam);
-  
-    const playerCards = teamPlayers.slice(0, 5).map((player, index) => (
-      <ShowTeamInfo key={player.id} player={player} isCaptain={index === 5} />
+    if (!team || team.teamAccounts.length === 0) {
+      return <div>No Players on the team.</div>;
+    }
+
+    const playerCards = team.teamAccounts.slice(0, 5).map(account => (
+      <ShowTeamInfo 
+        key={account.id} 
+        team={{
+          teamCaptain: team.teamCaptain,
+          rank: account.rank,
+          userName: account.user?.username ?? "Unknown",
+
+        }}
+        teamCaptain={false}
+      />
     ));
-  
-    if (teamPlayers.length < 5) {
+
+    if (team.teamAccounts.length < 5) {
       playerCards.push(
         <InviteCard key="invite">
           <InvitePlus>+</InvitePlus>
@@ -147,29 +139,22 @@ function TeamDashBoard() {
         </InviteCard>
       );
     }
-  
+
     return playerCards;
   };
-
   return (
     <Container>
-     <Title>Team Dashboard</Title>
+      <Title>Team Dashboard</Title>
+      <HeaderSection>
+        <GameBox>
+          <GameName>{team.game}</GameName>
+        </GameBox>
+        <TeamName>{team.teamName}</TeamName>
+      </HeaderSection>
 
-{players.length > 0 && (
-  <>
-  <HeaderSection>
-    <GameBox>
-      <GameName>{players[0].game}</GameName>
-    </GameBox>
-
-    <TeamName> {players[0].team}</TeamName> 
-    </HeaderSection>
-  </>
-)}
-
-<PlayersWrapper>
-  {renderPlayers()}
-</PlayersWrapper>
+      <PlayersWrapper>
+        {renderPlayers()}
+      </PlayersWrapper>
     </Container>
   );
 }
