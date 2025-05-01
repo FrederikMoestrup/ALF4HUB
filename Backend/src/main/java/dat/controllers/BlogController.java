@@ -94,22 +94,24 @@ public class BlogController {
 
 
     // Get all drafts for current user
-    public void getMyDrafts(Context ctx) throws ApiException {
+    public void getMyDrafts(Context ctx) {
         try {
             Long currentUserId = getAuthenticatedUserId(ctx);
             if (currentUserId == null) {
-                throw new ApiException(401, "Authentication required");
+                ctx.status(401).result("Authentication required");
+                return;
             }
 
             List<BlogPostDTO> drafts = blogPostDAO.getDraftsByUser(currentUserId);
-            ctx.json(drafts);
-        } catch (ApiException e) {
-            throw e;
+            if (drafts == null || drafts.isEmpty()) {
+                ctx.status(200).result("No drafts found");
+            } else {
+                ctx.status(200).json(drafts, BlogPostDTO.class);
+            }
         } catch (Exception e) {
-            throw new ApiException(500, "Error retrieving drafts");
+            ctx.status(500).result("Internal server error: " + e.getMessage());
         }
     }
-
     // Publish a draft
     public void publishDraft(Context ctx) throws ApiException {
         try {
@@ -119,21 +121,21 @@ public class BlogController {
             // First verify the post exists and belongs to the user
             BlogPostDTO post = blogPostDAO.getById(postId);
             if (!post.getUserId().equals(currentUserId)) {
-                throw new ApiException(403, "You can only publish your own drafts");
+                ctx.status(403).result("You can only publish your own drafts");
+                return;
             }
 
             BlogPostDTO updatedPost = blogPostDAO.updateStatus(postId, BlogPostStatus.PUBLISHED);
-            ctx.json(updatedPost);
+            ctx.status(200).json(updatedPost);
         } catch (NumberFormatException e) {
-            throw new ApiException(400, "Invalid post ID");
+            ctx.status(400).result("Invalid post ID");
         } catch (EntityNotFoundException e) {
-            throw new ApiException(404, "Post not found");
-        } catch (ApiException e) {
-            throw e;
+            ctx.status(404).result("Post not found");
         } catch (Exception e) {
-            throw new ApiException(500, "Error publishing draft");
+            ctx.status(500).result("Internal server error: " + e.getMessage());
         }
     }
+
 
     // Helper method - returns just the user ID
     private Long getAuthenticatedUserId(Context ctx) {

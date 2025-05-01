@@ -58,8 +58,13 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
     public BlogPostDTO create(BlogPostDTO blogPostDTO) {
         try (EntityManager em = emf.createEntityManager()) {
 
-            if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
-                throw new IllegalStateException("Blog post is not ready to be saved - it needs to be reviewed.");
+            //if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
+            //  throw new IllegalStateException("Blog post is not ready to be saved - it needs to be reviewed.");
+            // }
+
+            // 1. Remove the READY status validation (this was blocking drafts)
+            if (blogPostDTO.getTitle() == null || blogPostDTO.getContent() == null) {
+                throw new IllegalArgumentException("Title and content are required");
             }
 
             BlogPost newBlogPost = new BlogPost(blogPostDTO);
@@ -67,10 +72,11 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             // Currently we're only able to publish in our given US
             // We might have to take in status in the param in the future
 
-            //// If status isn't provided, it will default to DRAFT from entity
-            //If you want to force DRAFT status for certain operations:
-            //newBlogPost.setStatus(BlogPostStatus.DRAFT);
-            newBlogPost.setStatus(BlogPostStatus.PUBLISHED);
+            // If status wasn't provided in DTO, use default from entity (DRAFT)
+            // If provided, respect the requested status (but validate transitions if needed)
+            if (blogPostDTO.getStatus() != null) {
+                newBlogPost.setStatus(blogPostDTO.getStatus());
+            }
 
             em.getTransaction().begin();
             em.persist(newBlogPost);
@@ -78,6 +84,20 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
 
             return new BlogPostDTO(newBlogPost);
         }
+    }
+
+    // New dedicated method for draft creation
+    public BlogPostDTO createDraft(BlogPostDTO blogPostDTO) {
+        // Force DRAFT status regardless of what DTO contains
+        blogPostDTO.setStatus(BlogPostStatus.DRAFT);
+        return create(blogPostDTO);
+    }
+
+    // Optional method for direct publishing
+    public BlogPostDTO publishBlogPost(BlogPostDTO blogPostDTO) {
+        // Additional validation could be added here
+        blogPostDTO.setStatus(BlogPostStatus.PUBLISHED);
+        return create(blogPostDTO);
     }
 
     // new method to get drafts by user ID
@@ -102,13 +122,12 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
                 throw new EntityNotFoundException("Blog post not found");
             }
 
-            // Basic status transition validation
+            // Validate post exists
             if (blogPost.getStatus() == BlogPostStatus.PUBLISHED && newStatus == BlogPostStatus.DRAFT) {
                 throw new IllegalStateException("Cannot revert published post to draft");
             }
 
-            blogPost.setStatus(newStatus);
-            blogPost.setUpdatedAt(LocalDateTime.now());
+            blogPost.setStatus(newStatus); // Update status - @UpdateTimestamp will handle updatedAt automatically
             em.getTransaction().commit();
 
             return new BlogPostDTO(blogPost);
