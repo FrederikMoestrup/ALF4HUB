@@ -44,3 +44,17 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 ###
+
+### oprette turnering
+POST http://localhost:7070/api/tournaments
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+"tournamentName": "Spring Cup 2025",
+"startDate": "2025-06-01",
+"endDate": "2025-06-05"
+}
+
+###
+
