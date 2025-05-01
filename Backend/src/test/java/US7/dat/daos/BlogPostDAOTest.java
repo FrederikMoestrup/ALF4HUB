@@ -5,6 +5,7 @@ import dat.daos.BlogPostDAO;
 import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
 import dat.enums.BlogPostStatus;
+import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
@@ -84,10 +86,39 @@ class BlogPostDAOTest {
 
 
     @Test
-    void update() {
+    void update() throws ApiException {
+
+        List<BlogPostDTO> allPosts = blogPostDAO.getAll();
+        BlogPostDTO existingPost = allPosts.get(0);
+
+        BlogPostDTO updateDTO = new BlogPostDTO();
+        updateDTO.setTitle("Updated Title");
+        updateDTO.setContent("Updated Content");
+
+
+        BlogPostDTO updatedPost = blogPostDAO.update(existingPost.getId(), updateDTO);
+
+
+        assertThat(updatedPost.getTitle(), equalTo("Updated Title"));
+        assertThat(updatedPost.getContent(), equalTo("Updated Content"));
+
+
+        BlogPostDTO nonExistingUpdateDTO = new BlogPostDTO();
+        nonExistingUpdateDTO.setTitle("Will fail");
+        nonExistingUpdateDTO.setContent("Will also fail");
+
+
+        ApiException exception = assertThrowsExactly(ApiException.class, () -> {
+            blogPostDAO.update(9999L, nonExistingUpdateDTO);
+        });
+        assertThat(exception.getStatusCode(), equalTo(404));
     }
+
+
+
 
     @Test
     void delete() {
     }
 }
+
