@@ -1,13 +1,66 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';  // Importer useNavigate til navigation
-import '../index.css';  // Husk at importere CSS'en
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../index.css';
 
 function CreateTournament() {
-    const navigate = useNavigate();  // Hent navigate funktionen fra useNavigate
+    const [name, setName] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false); 
 
-    // Funktion til at navigere tilbage til Home-siden
+    const navigate = useNavigate();
+
+    const bannedWords = [
+        'fuck', 'shit', 'bitch', 'idiot', 'nazi', 'porno', 'porn', 'racist',
+        'asshole', 'fucker', 'bastard', 'slut', 'whore', 'retard', 'cunt', 'douche',
+        'crap', 'piss', 'faggot', 'cock', 'dick', 'pussy', 'bollocks', 'twat',
+        'motherfucker', 'satan', 'hell', 'skank', 'rape', 'rapist', 'kinky', 'nsfw',
+        'dræb', 'dræber', 'hader', 'kælling', 'spasser', 'klam', 'racisme', 'neger',
+        'jødehader', 'muslimhader', 'bøsse', 'lesbisk', 'luder'        
+      ];
+      
+
     const goBack = () => {
         navigate('/Home');
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setSuccess(false); 
+
+        if (!name || !startDate || !endDate) {
+            setError('Alle felter skal udfyldes');
+            return;
+        }
+
+        // Her tjekker vi for stødende ord
+        const containsBadWord = bannedWords.some(word =>
+            name.toLowerCase().includes(word)
+        );
+
+        if (containsBadWord) {
+            setError('Turneringsnavnet indeholder stødende ord');
+            return;
+        }
+
+        if (new Date(endDate) < new Date(startDate)) {
+            setError('Slutdato må ikke være før startdato');
+            return;
+        }
+
+        setError('');
+
+        // Her skal vi gemme turneringen i databasen
+        console.log('Turnering gemt:', { name, startDate, endDate });
+
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000); // skjul bekræftelse efter 3 sekunder
+
+        // jeg nulstiller formen ved succesfuld oprettelse
+        setName('');
+        setStartDate('');
+        setEndDate('');
     };
 
     return (
@@ -18,26 +71,42 @@ function CreateTournament() {
                     <h1>Create your next tournament</h1>
                 </div>
 
-                <div className="form">
+                <form className="form" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Choose name for tournament"
                         className="input-field"
+                        value={name}
+                        onChange={(e) => {
+                            setName(e.target.value);
+                            setError('');
+                        }}
                     />
                     <div className="date-fields">
                         <input
                             type="date"
-                            placeholder="Start date"
                             className="input-field"
+                            value={startDate}
+                            onChange={(e) => {
+                                setStartDate(e.target.value);
+                                setError('');
+                            }}
                         />
                         <input
                             type="date"
-                            placeholder="End date"
                             className="input-field"
+                            value={endDate}
+                            onChange={(e) => {
+                                setEndDate(e.target.value);
+                                setError('');
+                            }}
                         />
                     </div>
-                    <button className="confirm-btn">Confirm</button>
-                </div>
+                    <button type="submit" className="confirm-btn">Confirm</button>
+
+                    {error && <p className="error-message">{error}</p>}
+                    {success && <p className="success-message">Turneringen er oprettet!</p>}
+                </form>
 
                 <aside className="sidebar">
                     <h3>My tournaments</h3>
@@ -48,7 +117,6 @@ function CreateTournament() {
                         <li>Tournament 4</li>
                     </ul>
                 </aside>
-
             </div>
 
             <footer className="infoFooter">
