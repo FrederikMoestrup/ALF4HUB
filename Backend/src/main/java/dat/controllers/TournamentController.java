@@ -49,6 +49,7 @@ public class TournamentController {
         ctx.json(createdTournamentDTO, TournamentDTO.class);
     }
 
+
     public void update(Context ctx) throws ApiException {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
