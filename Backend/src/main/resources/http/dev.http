@@ -45,18 +45,5 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-### Create Tournament (tjek op på det)
-
-POST {{url}}/destinations
-Content-Type: application/json
-Authorization: Bearer {{jwt_token}}
-
-{
-  "tournamentName": "fodbold",
-  "startDate": "Germany",
-  "endDate": "Germany"
-
-}
-
 
 
