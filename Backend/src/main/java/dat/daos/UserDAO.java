@@ -20,6 +20,22 @@ public class UserDAO{
         return instance;
     }
 
+    public User findById(int id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.find(User.class, id);
+        }
+    }
+
+    public User update(User user) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            User updatedUser = em.merge(user);
+            em.getTransaction().commit();
+            return updatedUser;
+        }
+    }
+
+
     //Remember SecurityDAO has methods for creating and verifying users and do we really need to delete users?
     //So we are not implementing IDAO here. But we can use this DAO for other methods.
 

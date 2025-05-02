@@ -21,6 +21,7 @@ public class UserDTO {
     private List<PlayerAccountDTO> playerAccounts;
     private List<TournamentDTO> tournaments;
     private List<TeamDTO> teams;
+    private int strikes;
 
     public UserDTO(String username, Set<String> roles,
                    List<PlayerAccountDTO> playerAccounts,
@@ -31,6 +32,7 @@ public class UserDTO {
         this.playerAccounts = playerAccounts;
         this.tournaments = tournaments;
         this.teams = teams;
+
     }
 
     public UserDTO(User user) {
@@ -38,6 +40,7 @@ public class UserDTO {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.roles = user.getRolesAsStrings();
+        this.strikes = user.getStrikes();
 
         if (user.getPlayerAccounts() != null) {
             this.playerAccounts = user.getPlayerAccounts().stream()
