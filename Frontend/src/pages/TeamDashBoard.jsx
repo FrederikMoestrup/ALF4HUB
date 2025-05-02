@@ -86,7 +86,6 @@ const GameBox = styled.div`
 
 function TeamDashBoard() {
   const [team, setTeam] = useState(null);
-  const [currentUser, setCurrentUser] = useState(null)
 
   
   useEffect(() => {
@@ -96,8 +95,7 @@ function TeamDashBoard() {
   
         if (teamsData.length > 0) {
           const team = teamsData[0];
-          setTeam(team);
-          setCurrentUser(team.teamCaptain);  
+          setTeam(team);  
         }
   
       } catch (error) {
@@ -124,10 +122,10 @@ function TeamDashBoard() {
         team={{
           teamCaptain: team.teamCaptain,
           rank: account.rank,
-          userName: account.user?.username ?? "Unknown",
+          playAccountName: account.playAccountName?? "Unknown",
 
         }}
-        teamCaptain={false}
+        isCaptain={account.id === team.teamCaptain?.id}
       />
     ));
 

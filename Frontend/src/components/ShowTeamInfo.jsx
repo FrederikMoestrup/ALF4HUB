@@ -10,7 +10,6 @@ const PlayerCard = styled.div`
   flex-direction: column;
   align-items: center;
   position: relative;
-  opacity: ${props => (props.isActive ? "1" : "0.5")};
   transition: opacity 0.3s ease;
 `;
 
@@ -57,14 +56,14 @@ const RemoveButton = styled.button`
   cursor: pointer;
 `;
 
-const ShowTeamInfo = ({team, teamCaptain}) =>{
+const ShowTeamInfo = ({team, isCaptain}) =>{
 
     
     return (
         <PlayerCard >
-          {teamCaptain && <Crown>👑</Crown>}
-          <PlayerImage img="./" alt="" />
-          <PlayerName>{team.userName}</PlayerName>
+          {isCaptain && <Crown>👑</Crown>}
+          <PlayerImage src="https://via.placeholder.com/100" alt="Player" />
+          <PlayerName>{team.playAccountName}</PlayerName>
           <RankRectangle>{team.rank}</RankRectangle>
           <RemoveButton>Remove</RemoveButton>
         </PlayerCard>
