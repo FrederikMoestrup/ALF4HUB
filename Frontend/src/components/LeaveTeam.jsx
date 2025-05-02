@@ -46,7 +46,12 @@ function LeaveTeam({ playerId: propPlayerId, teamId: propTeamId }) {
   };
 
   if (!playerId || !teamId) {
-    return <p>Mangler spiller- eller holdoplysninger...</p>;
+    return (
+      <div className="error-box">
+        <p>Mangler spiller- eller holdoplysninger...</p>
+      </div>
+    );
+    
   }
 
   return (
