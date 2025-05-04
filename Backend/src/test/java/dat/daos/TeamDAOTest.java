@@ -138,4 +138,27 @@ class TeamDAOTest {
                 not(hasItem(playerToRemove.getId()))
         );
     }
+
+    @Test
+    void addPlayerToTeam() throws ApiException {
+        TeamDTO teamDTO = teamDTOList.get(0);
+
+        System.out.println("Before adding player:");
+        teamDTO.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayAccountName()));
+
+        PlayerAccountDTO newPlayer = playerAccountDTOList.stream()
+                .filter(pa -> teamDTO.getTeamAccounts().stream()
+                        .noneMatch(existing -> existing.getId() == pa.getId()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No suitable player to add"));
+
+        TeamDTO updatedTeam = teamDAO.invitePlayer(teamDTO.getId(), newPlayer);
+
+        System.out.println("After adding player:");
+        updatedTeam.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayAccountName()));
+
+        assertThat(updatedTeam.getTeamAccounts(), hasSize(teamDTO.getTeamAccounts().size() + 1));
+        assertThat(updatedTeam.getTeamAccounts(), hasItem(samePropertyValuesAs(newPlayer)));
+    }
+
 }
