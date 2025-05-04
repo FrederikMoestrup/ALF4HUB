@@ -1,14 +1,23 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // Importer useNavigate til navigation
+import {useState} from 'react-router-dom'; // Importer useState til at håndtere state
 import '../index.css';  // Husk at importere CSS'en
 
 function CreateTournament() {
     const navigate = useNavigate();  // Hent navigate funktionen fra useNavigate
+    const [showMessage, setShowMessage] = useState(false);  // State til at håndtere visning af besked
 
     // Funktion til at navigere tilbage til Home-siden
     const goBack = () => {
         navigate('/Home');
     };
+
+    const handleCreate = () => {
+        setShowMessage(true);  // Sæt state til at vise besked
+        setTimeout(() => {
+            setShowMessage(false);  // Skjul besked efter 3 sekunder
+        }, 2000);
+    }
 
     return (
         <>
@@ -16,6 +25,10 @@ function CreateTournament() {
                 <div className="header">
                     <button className="back-btn" onClick={goBack}>←</button>
                     <h1>Create your next tournament</h1>
+                </div>
+
+                <div className="headline">
+                    <h2> Create your tournament</h2>
                 </div>
 
                 <div className="form">
@@ -36,7 +49,8 @@ function CreateTournament() {
                             className="input-field"
                         />
                     </div>
-                    <button className="confirm-btn">Confirm</button>
+                    <button className="create-btn" onClick={() => navigate('/tournament')}>Create</button>
+                    {showMessage && <p className="success-message">Tournament created successfully!</p>}
                 </div>
 
                 <aside className="sidebar">
@@ -48,8 +62,9 @@ function CreateTournament() {
                         <li>Tournament 4</li>
                     </ul>
                 </aside>
-
             </div>
+
+
 
             <footer className="infoFooter">
                 <p>Altf4hub</p>
