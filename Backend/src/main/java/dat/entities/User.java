@@ -109,6 +109,11 @@ public class User implements Serializable, ISecurityUser {
                     .map(Team::new)
                     .collect(Collectors.toList()));
         }
+        if (dto.getTournamentTeams() != null) {
+            setTournamentTeams(dto.getTournamentTeams().stream()
+                    .map(TournamentTeam::new)
+                    .collect(Collectors.toList()));
+        }
     }
 
 

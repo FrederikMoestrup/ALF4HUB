@@ -72,6 +72,11 @@ public class PlayerAccount {
                     .map(Team::new)
                     .collect(Collectors.toList()));
         }
+        if (playerAccountDTO.getTournamentTeams() != null) {
+            setTournamentTeams(playerAccountDTO.getTournamentTeams().stream()
+                    .map(TournamentTeam::new)
+                    .collect(Collectors.toList()));
+        }
     }
 
     public void setTeam(List<Team> teams) {

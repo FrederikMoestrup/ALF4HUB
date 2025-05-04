@@ -64,7 +64,6 @@ public class Team {
             this.teamCaptain.addTeam(this);
         }
 
-        this.teamAccounts = new ArrayList<>();
         if (teamDTO.getTeamAccounts() != null && !teamDTO.getTeamAccounts().isEmpty()) {
             setTeamAccounts(teamDTO.getTeamAccounts().stream()
                     .map(PlayerAccount::new)

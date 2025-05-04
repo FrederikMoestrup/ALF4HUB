@@ -111,6 +111,7 @@ public class Tournament {
         this.prizePool = tournamentDTO.getPrizePool();
         this.rules = tournamentDTO.getRules();
         this.entryRequirements = tournamentDTO.getEntryRequirements();
+        this.tournamentStatus = tournamentDTO.getTournamentStatus();
         this.startDate = tournamentDTO.getStartDate();
         this.startTime = tournamentDTO.getStartTime();
         this.endDate = tournamentDTO.getEndDate();
@@ -120,15 +121,13 @@ public class Tournament {
             this.host = new User(tournamentDTO.getHost());
             this.host.addTournament(this);
         }
-/*
-        this.teams = new ArrayList<>();
-        if(tournamentDTO.getTeams() != null){
-            setTeams(tournamentDTO.getTeams().stream()
-                    .map(Team::new)
+
+        if (tournamentDTO.getTournamentTeams() != null) {
+            setTournamentTeams(tournamentDTO.getTournamentTeams().stream()
+                    .map(TournamentTeam::new)
                     .collect(Collectors.toList()));
         }
 
- */
     }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {

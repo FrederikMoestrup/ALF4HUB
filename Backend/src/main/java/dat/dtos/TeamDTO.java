@@ -3,6 +3,8 @@ package dat.dtos;
 import dat.entities.Team;
 import dat.enums.Game;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,15 +18,17 @@ public class TeamDTO {
     private Game game;
     private UserDTO teamCaptain;
     private TournamentDTO tournament;
-    private List<PlayerAccountDTO> teamAccounts;
+    private List<PlayerAccountDTO> teamAccounts = new ArrayList<>();
+    private List<TournamentTeamDTO> tournamentTeams = new ArrayList<>();
 
     public TeamDTO(String teamName, Game game, UserDTO teamCaptain,
-                   TournamentDTO tournament, List<PlayerAccountDTO> teamAccounts) {
+                   TournamentDTO tournament, List<PlayerAccountDTO> teamAccounts, List<TournamentTeamDTO> tournamentTeams) {
         this.teamName = teamName;
         this.game = game;
         this.teamCaptain = teamCaptain;
         this.tournament = tournament;
         this.teamAccounts = teamAccounts;
+        this.tournamentTeams = tournamentTeams;
     }
 
     public TeamDTO(Team team) {
@@ -39,6 +43,12 @@ public class TeamDTO {
         if (team.getTeamAccounts() != null && !team.getTeamAccounts().isEmpty()) {
             this.teamAccounts = team.getTeamAccounts().stream()
                     .map(PlayerAccountDTO::new)
+                    .collect(Collectors.toList());
+        }
+
+        if (team.getTournamentTeams() != null && !team.getTournamentTeams().isEmpty()) {
+            this.tournamentTeams = team.getTournamentTeams().stream()
+                    .map(TournamentTeamDTO::new)
                     .collect(Collectors.toList());
         }
     }

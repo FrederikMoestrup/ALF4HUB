@@ -65,6 +65,24 @@ public class TournamentTeam {
         this.game = game;
         this.tournamentTeamCaptain = tournamentTeamCaptain;
     }
+    public TournamentTeam(TournamentTeamDTO tournamentTeamDTO) {
+        this.id = tournamentTeamDTO.getId();
+        this.tournamentTeamName = tournamentTeamDTO.getTournamentTeamName();
+        this.game = tournamentTeamDTO.getGame();
+        this.tournamentStatus = tournamentTeamDTO.getTournamentStatus();
+
+        if (tournamentTeamDTO.getTournamentTeamCaptain() != null) {
+            this.tournamentTeamCaptain = new User(tournamentTeamDTO.getTournamentTeamCaptain());
+            this.tournamentTeamCaptain.addTournamentTeam(this);
+        }
+
+        if (tournamentTeamDTO.getTournamentTeamAccounts() != null && !tournamentTeamDTO.getTournamentTeamAccounts().isEmpty()) {
+            setTournamentTeamAccounts(tournamentTeamDTO.getTournamentTeamAccounts().stream()
+                    .map(PlayerAccount::new)
+                    .toList());
+        }
+
+    }
 
     public void setTournamentTeamAccounts(List<PlayerAccount> playerAccounts) {
         if(playerAccounts != null) {
