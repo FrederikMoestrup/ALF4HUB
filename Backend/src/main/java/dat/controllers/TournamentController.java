@@ -4,6 +4,7 @@ import dat.config.HibernateConfig;
 import dat.daos.TournamentDAO;
 import dat.dtos.TournamentDTO;
 import dat.exceptions.ApiException;
+import dat.services.OffensiveWordsCheck;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -44,6 +45,15 @@ public class TournamentController {
 
     public void create(Context ctx) {
         TournamentDTO tournamentDTO = validateEntity(ctx);
+
+
+        OffensiveWordsCheck checker = new OffensiveWordsCheck("badwordslist.txt");
+        if (checker.containsOffensiveWords(tournamentDTO.getTournamentName())) {
+            ctx.status(400).result("Tournament name contains offensive language.");
+            return;
+        }
+
+
         TournamentDTO createdTournamentDTO = tournamentDAO.create(tournamentDTO);
         ctx.res().setStatus(201);
         ctx.json(createdTournamentDTO, TournamentDTO.class);
