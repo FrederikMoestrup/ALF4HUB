@@ -90,8 +90,35 @@ public class Team {
     }
 
     public void removePlayerAccount(PlayerAccount playerAccount) {
+        if (playerAccount == null || !teamAccounts.contains(playerAccount)) {
+            return;
+        }
         teamAccounts.remove(playerAccount);
         playerAccount.removeTeam(this);
+    }
+
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if(tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTeam(this);
+            }
+        }
+    }
+
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTeam(this);
+        }
+    }
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+        tournamentTeam.setTeam(null);
     }
 
 }

@@ -177,5 +177,35 @@ public class User implements Serializable, ISecurityUser {
         }
     }
 
+    public void removeTeam(Team team) {
+        if (team == null || !teams.contains(team)) {
+            return;
+        }
+        teams.remove(team);
+    }
+
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if(tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTournamentTeamCaptain(this);
+            }
+        }
+    }
+
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTournamentTeamCaptain(this);
+        }
+    }
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+    }
+
 }
 

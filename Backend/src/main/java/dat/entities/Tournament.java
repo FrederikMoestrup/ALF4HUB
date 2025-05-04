@@ -139,21 +139,29 @@ public class Tournament {
 
  */
     }
-/*
-    public void setTeams(List<Team> teams) {
-        if(teams != null) {
-            this.teams = teams;
-            for (Team team : teams) {
-                team.setTournament(this);
+
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if(tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTournament(this);
             }
         }
     }
 
-    public void addTeam(Team team) {
-        if (team != null && !teams.contains(team)) {
-            this.teams.add(team);
-            team.setTournament(this);
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTournament(this);
         }
     }
-*/
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+        tournamentTeam.setTournament(null);
+    }
+
 }

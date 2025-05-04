@@ -93,9 +93,39 @@ public class PlayerAccount {
     public void addTeam(Team team) {
         if (team != null && !teams.contains(team)) {
             teams.add(team);
+            team.addPlayerAccount(this);
         }
     }
 
-    public void removeTeam(Team team) {teams.remove(team);
+    public void removeTeam(Team team){
+        if (team == null || !teams.contains(team)) {
+            return;
+        }
+        teams.remove(team);
     }
+
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if(tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.addPlayerAccount(this);
+            }
+        }
+    }
+
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            tournamentTeams.add(tournamentTeam);
+            tournamentTeam.addPlayerAccount(this);
+        }
+    }
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+    }
+
+
 }

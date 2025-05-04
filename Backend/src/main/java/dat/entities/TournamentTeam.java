@@ -66,6 +66,29 @@ public class TournamentTeam {
         this.tournamentTeamCaptain = tournamentTeamCaptain;
     }
 
+    public void setTournamentTeamAccounts(List<PlayerAccount> playerAccounts) {
+        if(playerAccounts != null) {
+            this.tournamentTeamAccounts = playerAccounts;
+            for (PlayerAccount playerAccount : playerAccounts) {
+                playerAccount.addTournamentTeam(this);
+            }
+        }
+    }
+
+    public void addPlayerAccount(PlayerAccount playerAccount) {
+        if (playerAccount != null && !tournamentTeamAccounts.contains(playerAccount)) {
+            tournamentTeamAccounts.add(playerAccount);
+            playerAccount.addTournamentTeam(this);
+        }
+    }
+
+    public void removePlayerAccount(PlayerAccount playerAccount) {
+        if (playerAccount == null || !tournamentTeamAccounts.contains(playerAccount)) {
+            return;
+        }
+        tournamentTeamAccounts.remove(playerAccount);
+        playerAccount.removeTournamentTeam(this);
+    }
 
 
 }
