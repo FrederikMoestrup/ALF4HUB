@@ -122,10 +122,15 @@ function TeamDashBoard() {
     }
   };
 
-
   const handleSelectPlayer = (player) => {
     console.log('Selected Player:', player);
-    setIsSearchPopupOpen(false); 
+    const updatedTeam = {
+      ...team,
+      teamAccounts: [...team.teamAccounts, player],  
+    };
+
+    setTeam(updatedTeam);  
+    setIsSearchPopupOpen(false);  
   };
 
   if (!team) {
