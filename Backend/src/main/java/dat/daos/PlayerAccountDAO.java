@@ -77,7 +77,6 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             if (playerAccount == null) {
                 throw new ApiException(404, "PlayerAccount not found");
             }
-            System.out.println("Updating status for PlayerAccount ID: " + id + " to " + isActive);
             playerAccount.setActive(isActive);
             em.getTransaction().commit();
             return new PlayerAccountDTO(playerAccount);

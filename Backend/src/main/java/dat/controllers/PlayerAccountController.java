@@ -66,14 +66,11 @@ public class PlayerAccountController {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
             boolean status = Boolean.parseBoolean(ctx.queryParam("status"));
-            System.out.println("Status: " + status);
             PlayerAccountDTO playerAccountDTO = playerAccountDAO.updateStatus(id, status);
             ctx.res().setStatus(200);
             ctx.json(playerAccountDTO, PlayerAccountDTO.class);
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
-        } catch (ApiException e) {
-            throw new ApiException(404, "PlayerAccount not found");
         }
     }
 
