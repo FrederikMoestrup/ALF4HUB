@@ -43,4 +43,14 @@ Authorization: Bearer {{jwt_token}}
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
-###
+### Remove player from team
+DELETE http://localhost:7071/api/teams/2/remove-player
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "id": 6
+}
+
+
