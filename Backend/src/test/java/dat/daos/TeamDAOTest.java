@@ -125,6 +125,7 @@ class TeamDAOTest {
         assertThrowsExactly(ApiException.class, () -> teamDAO.getById(teamDTO.getId()));
     }
 
+    //removeplayer
     @Test
     void removePlayer() throws ApiException {
         TeamDTO team = teamDTOList.get(0);
