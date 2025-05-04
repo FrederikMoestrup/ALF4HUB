@@ -122,6 +122,44 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
+//TournamentTeam
+
+GET http://localhost:7070/api/tournament-teams
+Authorization: Bearer {{jwt_token}}
+###
+
+GET http://localhost:7070/api/tournament-teams/1
+Authorization: Bearer {{jwt_token}}
+###
+
+POST http://localhost:7070/api/tournament-teams
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "tournamentTeamName": "ProGamerTeam",
+  "game": "LEAGUE_OF_LEGENDS"
+}
+
+###
+
+PUT http://localhost:7070/api/tournament-teams/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "tournamentTeamName": "ProGamer1234",
+  "game": "LEAGUE_OF_LEGENDS"
+}
+
+###
+
+DELETE http://localhost:7070/api/tournament-teams/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+
 //Tournament
 
 GET http://localhost:7070/api/tournaments
