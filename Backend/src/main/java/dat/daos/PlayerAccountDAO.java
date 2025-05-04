@@ -70,6 +70,19 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
         }
     }
 
+    public PlayerAccountDTO updateStatus(Integer id, boolean isActive) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            PlayerAccount playerAccount = em.find(PlayerAccount.class, id);
+            if (playerAccount == null) {
+                throw new ApiException(404, "PlayerAccount not found");
+            }
+            playerAccount.setActive(isActive);
+            em.getTransaction().commit();
+            return new PlayerAccountDTO(playerAccount);
+        }
+    }
+
     @Override
     public PlayerAccountDTO delete(Integer id) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {

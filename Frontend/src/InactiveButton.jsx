@@ -15,6 +15,7 @@ function InactiveButton({ playerAccount }) {
             const updatedPlayer = await apiFacade.togglePlayerStatus(playerAccount);
             setIsActive(updatedPlayer.isActive); // Update the state with the new status
             setErrorMessage(''); // Clear any previous error
+            setIsActive(!isActive); // Toggle the active state
         } catch (error) {
             setErrorMessage(error.message || 'Failed to update status. Please try again.');
         }

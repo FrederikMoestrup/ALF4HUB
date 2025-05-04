@@ -35,14 +35,12 @@ public class TeamDTO {
             this.teamCaptain = new UserDTO(team.getTeamCaptain());
         }
 
-        if (team.getTournament() != null) {
-            this.tournament = new TournamentDTO(team.getTournament());
-        }
 
         if (team.getTeamAccounts() != null && !team.getTeamAccounts().isEmpty()) {
             this.teamAccounts = team.getTeamAccounts().stream()
                     .map(PlayerAccountDTO::new)
                     .collect(Collectors.toList());
         }
+
     }
 }

@@ -13,6 +13,7 @@ const apiFacade = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          
         },
       });
 
@@ -28,6 +29,29 @@ const apiFacade = {
       return data.content || data;
     } catch (error) {
       console.error('Error fetching player accounts:', error);
+      throw error;
+    }
+  },
+
+  getAllTeams: async () => {
+    try {
+      const response = await fetch(`${API_URL}/teams`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to fetch teams');
+      }
+
+      const data = await response.json();
+      console.log('Fetched all teams:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching all teams:', error);
       throw error;
     }
   },
@@ -56,6 +80,8 @@ const apiFacade = {
       throw error;
     }
   },
+  
+
 };
 
 export default apiFacade;
