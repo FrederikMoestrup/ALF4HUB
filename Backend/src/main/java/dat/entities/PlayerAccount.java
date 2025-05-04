@@ -47,9 +47,8 @@ public class PlayerAccount {
     private List<TournamentTeam> tournamentTeams;
 
 
-    public PlayerAccount(String playAccountName, boolean isActive, Game game, String rank, User user) {
+    public PlayerAccount(String playAccountName, Game game, String rank, User user) {
         this.playAccountName = playAccountName;
-        this.isActive = isActive;
         this.game = game;
         this.rank = rank;
         this.user = user;
