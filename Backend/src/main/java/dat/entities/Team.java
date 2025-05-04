@@ -42,7 +42,7 @@ public class Team {
     )
     private List<PlayerAccount> teamAccounts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
 

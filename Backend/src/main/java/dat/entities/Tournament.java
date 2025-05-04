@@ -74,7 +74,7 @@ public class Tournament {
 
 
     //Relations
-    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<TournamentTeam> tournamentTeams;
 
     @Setter
