@@ -50,11 +50,14 @@ public class User implements Serializable, ISecurityUser {
 
     //As a host
     @OneToMany(mappedBy = "host", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Tournament> tournaments = new ArrayList<>();;
+    private List<Tournament> tournaments = new ArrayList<>();
 
     //As a team captain
     @OneToMany(mappedBy = "teamCaptain", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Team> teams = new ArrayList<>();;
+    private List<Team> teams = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tournamentTeamCaptain", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {

@@ -34,11 +34,6 @@ public class Team {
     @JoinColumn(name = "team_captain_id")
     private User teamCaptain;
 
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "tournament_id")
-    private Tournament tournament;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "team_accounts",
@@ -46,6 +41,9 @@ public class Team {
             inverseJoinColumns = @JoinColumn(name = "player_account_id", referencedColumnName = "player_account_id")
     )
     private List<PlayerAccount> teamAccounts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
 
     public Team(String teamName, Game game, User teamCaptain) {
@@ -65,11 +63,6 @@ public class Team {
         if (teamDTO.getTeamCaptain() != null) {
             this.teamCaptain = new User(teamDTO.getTeamCaptain());
             this.teamCaptain.addTeam(this);
-        }
-
-        if (teamDTO.getTournament() != null) {
-            this.tournament = new Tournament(teamDTO.getTournament());
-            this.tournament.addTeam(this);
         }
 
         this.teamAccounts = new ArrayList<>();

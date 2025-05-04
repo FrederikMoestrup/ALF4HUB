@@ -47,6 +47,9 @@ public class PlayerAccount {
     @ManyToMany(mappedBy = "teamAccounts", fetch = FetchType.LAZY)
     private List<Team> teams;
 
+    @ManyToMany(mappedBy = "tournamentTeamAccounts", fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams;
+
 
     public PlayerAccount(String playAccountName, boolean isActive, Game game, String rank, User user) {
         this.playAccountName = playAccountName;

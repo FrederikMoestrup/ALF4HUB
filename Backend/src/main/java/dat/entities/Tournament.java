@@ -75,7 +75,7 @@ public class Tournament {
 
     //Relations
     @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private List<Team> teams;
+    private List<TournamentTeam> tournamentTeams;
 
     @Setter
     @ManyToOne
@@ -97,7 +97,7 @@ public class Tournament {
         this.startTime = startTime;
         this.endDate = endDate;
         this.endTime = endTime;
-        this.teams = new ArrayList<>();
+        this.tournamentTeams = new ArrayList<>();
         this.host = host;
     }
 
@@ -122,15 +122,17 @@ public class Tournament {
             this.host = new User(tournamentDTO.getHost());
             this.host.addTournament(this);
         }
-
+/*
         this.teams = new ArrayList<>();
         if(tournamentDTO.getTeams() != null){
             setTeams(tournamentDTO.getTeams().stream()
                     .map(Team::new)
                     .collect(Collectors.toList()));
         }
-    }
 
+ */
+    }
+/*
     public void setTeams(List<Team> teams) {
         if(teams != null) {
             this.teams = teams;
@@ -146,5 +148,5 @@ public class Tournament {
             team.setTournament(this);
         }
     }
-
+*/
 }
