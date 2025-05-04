@@ -25,10 +25,6 @@ public class PlayerAccount {
     private String playAccountName;
 
     @Setter
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive;
-
-    @Setter
     @Column(name = "game", nullable = false)
     @Enumerated(EnumType.STRING)
     private Game game;
