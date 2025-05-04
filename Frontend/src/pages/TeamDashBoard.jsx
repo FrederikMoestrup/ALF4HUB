@@ -123,7 +123,9 @@ function TeamDashBoard() {
           teamCaptain: team.teamCaptain,
           rank: account.rank,
           playAccountName: account.playAccountName?? "Unknown",
-
+          id: account.id,
+          isActive: account.active,
+          game: account.game
         }}
         isCaptain={account.id === team.teamCaptain?.id}
       />
