@@ -61,7 +61,6 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             }
 
             playerAccount.setPlayAccountName(playerAccountDTO.getPlayAccountName());
-            playerAccount.setActive(playerAccountDTO.isActive());
             playerAccount.setGame(playerAccountDTO.getGame());
             playerAccount.setRank(playerAccountDTO.getRank());
 
