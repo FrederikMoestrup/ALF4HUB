@@ -18,6 +18,10 @@ public class PlayerAccountDTO {
     private UserDTO user;
     private List<TeamDTO> teams;
 
+
+    public PlayerAccountDTO() {
+    }
+
     public PlayerAccountDTO(String playAccountName, boolean isActive, Game game, String rank,
                             UserDTO user, List<TeamDTO> teams) {
         this.playAccountName = playAccountName;

@@ -124,4 +124,18 @@ class TeamDAOTest {
 
         assertThrowsExactly(ApiException.class, () -> teamDAO.getById(teamDTO.getId()));
     }
+
+    //removeplayer
+    @Test
+    void removePlayer() throws ApiException {
+        TeamDTO team = teamDTOList.get(0);
+        PlayerAccountDTO playerToRemove = team.getTeamAccounts().get(0);
+
+        TeamDTO updatedTeam = teamDAO.removePlayer(team.getId(), playerToRemove);
+
+        assertThat(
+                updatedTeam.getTeamAccounts().stream().map(PlayerAccountDTO::getId).toList(),
+                not(hasItem(playerToRemove.getId()))
+        );
+    }
 }
