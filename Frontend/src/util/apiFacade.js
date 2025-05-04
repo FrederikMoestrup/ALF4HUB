@@ -54,7 +54,32 @@ const apiFacade = {
       console.error('Error fetching all teams:', error);
       throw error;
     }
-  }
+  },
+
+  togglePlayerStatus: async (playerAccount) => {
+    try {
+      const response = await fetch(`${API_URL}/player-accounts/${playerAccount.id}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...playerAccount,
+          isActive: !playerAccount.isActive, // Toggle the status
+        }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to update player status');
+      }
+
+      return await response.json(); // Return the updated player account
+    } catch (error) {
+      console.error('Error updating player status:', error);
+      throw error;
+    }
+  },
   
 
 };
