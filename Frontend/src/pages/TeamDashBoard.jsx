@@ -1,13 +1,15 @@
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ShowTeamInfo from "../components/ShowTeamInfo.jsx";
-import React, { useEffect, useState } from "react";
 import apiFacade from "../util/apiFacade.js";
+import PlayerSearchPopup from "../components/PlayerSearchPopup"; 
 
 const HeaderSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
+
 const Container = styled.div`
   padding: 20px;
   text-align: center;
@@ -18,7 +20,6 @@ const Container = styled.div`
 const Title = styled.h1`
   font-size: 28px;
 `;
-
 
 const PlayersWrapper = styled.div`
   display: flex;
@@ -42,11 +43,11 @@ const InviteCard = styled.div`
 const InvitePlus = styled.div`
   font-size: 100px;
   margin-bottom: 15px;
-  color: #F3F3F3;
+  color: #f3f3f3;
 `;
 
 const InviteButton = styled.button`
-  background-color:rgb(78, 248, 92);
+  background-color: rgb(78, 248, 92);
   border: none;
   padding: 8px 15px;
   color: black;
@@ -54,6 +55,7 @@ const InviteButton = styled.button`
   border-radius: 5px;
   cursor: pointer;
 `;
+
 const GameName = styled.h2`
   font-size: 48px;
   font-weight: 900;
@@ -86,26 +88,26 @@ const GameBox = styled.div`
 
 function TeamDashBoard() {
   const [team, setTeam] = useState(null);
+  const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false); 
 
-  
   useEffect(() => {
     const fetchTeams = async () => {
       try {
         const teamsData = await apiFacade.getAllTeams();
-  
+
         if (teamsData.length > 0) {
           const team = teamsData[0];
           setTeam(team);  
         }
-  
+
       } catch (error) {
         console.error('Failed to fetch teams:', error);
       }
     };
-  
+
     fetchTeams();
   }, []);
-  
+
   const handleRemovePlayer = async (playerId) => {
     try {
       await apiFacade.removePlayerFromTeam(team.id, playerId);
@@ -118,6 +120,12 @@ function TeamDashBoard() {
       console.error("Failed to remove player:", error);
       alert("Could not remove player.");
     }
+  };
+
+
+  const handleSelectPlayer = (player) => {
+    console.log('Selected Player:', player);
+    setIsSearchPopupOpen(false); 
   };
 
   if (!team) {
@@ -135,7 +143,7 @@ function TeamDashBoard() {
         team={{
           teamCaptain: team.teamCaptain,
           rank: account.rank,
-          playAccountName: account.playAccountName?? "Unknown",
+          playAccountName: account.playAccountName ?? "Unknown",
           id: account.id,
           isActive: account.active,
           game: account.game
@@ -149,13 +157,14 @@ function TeamDashBoard() {
       playerCards.push(
         <InviteCard key="invite">
           <InvitePlus>+</InvitePlus>
-          <InviteButton>Invite</InviteButton>
+          <InviteButton onClick={() => setIsSearchPopupOpen(true)}>Invite</InviteButton> {/* Button to trigger the search popup */}
         </InviteCard>
       );
     }
 
     return playerCards;
   };
+
   return (
     <Container>
       <Title>Team Dashboard</Title>
@@ -169,6 +178,15 @@ function TeamDashBoard() {
       <PlayersWrapper>
         {renderPlayers()}
       </PlayersWrapper>
+
+      {/* Conditionally render the PlayerSearchPopup */}
+      {isSearchPopupOpen && (
+        <PlayerSearchPopup 
+          onClose={() => setIsSearchPopupOpen(false)} 
+          onSelectPlayer={handleSelectPlayer} 
+          teamId={team.id} 
+        />
+      )}
     </Container>
   );
 }
