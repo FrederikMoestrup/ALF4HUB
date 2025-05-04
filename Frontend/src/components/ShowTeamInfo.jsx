@@ -62,7 +62,7 @@ const ShowTeamInfo = ({team, isCaptain}) =>{
     return (
         <PlayerCard >
           {isCaptain && <Crown>👑</Crown>}
-          <PlayerImage src="https://via.placeholder.com/100" alt="Player" />
+          <PlayerImage src="https://via.placeholder.com/100"/>
           <PlayerName>{team.playAccountName}</PlayerName>
           <RankRectangle>{team.rank}</RankRectangle>
           <RemoveButton>Remove</RemoveButton>

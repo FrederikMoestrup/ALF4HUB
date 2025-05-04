@@ -46,7 +46,7 @@ const InvitePlus = styled.div`
 `;
 
 const InviteButton = styled.button`
-  background-color: #5CFF69;
+  background-color:rgb(78, 248, 92);
   border: none;
   padding: 8px 15px;
   color: black;
