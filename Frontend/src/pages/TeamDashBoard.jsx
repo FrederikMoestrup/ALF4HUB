@@ -106,6 +106,19 @@ function TeamDashBoard() {
     fetchTeams();
   }, []);
   
+  const handleRemovePlayer = async (playerId) => {
+    try {
+      await apiFacade.removePlayerFromTeam(team.id, playerId);
+      const updatedTeam = {
+        ...team,
+        teamAccounts: team.teamAccounts.filter(p => p.id !== playerId)
+      };
+      setTeam(updatedTeam);
+    } catch (error) {
+      console.error("Failed to remove player:", error);
+      alert("Could not remove player.");
+    }
+  };
 
   if (!team) {
     return <Container><Title>No teams for the captain.</Title></Container>;
@@ -128,6 +141,7 @@ function TeamDashBoard() {
           game: account.game
         }}
         isCaptain={account.id === team.teamCaptain?.id}
+        onRemovePlayer={handleRemovePlayer}
       />
     ));
 
