@@ -31,7 +31,7 @@ public class Team {
     //Relations
     @Setter
     @ManyToOne
-    @JoinColumn(name = "team_captain_id", nullable = false)
+    @JoinColumn(name = "team_captain_id")
     private User teamCaptain;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})

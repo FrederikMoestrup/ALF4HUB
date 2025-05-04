@@ -39,7 +39,7 @@ public class TournamentTeam {
     //Relations
     @Setter
     @ManyToOne
-    @JoinColumn(name = "tournament_team_captain_id", nullable = false)
+    @JoinColumn(name = "tournament_team_captain_id")
     private User tournamentTeamCaptain;
 
     @Setter
