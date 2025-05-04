@@ -53,8 +53,9 @@ public class Tournament {
     private String entryRequirements;
 
     @Setter
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Column(name = "tournament_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TournamentStatus tournamentStatus;
 
     @Setter
     @Column(name = "start_date", nullable = false)
@@ -72,25 +73,18 @@ public class Tournament {
     @Column(name = "end_time", nullable = false)
     private String endTime;
 
-    @Setter
-    @Column(name = "tournament_status")
-    @Enumerated(EnumType.STRING)
-    private TournamentStatus tournamentStatus;
-
-
-
     //Relations
     @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    private List<TournamentTeam> tournamentTeams;
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "host_id")
+    @JoinColumn(name = "host_id", nullable = false)
     private User host;
 
     public Tournament(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
-                      String rules, String entryRequirements, String status,
-                      String startDate, String startTime, String endDate, String endTime,TournamentStatus tournamentStatus, User host) {
+                      String rules, String entryRequirements, TournamentStatus tournamentStatus,
+                      String startDate, String startTime, String endDate, String endTime, User host) {
         this.tournamentName = tournamentName;
         this.game = game;
         this.tournamentSize = tournamentSize;
@@ -98,13 +92,11 @@ public class Tournament {
         this.prizePool = prizePool;
         this.rules = rules;
         this.entryRequirements = entryRequirements;
-        this.status = status;
+        this.tournamentStatus = tournamentStatus;
         this.startDate = startDate;
         this.startTime = startTime;
         this.endDate = endDate;
         this.endTime = endTime;
-        this.tournamentStatus = tournamentStatus;
-        this.tournamentTeams = new ArrayList<>();
         this.host = host;
     }
 
@@ -119,7 +111,6 @@ public class Tournament {
         this.prizePool = tournamentDTO.getPrizePool();
         this.rules = tournamentDTO.getRules();
         this.entryRequirements = tournamentDTO.getEntryRequirements();
-        this.status = tournamentDTO.getStatus();
         this.startDate = tournamentDTO.getStartDate();
         this.startTime = tournamentDTO.getStartTime();
         this.endDate = tournamentDTO.getEndDate();

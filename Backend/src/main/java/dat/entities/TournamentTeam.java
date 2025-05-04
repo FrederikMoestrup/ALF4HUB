@@ -24,7 +24,7 @@ public class TournamentTeam {
 
     @Setter
     @Column(name = "tournament_team_name", nullable = false)
-    private String tournamentName;
+    private String tournamentTeamName;
 
     @Setter
     @Column(name = "game", nullable = false)
@@ -38,7 +38,7 @@ public class TournamentTeam {
     //Relations
     @Setter
     @ManyToOne
-    @JoinColumn(name = "tournament_team_captain_id")
+    @JoinColumn(name = "tournament_team_captain_id", nullable = false)
     private User tournamentTeamCaptain;
 
     @Setter
@@ -60,8 +60,8 @@ public class TournamentTeam {
     private List<PlayerAccount> tournamentTeamAccounts = new ArrayList<>();
 
 
-    public TournamentTeam(String tournamentName, Game game, User tournamentTeamCaptain) {
-        this.tournamentName = tournamentName;
+    public TournamentTeam(String tournamentTeamName, Game game, User tournamentTeamCaptain) {
+        this.tournamentTeamName = tournamentTeamName;
         this.game = game;
         this.tournamentTeamCaptain = tournamentTeamCaptain;
     }

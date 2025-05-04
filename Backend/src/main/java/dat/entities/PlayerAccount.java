@@ -41,10 +41,10 @@ public class PlayerAccount {
     private User user;
 
     @ManyToMany(mappedBy = "teamAccounts", fetch = FetchType.LAZY)
-    private List<Team> teams;
+    private List<Team> teams = new ArrayList<>();
 
     @ManyToMany(mappedBy = "tournamentTeamAccounts", fetch = FetchType.LAZY)
-    private List<TournamentTeam> tournamentTeams;
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
 
     public PlayerAccount(String playAccountName, Game game, String rank, User user) {
@@ -52,7 +52,6 @@ public class PlayerAccount {
         this.game = game;
         this.rank = rank;
         this.user = user;
-        this.teams = new ArrayList<>();
     }
 
     public PlayerAccount(PlayerAccountDTO playerAccountDTO) {
@@ -60,7 +59,6 @@ public class PlayerAccount {
             this.id = playerAccountDTO.getId();
         }
         this.playAccountName = playerAccountDTO.getPlayAccountName();
-        this.isActive = playerAccountDTO.isActive();
         this.game = playerAccountDTO.getGame();
         this.rank = playerAccountDTO.getRank();
 

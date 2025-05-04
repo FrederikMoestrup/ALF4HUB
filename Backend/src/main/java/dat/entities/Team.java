@@ -31,7 +31,7 @@ public class Team {
     //Relations
     @Setter
     @ManyToOne
-    @JoinColumn(name = "team_captain_id")
+    @JoinColumn(name = "team_captain_id", nullable = false)
     private User teamCaptain;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -50,7 +50,6 @@ public class Team {
         this.teamName = teamName;
         this.game = game;
         this.teamCaptain = teamCaptain;
-        this.teamAccounts = new ArrayList<>();
     }
 
     public Team(TeamDTO teamDTO) {
