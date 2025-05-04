@@ -2,6 +2,7 @@ package dat.entities;
 
 import dat.dtos.*;
 import dat.enums.Game;
+import dat.enums.TournamentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -71,6 +72,11 @@ public class Tournament {
     @Column(name = "end_time", nullable = false)
     private String endTime;
 
+    @Setter
+    @Column(name = "tournament_status")
+    @Enumerated(EnumType.STRING)
+    private TournamentStatus tournamentStatus;
+
 
 
     //Relations
@@ -84,7 +90,7 @@ public class Tournament {
 
     public Tournament(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
                       String rules, String entryRequirements, String status,
-                      String startDate, String startTime, String endDate, String endTime, User host) {
+                      String startDate, String startTime, String endDate, String endTime,TournamentStatus tournamentStatus, User host) {
         this.tournamentName = tournamentName;
         this.game = game;
         this.tournamentSize = tournamentSize;
@@ -97,6 +103,7 @@ public class Tournament {
         this.startTime = startTime;
         this.endDate = endDate;
         this.endTime = endTime;
+        this.tournamentStatus = tournamentStatus;
         this.tournamentTeams = new ArrayList<>();
         this.host = host;
     }

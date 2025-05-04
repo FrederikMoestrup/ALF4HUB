@@ -33,7 +33,7 @@ public class TournamentTeam {
 
     @Column(name = "tournament_status")
     @Enumerated(EnumType.STRING)
-    private TournamentStatus status;
+    private TournamentStatus tournamentStatus;
 
     //Relations
     @Setter
