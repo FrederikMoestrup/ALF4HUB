@@ -31,6 +31,7 @@ public class TournamentTeam {
     @Enumerated(EnumType.STRING)
     private Game game;
 
+    @Setter
     @Column(name = "tournament_status")
     @Enumerated(EnumType.STRING)
     private TournamentStatus tournamentStatus;
