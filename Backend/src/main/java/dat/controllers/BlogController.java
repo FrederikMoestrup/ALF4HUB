@@ -18,7 +18,7 @@ public class BlogController {
 
     public BlogController() {
         EntityManagerFactory emf;
-        if  (HibernateConfig.getTest()) {
+        if (HibernateConfig.getTest()) {
             emf = HibernateConfig.getEntityManagerFactoryForTest();
         } else {
             emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
@@ -46,9 +46,11 @@ public class BlogController {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
             BlogPostDTO blogPostDTO = blogPostDAO.getById((long) id);
+
             if (blogPostDTO == null) {
                 throw new ApiException(404, "BlogPost not found");
             }
+
             ctx.res().setStatus(200);
             ctx.json(blogPostDTO, BlogPostDTO.class);
         } catch (NumberFormatException e) {
@@ -61,18 +63,35 @@ public class BlogController {
     }
 
     public void create(Context ctx) throws ApiException {
-        BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
+        try {
+            BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
 
-        if (blogPostDTO == null || blogPostDTO.getTitle() == null || blogPostDTO.getContent() == null) {
-            throw new ApiException(400, "Missing required fields: title or content");
-        }
-
-        try{
             BlogPostDTO createdBlogPostDTO = blogPostService.createBlogPost(blogPostDTO);
+
             ctx.res().setStatus(201);
             ctx.json(createdBlogPostDTO, BlogPostDTO.class);
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(400, e.getMessage());
         } catch (Exception e) {
-            ctx.status(500).result("Internal server error: " + e.getMessage());
+            throw new ApiException(500, "Internal server error: " + e.getMessage());
+        }
+    }
+
+    public void createDraft(Context ctx) throws ApiException {
+        try {
+            BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
+
+            BlogPostDTO createdBlogPostDTO = blogPostService.createBlogPostDraft(blogPostDTO);
+
+            ctx.status(201).json(createdBlogPostDTO, BlogPostDTO.class);
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(400, e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(500, "Internal server error: " + e.getMessage());
         }
     }
 
