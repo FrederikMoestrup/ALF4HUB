@@ -51,11 +51,19 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-"tournamentName": "Spring Cup 2025",
-"startDate": "2025-06-01",
-"endDate": "2025-06-05"
+ "tournamentName": "assassin's creed",
+  "game": "COUNTER_STRIKE",
+  "tournamentSize": 16,
+  "teamSize": 5,
+  "prizePool": 10000,
+  "rules": "No cheating",
+  "entryRequirements": "Over 18",
+  "status": "OPEN",
+  "startDate": "2023-10-01",
+  "startTime": "12:00",
+  "endDate": "2023-10-31",
+  "endTime": "18:00"
 }
-
 
 
 ###
