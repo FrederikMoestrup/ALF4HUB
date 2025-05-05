@@ -6,6 +6,7 @@ import dat.entities.Team;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
     }
 
     @Override
-    public List<PlayerAccountDTO> getAll(){
+    public List<PlayerAccountDTO> getAll() {
         try (EntityManager em = emf.createEntityManager()) {
             List<PlayerAccount> playerAccounts = em.createQuery("SELECT p FROM PlayerAccount p", PlayerAccount.class).getResultList();
             return playerAccounts.stream().map(PlayerAccountDTO::new).toList();
@@ -87,6 +88,8 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
     }
 
 
+    // This method is commented out because im not sure if it works
+/*
     public static List<PlayerAccountDTO> getPlayersByTeamId(Integer id) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             Team team = em.find(Team.class, id);
@@ -96,6 +99,19 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             return team.getTeamAccounts().stream()
                 .map(PlayerAccountDTO::new)
                 .toList();
+        }
+    }
+*/
+
+//Might work but not sure
+    public List<PlayerAccount> getPlayersByTeamId(int teamId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<PlayerAccount> query = em.createQuery(
+                    "SELECT p FROM Team t JOIN t.teamAccounts p WHERE t.id = :teamId",
+                    PlayerAccount.class
+            );
+            query.setParameter("teamId", teamId);
+            return query.getResultList();
         }
     }
 
