@@ -5,7 +5,6 @@ import dat.config.HibernateConfig;
 import dat.controllers.BlogController;
 import dat.daos.BlogPostDAO;
 import dat.dtos.BlogPostDTO;
-import dat.enums.BlogPostStatus;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,8 +15,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.mockito.Mockito;
 
 import jakarta.persistence.EntityManagerFactory;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -65,7 +62,7 @@ class BlogControllerTest {
         });
 
         assertEquals(400, exception.getStatusCode());
-        assertEquals("Missing required fields: title or content", exception.getMessage());
+        assertEquals("Title and content must not be empty.", exception.getMessage());
     }
 
     @Test
@@ -80,7 +77,7 @@ class BlogControllerTest {
         });
 
         assertEquals(400, exception.getStatusCode());
-        assertEquals("Missing required fields: title or content", exception.getMessage());
+        assertEquals("Title and content must not be empty.", exception.getMessage());
     }
 
     @Test
