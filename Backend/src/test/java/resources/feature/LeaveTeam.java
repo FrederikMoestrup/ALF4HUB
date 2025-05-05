@@ -1,16 +1,22 @@
 package resources.feature;
 
+import dat.config.HibernateConfig;
+import dat.daos.PlayerAccountDAO;
+import dat.dtos.PlayerAccountDTO;
 import dat.entities.Team;
 import dat.entities.PlayerAccount;
 import dat.entities.Tournament;
 import dat.enums.Game;
+import dat.exceptions.ApiException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MyStepdefs {
+public class LeaveTeam {
 
     private Team team;
     private PlayerAccount playerAccount;
     private Tournament tournament;
+    private PlayerAccountDAO dao;
 
     @io.cucumber.java.en.Given("I am registered on a team")
     public void iAmRegisteredOnATeam() {
@@ -33,15 +39,24 @@ public class MyStepdefs {
 
     @io.cucumber.java.en.When("I click the {string} button")
     public void iClickTheButton(String arg0) {
-        team.removePlayerAccount(playerAccount);
+        PlayerAccountDAO dao = PlayerAccountDAO.getInstance(HibernateConfig.getEntityManagerFactory("ALF4HUB_DB"));
+        try {
+            dao.leaveTeam(playerAccount.getId(), team.getId());
+        } catch (Exception e) {
+            fail("Failed to leave team: " + e.getMessage());
+        }
     }
 
     @io.cucumber.java.en.Then("I am removed from the team")
-    public void iAmRemovedFromTheTeam() {
-        assertFalse(team.getTeamAccounts().contains(playerAccount));
+    public void iAmRemovedFromTheTeam() throws ApiException {
+        PlayerAccountDTO updated = dao.getById(playerAccount.getId());
+        boolean isStillOnTeam = updated.getTeams().stream()
+                .anyMatch(t -> t.getId() == team.getId());
+        assertFalse(isStillOnTeam);
     }
 
-    @io.cucumber.java.en.And("I receive a confirmation message on the screen and\\/or via email")
+
+        @io.cucumber.java.en.And("I receive a confirmation message on the screen and\\/or via email")
     public void iReceiveAConfirmationMessageOnTheScreenAndOrViaEmail() {
         String confirmationMessage = "You have successfully left the team.";
         assertNotNull(confirmationMessage);

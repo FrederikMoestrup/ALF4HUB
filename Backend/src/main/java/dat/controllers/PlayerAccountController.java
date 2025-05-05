@@ -12,6 +12,7 @@ import dat.exceptions.ApiException;
 import dat.services.EmailService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -122,6 +123,4 @@ public class PlayerAccountController {
             throw new ApiException(e.getStatusCode(), e.getMessage());
         }
     }
-
-
 }
