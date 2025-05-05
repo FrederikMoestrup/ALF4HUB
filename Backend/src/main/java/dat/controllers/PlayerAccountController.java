@@ -2,8 +2,14 @@ package dat.controllers;
 
 import dat.config.HibernateConfig;
 import dat.daos.PlayerAccountDAO;
+import dat.daos.TeamDAO;
+import dat.daos.TournamentDAO;
 import dat.dtos.PlayerAccountDTO;
+import dat.dtos.TeamDTO;
+import dat.dtos.TournamentDTO;
+import dat.dtos.UserDTO;
 import dat.exceptions.ApiException;
+import dat.services.EmailService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
@@ -13,14 +19,20 @@ import java.util.List;
 public class PlayerAccountController {
 
     private final PlayerAccountDAO playerAccountDAO;
+    private final TeamDAO teamDAO;
+    private final TournamentDAO tournamentDAO;
 
     public PlayerAccountController() {
         if (HibernateConfig.getTest()) {
             EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
             this.playerAccountDAO = PlayerAccountDAO.getInstance(emf);
+            this.teamDAO = TeamDAO.getInstance(emf);
+            this.tournamentDAO = TournamentDAO.getInstance(emf);
         } else {
             EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
             this.playerAccountDAO = PlayerAccountDAO.getInstance(emf);
+            this.teamDAO = TeamDAO.getInstance(emf);
+            this.tournamentDAO = TournamentDAO.getInstance(emf);
         }
     }
 
@@ -90,6 +102,20 @@ public class PlayerAccountController {
             int teamId = Integer.parseInt(ctx.pathParam("teamId"));
             playerAccountDAO.leaveTeam(playerAccountId, teamId);
             ctx.res().setStatus(200);
+            UserDTO user = playerAccountDAO.getById(playerAccountId).getUser();
+            TeamDTO team = teamDAO.getById(teamId);
+            EmailService emailService = new EmailService();
+            emailService.sendEmail(user.getEmail(), "Team Leave Notification",
+                    "You have successfully left team: " + team.getTeamName());
+
+            TournamentDTO tournament = tournamentDAO.getById(team.getTournament().getId());
+// TODO apply strike if leaving too close to tournament start.
+
+//            if (tournament.getStartTime() < 0) {
+//                emailService.sendEmail(user.getEmail(), "Tournament Notification",
+//                        "You have left the team: " + team.getTeamName() + " in tournament: " + tournament.getTournamentName());
+//            }
+
             ctx.result("Player has successfully left the team.");
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: playerAccountId or teamId");

@@ -22,6 +22,7 @@ public class UserDAO{
         return instance;
     }
 
+<<<<<<< HEAD
     public User findByUsername(String username) {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
@@ -29,6 +30,20 @@ public class UserDAO{
             return query.getSingleResult();
         } catch (NoResultException e) {
             return null; // No user found with the given username
+=======
+    public User findById(int id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.find(User.class, id);
+        }
+    }
+
+    public User update(User user) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            User updatedUser = em.merge(user);
+            em.getTransaction().commit();
+            return updatedUser;
+>>>>>>> 168dc6a2a4a1413c5e00f03c99027428f23930fc
         }
     }
 

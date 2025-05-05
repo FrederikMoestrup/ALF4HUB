@@ -68,7 +68,7 @@
 }
 
 .success-message {
-    background-color: #4caf50; /* Green background */
+    background-color: #4caf50; 
     color: white;
     padding: 10px;
     border-radius: 8px;
@@ -76,3 +76,13 @@
     text-align: center;
   }
   
+  .error-box {
+    background-color: black;
+    color: white;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 400px;
+    margin: 20px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }

@@ -21,7 +21,7 @@ POST http://localhost:7070/api/auth/login/
 
 > {%
     client.global.set("jwt_token", response.body.token);
-    //console.log("JWT Token:", client.global.get("jwt_token"));
+    console.log("JWT Token:", client.global.get("jwt_token"));
 %}
 
 ###

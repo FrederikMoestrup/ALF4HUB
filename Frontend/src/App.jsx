@@ -1,15 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
-import { useState } from 'react'
 import './App.css'
 
-import Tournament from "./components/Tournament";
+import LeaveTeam from './components/LeaveTeam';
 
 function App() {
 
   return (
     <>
     <Routes>
-       <Route path="/Tournament" element={<Tournament />} />
+       <Route path="/LeaveTeam" element={<LeaveTeam />} />
     </Routes>
     </>
   )

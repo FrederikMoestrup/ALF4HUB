@@ -43,6 +43,10 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "email", length = 50, nullable = false)
     private String email;
 
+    @Column(name = "strikes")
+    private int strikes = 0;
+
+
     //Relations
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -182,6 +186,15 @@ public class User implements Serializable, ISecurityUser {
             team.setTeamCaptain(this);
         }
     }
+
+    public void addStrike() {
+        this.strikes++;
+    }
+
+    public int getStrikes() {
+        return strikes;
+    }
+
 
 }
 
