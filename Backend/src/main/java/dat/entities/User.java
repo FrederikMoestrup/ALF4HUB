@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class User implements Serializable, ISecurityUser {
 
     @Serial
@@ -54,7 +55,11 @@ public class User implements Serializable, ISecurityUser {
 
     //As a team captain
     @OneToMany(mappedBy = "teamCaptain", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Team> teams = new ArrayList<>();;
+    private List<Team> teams = new ArrayList<>();
+
+    //One user can have multiple blogposts, but a blogpost belongs to one user
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<BlogPost> blogPosts = new ArrayList<>();
 
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {
@@ -173,6 +178,27 @@ public class User implements Serializable, ISecurityUser {
             team.setTeamCaptain(this);
         }
     }
+
+    //Blogposts methods:
+    //husk kommentar
+
+    public void setBlogPosts(List<BlogPost> blogPosts) {
+        if(blogPosts != null) {
+            this.blogPosts = blogPosts;
+            for (BlogPost blogPost : blogPosts) {
+                blogPost.setUser(this);
+            }
+        }
+    }
+
+    public void addBlogPost(BlogPost blogPost) {
+        if (blogPost != null && !blogPosts.contains(blogPost)) {
+            this.blogPosts.add(blogPost);
+            blogPost.setUser(this);
+        }
+    }
+
+
 
 }
 
