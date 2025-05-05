@@ -60,7 +60,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "playAccountName": "ProGamer123",
+  "playerAccountName": "ProGamer123",
   "game": "LEAGUE_OF_LEGENDS",
   "rank": "DIAMOND"
 }
@@ -72,7 +72,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "playAccountName": "ProGamer123",
+  "playerAccountName": "ProGamer123",
   "game": "LEAGUE_OF_LEGENDS",
   "rank": "DIAMOND",
   "active": true
@@ -100,8 +100,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-    "teamName": "ProGamerTeam",
-    "game": "LEAGUE_OF_LEGENDS"
+    "teamName": "ProGamerTeam"
 }
 
 ###
@@ -111,8 +110,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "teamName": "ProGamer1234",
-  "game": "LEAGUE_OF_LEGENDS"
+  "teamName": "ProGamer1234"
 }
 
 ###

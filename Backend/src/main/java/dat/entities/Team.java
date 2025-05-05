@@ -23,11 +23,6 @@ public class Team {
     @Column(name = "team_name", nullable = false)
     private String teamName;
 
-    @Setter
-    @Column(name = "game", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Game game;
-
     //Relations
     @Setter
     @ManyToOne
@@ -46,9 +41,8 @@ public class Team {
     private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
 
-    public Team(String teamName, Game game, User teamCaptain) {
+    public Team(String teamName, User teamCaptain) {
         this.teamName = teamName;
-        this.game = game;
         this.teamCaptain = teamCaptain;
     }
 
@@ -57,7 +51,6 @@ public class Team {
             this.id = teamDTO.getId();
         }
         this.teamName = teamDTO.getTeamName();
-        this.game = teamDTO.getGame();
 
         if (teamDTO.getTeamCaptain() != null) {
             this.teamCaptain = new User(teamDTO.getTeamCaptain());
