@@ -6,7 +6,7 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<BlogPostFrontPage />} />
+        <Route path="/blogposts" element={<BlogPostFrontPage />} />
         <Route path="/createblogpost" element={<CreateBlogPost />} />
       </Routes>
     </div>
