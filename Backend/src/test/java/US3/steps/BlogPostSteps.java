@@ -3,7 +3,9 @@ package US3.steps;
 import dat.config.HibernateConfig;
 import dat.daos.BlogPostDAO;
 import dat.dtos.BlogPostDTO;
+import dat.entities.User;
 import dat.enums.BlogPostStatus;
+import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -24,16 +26,36 @@ public class BlogPostSteps {
     private BlogPostDTO blogPostDTO;
     private List<BlogPostDTO> blogPosts;
     private List<BlogPostDTO> blogPostWithOnlyContentPreview;
+    private List<User> userList;
 
     public BlogPostSteps() {
         blogPostDAO = BlogPostDAO.getInstance(emf);
     }
 
     @Before
+    public void setUp() {
+
+        userList = List.of(
+                new User("username1", "test1"),
+                new User("username2", "test2"),
+                new User("username3", "test3")
+        );
+
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            userList.forEach(em::persist);
+            em.getTransaction().commit();
+        }
+    }
+
+    @After
     public void cleanUp() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM BlogPost").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE blog_post_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE users_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
         }
     }
@@ -45,7 +67,7 @@ public class BlogPostSteps {
 
     @When("they provide the title {string} and content {string}")
     public void theyProvideTheTitleAndContent(String title, String content) {
-        blogPostDTO.setUserId(1L);
+        blogPostDTO.setUserId((long) userList.get(0).getId());
         blogPostDTO.setTitle(title);
         blogPostDTO.setContent(content);
         blogPostDTO.setStatus(BlogPostStatus.READY);
@@ -66,7 +88,7 @@ public class BlogPostSteps {
     @Given("a blog post exists with title {string} and content {string}")
     public void aBlogPostExistsWithTitleAndContent(String title, String content) {
         blogPostDTO = new BlogPostDTO();
-        blogPostDTO.setUserId(1L);
+        blogPostDTO.setUserId((long) userList.get(0).getId());
         blogPostDTO.setTitle(title);
         blogPostDTO.setContent(content);
         blogPostDTO.setStatus(BlogPostStatus.READY);
@@ -92,32 +114,32 @@ public class BlogPostSteps {
     @Given("multiple blog posts exist")
     public void multipleBlogPostsExist() {
         blogPostDTO = new BlogPostDTO();
-        blogPostDTO.setUserId(2L);
+        blogPostDTO.setUserId((long) userList.get(1).getId());
         blogPostDTO.setTitle("My First Blog Post By User 2");
         blogPostDTO.setContent("This is the content of my first blog post as User 2.");
         blogPostDTO.setStatus(BlogPostStatus.READY);
         blogPostDAO.create(blogPostDTO);
 
         blogPostDTO = new BlogPostDTO();
-        blogPostDTO.setUserId(2L);
+        blogPostDTO.setUserId((long) userList.get(1).getId());
         blogPostDTO.setTitle("My Second Blog Post By User 2");
         blogPostDTO.setContent("This is the content of my second blog post as User 2.");
         blogPostDTO.setStatus(BlogPostStatus.READY);
         blogPostDAO.create(blogPostDTO);
 
         blogPostDTO = new BlogPostDTO();
-        blogPostDTO.setUserId(3L);
+        blogPostDTO.setUserId((long) userList.get(2).getId());
         blogPostDTO.setTitle("My First Blog Post By User 3");
         blogPostDTO.setContent(
                 "This is the content of my first blog post as User 3. " +
-                "In today’s fast-paced digital world, " +
-                "having a space to share your thoughts, ideas, " +
-                "and stories is more important than ever. " +
-                "Blogging allows individuals to express themselves, " +
-                "connect with others, and build an audience around topics they care about. " +
-                "Whether you're sharing personal experiences, professional insights, " +
-                "or creative writing, a well-crafted blog post can inform, inspire, " +
-                "and entertain readers around the world");
+                        "In today’s fast-paced digital world, " +
+                        "having a space to share your thoughts, ideas, " +
+                        "and stories is more important than ever. " +
+                        "Blogging allows individuals to express themselves, " +
+                        "connect with others, and build an audience around topics they care about. " +
+                        "Whether you're sharing personal experiences, professional insights, " +
+                        "or creative writing, a well-crafted blog post can inform, inspire, " +
+                        "and entertain readers around the world");
         blogPostDTO.setStatus(BlogPostStatus.READY);
         blogPostDAO.create(blogPostDTO);
     }
