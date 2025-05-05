@@ -110,4 +110,21 @@ public class BlogController {
         }
 
     }
-}
+
+    public void delete(Context ctx) throws ApiException {
+        try {
+            long id = Long.parseLong(ctx.pathParam("id"));
+            BlogPostDTO deletedBlogPost = blogPostDAO.delete(id);
+            if (deletedBlogPost == null) {
+                throw new ApiException(404, "BlogPost not found");
+            }
+            ctx.status(200).json(deletedBlogPost, BlogPostDTO.class);
+        } catch (ApiException e) {
+            ctx.status(e.getStatusCode()).result(e.getMessage());
+        } catch (NumberFormatException e) {
+            ctx.status(400).result("Invalid ID format");
+        }
+
+    }
+
+    }
