@@ -33,12 +33,13 @@ public class BlogPostDTO {
 
     public BlogPostDTO(BlogPost blogPost) {
         this.id = blogPost.getId();
-        this.userId = blogPost.getUserId();
+        this.userId = (long) blogPost.getUser().getId();
         this.title = blogPost.getTitle();
         this.content = blogPost.getContent();
         this.createdAt = blogPost.getCreatedAt();
         this.updatedAt = blogPost.getUpdatedAt();
         this.status = blogPost.getStatus();
     }
+
 
 }

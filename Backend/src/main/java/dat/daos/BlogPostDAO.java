@@ -2,6 +2,7 @@ package dat.daos;
 
 import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
+import dat.entities.User;
 import dat.enums.BlogPostStatus;
 import jakarta.persistence.*;
 
@@ -60,8 +61,13 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
                 throw new IllegalStateException("Blog post is not ready to be saved - it needs to be reviewed.");
             }
+            Long userId = blogPostDTO.getUserId();
+            User user = em.find(User.class, userId);
+            if (user == null) {
+                throw new EntityNotFoundException("User with id " + userId + " not found");
+            }
 
-            BlogPost newBlogPost = new BlogPost(blogPostDTO);
+            BlogPost newBlogPost = new BlogPost(blogPostDTO,user);
             // TODO: Set the new status to PUBLISHED or DRAFT depending on the context
             // Currently we're only able to publish in our given US
             // We might have to take in status in the param in the future
@@ -74,6 +80,27 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             return new BlogPostDTO(newBlogPost);
         }
     }
+
+    // Method to save a blog post as a draft
+    public BlogPostDTO saveAsDraft(BlogPostDTO blogPostDTO, Long userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+
+            User user = em.find(User.class, userId);
+            if (user == null) {
+                throw new EntityNotFoundException("User with id " + userId + " not found");
+            }
+
+            BlogPost newDraft = new BlogPost(blogPostDTO, user);
+            newDraft.setStatus(BlogPostStatus.DRAFT);
+
+            em.getTransaction().begin();
+            em.persist(newDraft);
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(newDraft);
+        }
+    }
+
 
     @Override
     public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) {

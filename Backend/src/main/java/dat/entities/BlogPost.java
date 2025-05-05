@@ -24,7 +24,11 @@ import java.time.LocalDateTime;
         ),
         @NamedQuery(
                 name = "BlogPost.findAllWithOnlyContentPreview",
-                query = "SELECT new dat.dtos.BlogPostDTO(bp.id, bp.userId, bp.title, SUBSTRING(bp.content, 1, 150), bp.createdAt, bp.updatedAt, bp.status) FROM BlogPost bp"
+                query = "SELECT new dat.dtos.BlogPostDTO(bp.id,CAST(bp.user.id AS Long), bp.title, SUBSTRING(bp.content, 1, 150), bp.createdAt, bp.updatedAt, bp.status) FROM BlogPost bp"
+        ),
+        @NamedQuery(
+                name = "BlogPost.findDraftsByUser",
+                query = "SELECT bp FROM BlogPost bp WHERE bp.user.id = :userId AND bp.status = 'DRAFT'"
         )
 })
 @Table(name = "blog_post")
@@ -37,8 +41,9 @@ public class BlogPost {
 
     // A user can have multiple blog posts, but a blog post belongs to one user
     // Who should be responsible for the relation and where should it be managed?
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
     private String title;
@@ -58,9 +63,9 @@ public class BlogPost {
     @Enumerated(EnumType.STRING)
     private BlogPostStatus status;
 
-    public BlogPost(BlogPostDTO blogPostDTO) {
+    public BlogPost(BlogPostDTO blogPostDTO, User user) {
         this.id = blogPostDTO.getId();
-        this.userId = blogPostDTO.getUserId();
+        this.user = user;
         this.title = blogPostDTO.getTitle();
         this.content = blogPostDTO.getContent();
         this.createdAt = blogPostDTO.getCreatedAt();
