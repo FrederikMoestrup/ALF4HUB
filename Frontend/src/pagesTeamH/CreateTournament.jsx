@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // Importer useNavigate til navigation
-import {useState} from 'react-router-dom'; // Importer useState til at håndtere state
+import {useState} from 'react'; // Importer useState til at håndtere state
 import '../index.css';  // Husk at importere CSS'en
 
 function CreateTournament() {
     const navigate = useNavigate();  // Hent navigate funktionen fra useNavigate
-    const [showMessage, setShowMessage] = useState(false);  // State til at håndtere visning af besked
+    const [showMessage, setShowMessage] = useState(false);  // State til at håndtere visning af succes besked
+    const [showError, setShowError] = useState(false);  // State til at håndtere visning af fejlbesked
+    const [name, setName] = useState('');  // State til at håndtere turneringsnavn
+    const [startDate, setStartDate] = useState('');  // State til at håndtere startdato
+    const [endDate, setEndDate] = useState('');  // State til at håndtere slutdato
 
     // Funktion til at navigere tilbage til Home-siden
     const goBack = () => {
@@ -13,11 +17,22 @@ function CreateTournament() {
     };
 
     const handleCreate = () => {
-        setShowMessage(true);  // Sæt state til at vise besked
+        if (!name || !startDate || !endDate) {
+            setShowError(true);
+            setTimeout(() => setShowError(false), 3000);
+            return;
+        }
+
+        setShowMessage(true);
         setTimeout(() => {
-            setShowMessage(false);  // Skjul besked efter 3 sekunder
-        }, 2000);
-    }
+            setShowMessage(false);
+            setName('');
+            setStartDate('');
+            setEndDate('');
+            navigate('/tournament');
+        }, 3000);
+    };
+
 
     return (
         <>
@@ -28,7 +43,7 @@ function CreateTournament() {
                 </div>
 
                 <div className="headline">
-                    <h2> Create your tournament</h2>
+                    <h2>Create your tournament</h2>
                 </div>
 
                 <div className="form">
@@ -36,21 +51,26 @@ function CreateTournament() {
                         type="text"
                         placeholder="Choose name for tournament"
                         className="input-field"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                     />
                     <div className="date-fields">
                         <input
                             type="date"
-                            placeholder="Start date"
                             className="input-field"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
                         />
                         <input
                             type="date"
-                            placeholder="End date"
                             className="input-field"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
                         />
                     </div>
-                    <button className="create-btn" onClick={() => navigate('/tournament')}>Create</button>
+                    <button className="create-btn" onClick={handleCreate}>Create</button>
                     {showMessage && <p className="success-message">Tournament created successfully!</p>}
+                    {showError && <p className="error-message">Please fill in all fields.</p>}
                 </div>
 
                 <aside className="sidebar">
