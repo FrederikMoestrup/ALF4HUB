@@ -9,6 +9,7 @@ import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TournamentController {
 
@@ -46,13 +47,12 @@ public class TournamentController {
     public void create(Context ctx) {
         TournamentDTO tournamentDTO = validateEntity(ctx);
 
-
         OffensiveWordsCheck checker = new OffensiveWordsCheck("badwordslist.txt");
-        if (checker.containsOffensiveWords(tournamentDTO.getTournamentName())) {
-            ctx.status(400).result("Tournament name contains offensive language.");
+        Optional<String> offensiveWord = checker.findFirstOffensiveWord(tournamentDTO.getTournamentName());
+        if (offensiveWord.isPresent()) {
+            ctx.status(400).result("Tournament name contains offensive word: " + offensiveWord.get());
             return;
         }
-
 
         TournamentDTO createdTournamentDTO = tournamentDAO.create(tournamentDTO);
         ctx.res().setStatus(201);
