@@ -1,67 +1,63 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../index.css';
+import apiFacade from '../utilTeamH/apiFacade';
+import styled from 'styled-components';
+
+const StyledError = styled.p`
+  background-color: #ffe0e0;
+  color: #a00;
+  padding: 10px;
+  border: 1px solid #a00;
+  border-radius: 6px;
+  text-align: center;
+  max-width: 400px;
+  margin: 1rem auto;
+`;
 
 function CreateTournament() {
     const [name, setName] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState(false); 
+    const [success, setSuccess] = useState(false);
 
     const navigate = useNavigate();
-
-    const bannedWords = [
-        'fuck', 'shit', 'bitch', 'idiot', 'nazi', 'porno', 'porn', 'racist',
-        'asshole', 'fucker', 'bastard', 'slut', 'whore', 'retard', 'cunt', 'douche',
-        'crap', 'piss', 'faggot', 'cock', 'dick', 'pussy', 'bollocks', 'twat',
-        'motherfucker', 'satan', 'hell', 'skank', 'rape', 'rapist', 'kinky', 'nsfw',
-        'dræb', 'dræber', 'hader', 'kælling', 'spasser', 'klam', 'racisme', 'neger',
-        'jødehader', 'muslimhader', 'bøsse', 'lesbisk', 'luder'        
-      ];
-      
 
     const goBack = () => {
         navigate('/Home');
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setSuccess(false); 
-
+        setSuccess(false);
+        setError('');
+    
         if (!name || !startDate || !endDate) {
             setError('Alle felter skal udfyldes');
             return;
         }
-
-        // Her tjekker vi for stødende ord
-        const containsBadWord = bannedWords.some(word =>
-            name.toLowerCase().includes(word)
-        );
-
-        if (containsBadWord) {
-            setError('Turneringsnavnet indeholder stødende ord');
-            return;
-        }
-
+    
         if (new Date(endDate) < new Date(startDate)) {
             setError('Slutdato må ikke være før startdato');
             return;
         }
-
-        setError('');
-
-        // Her skal vi gemme turneringen i databasen
-        console.log('Turnering gemt:', { name, startDate, endDate });
-
-        setSuccess(true);
-        setTimeout(() => setSuccess(false), 3000); // skjul bekræftelse efter 3 sekunder
-
-        // jeg nulstiller formen ved succesfuld oprettelse
-        setName('');
-        setStartDate('');
-        setEndDate('');
+    
+        try {
+            const nameExists = await apiFacade.checkTournamentNameExists(name);
+    
+            if (nameExists) {
+                setError('En turnering med dette navn findes allerede');
+            } else {
+                setSuccess(true);
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Fejl: ' + err.message);
+        }
     };
+    
+    
 
     return (
         <>
@@ -104,7 +100,7 @@ function CreateTournament() {
                     </div>
                     <button type="submit" className="confirm-btn">Confirm</button>
 
-                    {error && <p className="error-message">{error}</p>}
+                    {error && <StyledError>{error}</StyledError>}
                     {success && <p className="success-message">Turneringen er oprettet!</p>}
                 </form>
 
