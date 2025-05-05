@@ -85,17 +85,15 @@ public class TeamController {
     public void invitePlayer(Context ctx) throws ApiException {
         try {
             int teamId = Integer.parseInt(ctx.pathParam("id"));
-            PlayerAccountDTO playerAccountDTO = ctx.bodyAsClass(PlayerAccountDTO.class);
-            TeamDTO updatedTeamDTO = teamDAO.invitePlayer(teamId, playerAccountDTO);
-            ctx.status(201).json(updatedTeamDTO);
+            PlayerAccountDTO playerDTO = ctx.bodyAsClass(PlayerAccountDTO.class);
+            TeamDTO updatedTeam = teamDAO.invitePlayer(teamId, playerDTO);
+            ctx.res().setStatus(200);
+            ctx.json(updatedTeam, TeamDTO.class);
         } catch (NumberFormatException e) {
-            throw new ApiException(400, "Invalid team ID format.");
-        } catch (ApiException e) {
-            ctx.status(e.getStatusCode()).result("Error: " + e.getMessage());
-        } catch (Exception e) {
-            ctx.status(500).result("Unexpected error: " + e.getMessage());
+            throw new ApiException(400, "Invalid team ID format");
         }
     }
+
 
     public void removePlayer(Context ctx) throws ApiException {
         try {

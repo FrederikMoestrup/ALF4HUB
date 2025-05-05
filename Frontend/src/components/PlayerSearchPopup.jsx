@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import playerApi from '../util/apiFacade';
+import AddPlayerButton from './AddPlayerButton'; 
 
 // Styled Components
 const Overlay = styled.div`
@@ -86,20 +87,7 @@ const UserItem = styled.div`
   }
 `;
 
-const AddPlayerButton = styled.button`
-  background-color: #28a745;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  &:hover {
-    background-color: #218838;
-  }
-`;
-
-const PlayerSearchPopup = ({ onClose, onSelectPlayer }) => {
+const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(false);
   const [players, setPlayers] = useState([]);
@@ -113,7 +101,7 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer }) => {
 
       try {
         const data = await playerApi.searchPlayers();
-        setPlayers(data || []); 
+        setPlayers(data || []);
         setFilteredPlayers(data || []);
       } catch (err) {
         console.error('Error fetching players:', err);
@@ -128,7 +116,7 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer }) => {
 
   useEffect(() => {
     if (!searchTerm) {
-      setFilteredPlayers(players); 
+      setFilteredPlayers(players);
     } else {
       const filtered = players.filter(player =>
         player.playAccountName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -163,7 +151,7 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer }) => {
               filteredPlayers.map((player) => (
                 <UserItem key={player.id} onClick={() => handleSelect(player)}>
                   {player.playAccountName} (Rank: {player.rank || 'N/A'})
-                  <AddPlayerButton>Add Player</AddPlayerButton>
+                  <AddPlayerButton playerAccount={player} teamId={teamId} />
                 </UserItem>
               ))
             ) : (
