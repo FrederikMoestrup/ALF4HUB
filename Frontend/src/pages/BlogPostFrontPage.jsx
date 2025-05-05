@@ -1,6 +1,7 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from "styled-components";
+import { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
 
-/* Should fill the entire screen, doesn't right now. Needs to be fixed */
 const GlobalStyle = createGlobalStyle`
   html, body, #root{
     margin: 0;
@@ -11,10 +12,29 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const BlogCard = styled.div`
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+  h3 {
+    margin: 0 0 8px;
+  }
+
+  p {
+    margin: 0 0 8px;
+  }
+
+  small {
+    color: #777;
+  }
+`;
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `;
 
 const Navbar = styled.nav`
@@ -23,7 +43,7 @@ const Navbar = styled.nav`
   border-bottom: 1px solid #cccccc;
   padding: 1rem 2rem;
   display: flex;
-  justify-content: center;   /* Center NavLinks in the middle */
+  justify-content: center; /* Center NavLinks in the middle */
   align-items: center;
 `;
 
@@ -49,8 +69,8 @@ const HomeButton = styled.div`
 `;
 
 const ProfileButton = styled(HomeButton)`
-  right: 2rem;  /* Position on the opposite corner */
-  left: unset;  /* Make sure left is not applied */
+  right: 2rem; /* Position on the opposite corner */
+  left: unset; /* Make sure left is not applied */
 `;
 
 const NavLinks = styled.div`
@@ -84,11 +104,11 @@ const Content = styled.main`
 `;
 
 const ButtonContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding-top: 2.5rem;
-    margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-top: 2.5rem;
+  margin-bottom: 2rem;
 `;
 
 const BlogContainer = styled.div`
@@ -112,8 +132,8 @@ const Section = styled.section`
 
 const SectionTitle = styled.h2`
   position: absolute;
-  top: -2.5rem;  /* Increase space between the title and the blog sections */
-  left: 0;  /* Align the title with the left border of the blog sections */
+  top: -2.5rem; /* Increase space between the title and the blog sections */
+  left: 0; /* Align the title with the left border of the blog sections */
   margin: 0;
   font-size: 1.2rem;
   font-weight: bold;
@@ -155,32 +175,45 @@ const Footer = styled.footer`
 `;
 
 function BlogPostFrontPage() {
+  const [blogPosts, setBlogPosts] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:7070/api/blogpost/preview")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch blog posts");
+        }
+        return res.json();
+      })
+      .then((data) => setBlogPosts(data))
+      .catch((err) => console.error("Error:", err));
+  }, []);
 
   return (
     <>
       <GlobalStyle />
       <Container>
         <Navbar>
-            <HomeButton>
-                <a href="/">Home</a>
-            </HomeButton>
+          <HomeButton>
+            <a href="/">Home</a>
+          </HomeButton>
 
-            {/* a href should be changed with NavLink to the respective pages, when these are ready */}
-            <NavLinks>
-                <a href="/teams">Teams</a>
-                <a href="/tournaments">Tournaments</a>
-                <a href="/blog">Blog</a>
-            </NavLinks>
-
-            <ProfileButton>
-                <a href="/">Profile</a>
-            </ProfileButton>
+          <NavLinks>
+            <NavLink to="/teams">Teams</NavLink>
+            <NavLink to="/tournaments">Tournaments</NavLink>
+            <NavLink to="/">Blog</NavLink>
+          </NavLinks>
+          <ProfileButton>
+            <a href="/">Profile</a>
+          </ProfileButton>
         </Navbar>
 
         <Content>
           {/* Button container */}
           <ButtonContainer>
-            <Button>Create blogpost</Button>
+            <NavLink to="/createblogpost">
+              <Button>Create blogpost</Button>
+            </NavLink>{" "}
             <Button>Drafts</Button>
           </ButtonContainer>
 
@@ -188,22 +221,34 @@ function BlogPostFrontPage() {
           <BlogContainer>
             <BlogSectionLeft>
               <SectionTitle>Your published blogposts</SectionTitle>
-              <p>No blogposts yet.</p>
+              <p>No recent posts yet.</p>
             </BlogSectionLeft>
 
-            {/* Not a part of our US, it's just for aesthetics. 
-            Can always be removed, especially if it requires too many changes/adding new features backend wise */}
             <BlogSectionRight>
               <SectionTitle>Latest from the Community</SectionTitle>
-              <p>No recent posts yet.</p>
+
+              {blogPosts.length === 0 ? (
+                <p>No blogposts yet.</p>
+              ) : (
+                blogPosts.map((post) => (
+                  <BlogCard key={post.id}>
+                    <h3>{post.title}</h3>
+                    <p>{post.content}</p>
+                    <small>Posted on {post.createdAt}</small>
+                  </BlogCard>
+                ))
+              )}
             </BlogSectionRight>
           </BlogContainer>
         </Content>
 
-      <Footer>
-        <p>© Altf4hub | Firskovvej 18 2800 Lyngby | CVR-nr. 10101010 | Tlf: 36 15 45 04 | Mail: turnering@altf4hub.dk</p>
-      </Footer>
-    </Container>
+        <Footer>
+          <p>
+            © Altf4hub | Firskovvej 18 2800 Lyngby | CVR-nr. 10101010 | Tlf: 36
+            15 45 04 | Mail: turnering@altf4hub.dk
+          </p>
+        </Footer>
+      </Container>
     </>
   );
 }

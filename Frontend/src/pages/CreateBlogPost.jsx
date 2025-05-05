@@ -1,5 +1,6 @@
-import styled, { createGlobalStyle } from 'styled-components';
-/*import { useState } from 'react-router-dom';*/
+import styled, { createGlobalStyle } from "styled-components";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 
 /* Should fill the entire screen, doesn't right now. Needs to be fixed */
 const GlobalStyle = createGlobalStyle`
@@ -14,9 +15,9 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `;
 
 /* Top navbar */
@@ -26,7 +27,7 @@ const Navbar = styled.nav`
   border-bottom: 1px solid #cccccc;
   padding: 1rem 2rem;
   display: flex;
-  justify-content: center;   /* Center NavLinks in the middle */
+  justify-content: center; /* Center NavLinks in the middle */
   align-items: center;
 `;
 
@@ -52,8 +53,8 @@ const HomeButton = styled.div`
 `;
 
 const ProfileButton = styled(HomeButton)`
-  right: 2rem;  /* Position on the opposite corner */
-  left: unset;  /* Make sure left is not applied */
+  right: 2rem; /* Position on the opposite corner */
+  left: unset; /* Make sure left is not applied */
 `;
 
 const NavLinks = styled.div`
@@ -77,12 +78,12 @@ const NavLinks = styled.div`
   }
 `;
 
- /* Main part of the page */
+/* Main part of the page */
 const Content = styled.main`
   flex: 1;
   display: flex;
-  justify-content: center;  /* Center the form horizontally */
-  align-items: flex-start; 
+  justify-content: center; /* Center the form horizontally */
+  align-items: flex-start;
   padding: 2rem;
   gap: 2rem;
   background-color: #ebecf8;
@@ -116,7 +117,7 @@ const FormTitle = styled.h2`
   margin-bottom: 1rem;
   color: black;
   margin-top: -0.3rem;
-  `;
+`;
 
 const Form = styled.form`
   display: flex;
@@ -126,7 +127,7 @@ const Form = styled.form`
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  max-width: 800px;  
+  max-width: 800px;
   width: 100%;
 `;
 
@@ -184,105 +185,122 @@ const Footer = styled.footer`
 `;
 
 function CreateBlogPost() {
-   /*Doesn't work, since BrowserRouter is not yet set up in the main.jsx file
-   
-   const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [tags, setTags] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
-    const goBack = () => {
-        navigate(-1);  // This will take the user to the previous page
-    };
-
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [tags, setTags] = useState('');
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState(false);
-
-    // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content) {
-      setError('Title and content are required!');
+      setError("Title and content are required!");
       setSuccess(false);
-    } else {
-      setError('');
-      setSuccess(true);
-      console.log('Blog post created:', { title, content, tags });
-      // Here you would send the data to the backend or store it
+      return;
     }
-  };*/
 
-    return (
-        <>
-        <GlobalStyle />
-        <Container>
-            <Navbar>
-            <HomeButton>
-                <a href="/">Home</a>
-            </HomeButton>
+    try {
+      const response = await fetch("http://localhost:7070/api/blogpost", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: 1, // hardcoded until login works
+          title: title,
+          content: content,
+          status: "PUBLISHED",
+        }),
+      });
 
-            {/* a href should be changed with NavLink to the respective pages, when these are ready */}
-            <NavLinks>
-                <a href="/teams">Teams</a>
-                <a href="/tournaments">Tournaments</a>
-                <a href="/blog">Blog</a>
-            </NavLinks>
+      if (!response.ok) {
+        throw new Error("Failed to create blog post");
+      }
 
-            <ProfileButton>
-                <a href="/">Profile</a>
-            </ProfileButton>
-            </Navbar>
-            <Content>
-                <FormWrapper>
-                {/*<BackButton onClick={goBack}>←</BackButton>
-                <h2>Create a New Blog Post</h2>
-                    <Form onSubmit={handleSubmit}>
-                        <Input
-                        type="text"
-                        placeholder="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        />
-                        <Textarea
-                        placeholder="Content"
-                        value={content}
-                        onChange={(e) => setContent(e.target.value)}
-                        />
-                        <Input
-                        type="text"
-                        placeholder="Tags (optional)"
-                        value={tags}
-                        onChange={(e) => setTags(e.target.value)}
-                        />
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
-                        {success && <p style={{ color: 'green' }}>Blog post created successfully!</p>}
-                        <Button type="submit">Create Post</Button>
-                    </Form>*/}
-                    <FormTitle>Create a new blog post</FormTitle>
-                    <Form>
-                        <Label>Title*</Label>
-                        <Input
-                        type="text"
-                        placeholder="Write your title here"
-                        />
-                        <Label>Content*</Label>
-                        <Textarea
-                        type="text"
-                        placeholder="Write your blog post here... Share your thoughts, insights, or experiences in detail but be mindful of one another."
-                        />
-                        
-                        <Button type="submit">Create post</Button>
-                        <RequiredText>*Title and content are required fields and most not be left blank.</RequiredText>
-                    </Form>
-                </FormWrapper>
-            </Content>
+      setError("");
+      setSuccess(true);
+      setTitle("");
+    } catch (err) {
+      setError(err.message);
+      setSuccess(false);
+    }
+  };
 
-            <Footer>
-                <p>© Altf4hub | Firskovvej 18 2800 Lyngby | CVR-nr. 10101010 | Tlf: 36 15 45 04 | Mail: turnering@altf4hub.dk</p>
-            </Footer>
-        </Container>
-        </>
-    );
+  return (
+    <>
+      <GlobalStyle />
+      <Container>
+        <Navbar>
+          <HomeButton>
+            <a href="/">Home</a>
+          </HomeButton>
+
+          <NavLinks>
+            <NavLink to="/teams">Teams</NavLink>
+            <NavLink to="/tournaments">Tournaments</NavLink>
+            <NavLink to="/">Blog</NavLink>
+          </NavLinks>
+
+          <ProfileButton>
+            <a href="/">Profile</a>
+          </ProfileButton>
+        </Navbar>
+
+        <Content>
+          <FormWrapper>
+            <h2>Create a New Blog Post</h2>
+
+            <Form onSubmit={handleSubmit}>
+              <Label>Title*</Label>
+              <Input
+                type="text"
+                placeholder="Write your title here"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+
+              <Label>Content*</Label>
+              <Textarea
+                placeholder="Write your blog post here... Share your thoughts, insights, or experiences in detail but be mindful of one another."
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                required
+              />
+
+              <Label>Tags (optional)</Label>
+              <Input
+                type="text"
+                placeholder="e.g., React, Tournament, Gaming"
+                value={tags}
+                onChange={(e) => setTags(e.target.value)}
+              />
+
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              {success && (
+                <p style={{ color: "green" }}>
+                  Blog post created successfully!
+                </p>
+              )}
+
+              <Button type="submit">Create Post</Button>
+              <RequiredText>
+                *Title and content are required fields and must not be left
+                blank.
+              </RequiredText>
+            </Form>
+          </FormWrapper>
+        </Content>
+
+        <Footer>
+          <p>
+            © Altf4hub | Firskovvej 18 2800 Lyngby | CVR-nr. 10101010 | Tlf: 36
+            15 45 04 | Mail: turnering@altf4hub.dk
+          </p>
+        </Footer>
+      </Container>
+    </>
+  );
 }
 
 export default CreateBlogPost;
