@@ -94,17 +94,20 @@ public class BlogController {
             if (blogPostDTO == null ||
                     blogPostDTO.getTitle() == null || blogPostDTO.getTitle().trim().isEmpty() ||
                     blogPostDTO.getContent() == null || blogPostDTO.getContent().trim().isEmpty()) {
-                throw new ApiException(400,"Der mangler nødvendige felter: titel og/eller indhold");
+                throw new ApiException(400, "Der mangler nødvendige felter: titel og/eller indhold");
             }
 
             BlogPostDTO updatedBlogPost = blogPostDAO.update(id, blogPostDTO);
 
             ctx.status(200).json(updatedBlogPost, BlogPostDTO.class);
 
+        } catch (ApiException e) {
+            throw e;
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Ugyldigt ID-format");
         } catch (Exception e) {
-            ctx.status(500).result("Intern serverfejl: " + e.getMessage());
+            throw new ApiException(500, "Intern serverfejl: " + e.getMessage());
         }
+
     }
 }
