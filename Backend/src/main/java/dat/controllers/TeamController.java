@@ -2,6 +2,8 @@ package dat.controllers;
 
 import dat.config.HibernateConfig;
 import dat.daos.TeamDAO;
+import dat.dtos.PlayerAccountDTO;
+import dat.daos.PlayerAccountDAO;
 import dat.dtos.TeamDTO;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
@@ -81,4 +83,18 @@ public class TeamController {
                 .check(t -> t.getGame() != null, "Game must be associated")
                 .get();
     }
+
+    public void getPlayersByTeamId(Context ctx) throws ApiException {
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            List<PlayerAccountDTO> playerAccountDTOs = PlayerAccountDAO.getPlayersByTeamId(id);
+            ctx.res().setStatus(200);
+            ctx.json(playerAccountDTOs);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Missing or invalid parameter: id");
+        } catch (ApiException e) {
+            throw new ApiException(404, "PlayerAccount not found");
+        }
+    }
+
 }
