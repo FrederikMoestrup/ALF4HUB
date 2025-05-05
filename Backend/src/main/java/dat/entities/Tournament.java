@@ -136,6 +136,9 @@ public class Tournament {
         }
     }
 
+    public Tournament(String s, Game game, int i, int i1, double v, String s1, String inviteOnly, String upcoming, String date, String time, String date1, String time1, User cap2) {
+    }
+
     public void setTeams(List<Team> teams) {
         if(teams != null) {
             this.teams = teams;

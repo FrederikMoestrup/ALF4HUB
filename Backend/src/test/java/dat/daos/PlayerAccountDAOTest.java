@@ -147,4 +147,16 @@ class PlayerAccountDAOTest {
         List<PlayerAccountDTO> remaining = playerAccountDAO.getAll();
         assertEquals(11, remaining.size());
     }
+
+    @Test
+    void getPlayersByTeamId() throws ApiException {
+        List<PlayerAccount> players = playerAccountDAO.getPlayersByTeamId(1);
+
+        assertNotNull(players);
+        assertFalse(players.isEmpty());
+        assertEquals(2, players.size());
+        assertEquals("Cap1Account", players.get(0).getPlayAccountName());
+    }
+
+
 }

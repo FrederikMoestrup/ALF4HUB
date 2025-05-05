@@ -5,10 +5,12 @@ import dat.daos.TeamDAO;
 import dat.dtos.PlayerAccountDTO;
 import dat.daos.PlayerAccountDAO;
 import dat.dtos.TeamDTO;
+import dat.entities.PlayerAccount;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamController {
@@ -87,14 +89,20 @@ public class TeamController {
     public void getPlayersByTeamId(Context ctx) throws ApiException {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
-            List<PlayerAccountDTO> playerAccountDTOs = PlayerAccountDAO.getPlayersByTeamId(id);
+            PlayerAccountDAO playerAccountDAO = new PlayerAccountDAO();
+            List<PlayerAccount> playerAccounts = playerAccountDAO.getPlayersByTeamId(id);
+
+            List<PlayerAccountDTO> playerAccountDTOs = new ArrayList<>();
+            for (PlayerAccount player : playerAccounts) {
+                playerAccountDTOs.add(new PlayerAccountDTO(player));
+            }
+
             ctx.res().setStatus(200);
             ctx.json(playerAccountDTOs);
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
-        } catch (ApiException e) {
-            throw new ApiException(404, "PlayerAccount not found");
         }
     }
+
 
 }
