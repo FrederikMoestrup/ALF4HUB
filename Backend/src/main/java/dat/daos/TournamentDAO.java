@@ -88,6 +88,7 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
                 throw new ApiException(404, "Tournament not found");
             }
 
+            tournament.getTeams().size();
             em.remove(tournament);
             em.getTransaction().commit();
             return new TournamentDTO(tournament);

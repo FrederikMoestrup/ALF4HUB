@@ -189,8 +189,8 @@ public class SecurityController implements ISecurityController {
                 // get the role from the body. the json is {"role": "manager"}.
                 // We need to get the role from the body and the username from the token
                 String newRole = ctx.bodyAsClass(ObjectNode.class).get("role").asText();
-                UserDTO user = ctx.attribute("user");
-                User updatedUser = securityDAO.addRole(user, newRole);
+                int id = Integer.parseInt(ctx.pathParam("id"));
+                User updatedUser = securityDAO.addRole(id, newRole);
                 ctx.status(200).json(returnObject.put("msg", "Role " + newRole + " added to user"));
             } catch (EntityNotFoundException e) {
                 ctx.status(404).json("{\"msg\": \"User not found\"}");
