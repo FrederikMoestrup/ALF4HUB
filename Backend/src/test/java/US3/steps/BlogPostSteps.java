@@ -132,14 +132,14 @@ public class BlogPostSteps {
         blogPostDTO.setTitle("My First Blog Post By User 3");
         blogPostDTO.setContent(
                 "This is the content of my first blog post as User 3. " +
-                        "In today’s fast-paced digital world, " +
-                        "having a space to share your thoughts, ideas, " +
-                        "and stories is more important than ever. " +
-                        "Blogging allows individuals to express themselves, " +
-                        "connect with others, and build an audience around topics they care about. " +
-                        "Whether you're sharing personal experiences, professional insights, " +
-                        "or creative writing, a well-crafted blog post can inform, inspire, " +
-                        "and entertain readers around the world");
+                "In today’s fast-paced digital world, " +
+                "having a space to share your thoughts, ideas, " +
+                "and stories is more important than ever. " +
+                "Blogging allows individuals to express themselves, " +
+                "connect with others, and build an audience around topics they care about. " +
+                "Whether you're sharing personal experiences, professional insights, " +
+                "or creative writing, a well-crafted blog post can inform, inspire, " +
+                "and entertain readers around the world");
         blogPostDTO.setStatus(BlogPostStatus.READY);
         blogPostDAO.create(blogPostDTO);
     }
