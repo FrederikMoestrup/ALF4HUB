@@ -2,6 +2,7 @@ package dat.daos;
 
 import dat.dtos.PlayerAccountDTO;
 import dat.entities.PlayerAccount;
+import dat.entities.Team;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -84,4 +85,19 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             return new PlayerAccountDTO(playerAccount);
         }
     }
+
+
+    public static List<PlayerAccountDTO> getPlayersByTeamId(Integer id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            Team team = em.find(Team.class, id);
+            if (team == null) {
+                throw new ApiException(404, "Team not found");
+            }
+            return team.getTeamAccounts().stream()
+                .map(PlayerAccountDTO::new)
+                .toList();
+        }
+    }
+
+
 }
