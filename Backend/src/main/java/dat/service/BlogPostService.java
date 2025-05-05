@@ -31,7 +31,6 @@ public class BlogPostService {
             throw new IllegalArgumentException("Title and content must not be empty.");
         }
 
-        blogPostDTO.setStatus(BlogPostStatus.DRAFT);
         return blogPostDAO.saveAsDraft(blogPostDTO);
     }
 }
