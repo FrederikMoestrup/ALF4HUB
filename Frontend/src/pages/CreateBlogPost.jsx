@@ -46,7 +46,7 @@ function CreateBlogPost() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError(errorData.message || "Something went wrong");
+        setError(errorData.warning);
         return;
       }
 
