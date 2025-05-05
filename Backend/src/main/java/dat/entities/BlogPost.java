@@ -25,6 +25,11 @@ import java.time.LocalDateTime;
         @NamedQuery(
                 name = "BlogPost.findAllWithOnlyContentPreview",
                 query = "SELECT new dat.dtos.BlogPostDTO(bp.id, bp.userId, bp.title, SUBSTRING(bp.content, 1, 150), bp.createdAt, bp.updatedAt, bp.status) FROM BlogPost bp"
+        ),
+        //New query to get the draft blog posts by user
+        @NamedQuery(
+                name = "BlogPost.findDraftsByUser",
+                query = "SELECT bp FROM BlogPost bp WHERE bp.userId = :userId AND bp.status = 'DRAFT'"
         )
 })
 @Table(name = "blog_post")

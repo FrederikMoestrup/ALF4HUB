@@ -75,6 +75,21 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         }
     }
 
+    // Method to save a blog post as a draft
+    public BlogPostDTO saveAsDraft(BlogPostDTO blogPostDTO) {
+        try (EntityManager em = emf.createEntityManager()) {
+            BlogPost newDraft = new BlogPost(blogPostDTO);
+            newDraft.setStatus(BlogPostStatus.DRAFT);
+
+            em.getTransaction().begin();
+            em.persist(newDraft);
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(newDraft);
+        }
+    }
+
+
     @Override
     public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) {
         return null;
