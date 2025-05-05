@@ -58,19 +58,18 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
     public BlogPostDTO create(BlogPostDTO blogPostDTO) {
         try (EntityManager em = emf.createEntityManager()) {
 
+            // TODO: Perhaps replace with the getById method from User DAO later (if there is one)?
+            int userId = blogPostDTO.getUserId().intValue();
+            User user = em.find(User.class,  userId);
+            if (user == null) {
+                throw new EntityNotFoundException("User with id " + userId + " not found.");
+            }
+
             if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
                 throw new IllegalStateException("Blog post is not ready to be saved - it needs to be reviewed.");
             }
-            Long userId = blogPostDTO.getUserId();
-            User user = em.find(User.class, userId);
-            if (user == null) {
-                throw new EntityNotFoundException("User with id " + userId + " not found");
-            }
 
-            BlogPost newBlogPost = new BlogPost(blogPostDTO,user);
-            // TODO: Set the new status to PUBLISHED or DRAFT depending on the context
-            // Currently we're only able to publish in our given US
-            // We might have to take in status in the param in the future
+            BlogPost newBlogPost = new BlogPost(blogPostDTO, user);
             newBlogPost.setStatus(BlogPostStatus.PUBLISHED);
 
             em.getTransaction().begin();
@@ -81,13 +80,14 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         }
     }
 
-    // Method to save a blog post as a draft
-    public BlogPostDTO saveAsDraft(BlogPostDTO blogPostDTO, Long userId) {
+    public BlogPostDTO saveAsDraft(BlogPostDTO blogPostDTO) {
         try (EntityManager em = emf.createEntityManager()) {
 
-            User user = em.find(User.class, userId);
+            // TODO: Perhaps replace with the getById method from User DAO later (if there is one)?
+            int userId = blogPostDTO.getUserId().intValue();
+            User user = em.find(User.class,  userId);
             if (user == null) {
-                throw new EntityNotFoundException("User with id " + userId + " not found");
+                throw new EntityNotFoundException("User with id " + userId + " not found.");
             }
 
             BlogPost newDraft = new BlogPost(blogPostDTO, user);
