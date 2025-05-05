@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navbar from './Navbar';
-import Login from './Login'; // import Login component
-import Register from './Register'; // import Register component
+import Login from './Login'; 
+import Register from './Register'; 
 
 function App() {
   const [count, setCount] = useState(0);

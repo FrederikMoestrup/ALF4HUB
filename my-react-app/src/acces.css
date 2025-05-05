@@ -5,7 +5,6 @@
   color: #444;
 }
 
-/* Input group styling */
 .login-page .input-group,
 .register-page .input-group {
   margin-bottom: 5px;
@@ -16,30 +15,28 @@
   display: block;
   font-size: 1.1rem;
   margin-bottom: 8px;
-  color: #fff; /* or #444 if you prefer */
-  text-align: left;         /* <-- Align to left */
+  color: #fff; 
+  text-align: left;         
 }
 
-/* Input box adjustments */
 .login-page .input-group input,
 .register-page .input-group input {
   padding: 12px;
   font-size: 1rem;
-  color: #333; /* Dark text color for better visibility */
+  color: #333; 
   border: 1px solid #ddd;
   border-radius: 6px;
   background-color: #f9f9f9;
   transition: all 0.3s;
 }
 
-/* Input box adjustments */
+
 .login-page .input-group input::placeholder,
 .register-page .input-group input::placeholder {
   text-align: left;
-  transition: opacity 0.2s ease; /* Smooth transition for opacity change */
+  transition: opacity 0.2s ease; 
 }
 
-/* Input box adjustments */
 .login-page .input-group input:focus::placeholder,
 .register-page .input-group input:focus::placeholder {
 opacity: 0;
@@ -52,7 +49,6 @@ opacity: 0;
   outline: none;
 }
 
-/* Button styling */
 .login-page button,
 .register-page button {
   border: none;
@@ -65,7 +61,6 @@ opacity: 0;
   background-color: #535bf2;
 }
 
-/* Register button */
 .register-btn {
   background-color: #e0e0e0;
   color: #333;
@@ -83,7 +78,6 @@ opacity: 0;
   background-color: #c8c8c8;
 }
 
-/* Link text styling */
 .login-page p a,
 .register-page p a {
   color: #646cff;
@@ -95,7 +89,6 @@ opacity: 0;
   text-decoration: underline;
 }
 
-/* Text paragraph styling */
 .login-page p,
 .register-page p {
   font-size: 0.9rem;
@@ -107,21 +100,19 @@ opacity: 0;
 .register-form {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centers input groups horizontally */
-  gap: 1.2rem; /* Adds vertical spacing */
+  align-items: center; 
+  gap: 1.2rem; 
 }
 
 .login-form .input-group,
 .register-form .input-group {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align label to left within each group */
+  align-items: flex-start; 
   width: 100%;
-  max-width: 225px; /* Optional: control form width */
+  max-width: 225px; 
 }
 
-
-/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .login-page .container,
   .register-page .container {
