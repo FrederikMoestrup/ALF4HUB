@@ -60,7 +60,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
                 throw new ApiException(404, "PlayerAccount not found");
             }
 
-            playerAccount.setPlayAccountName(playerAccountDTO.getPlayAccountName());
+            playerAccount.setPlayerAccountName(playerAccountDTO.getPlayerAccountName());
             playerAccount.setGame(playerAccountDTO.getGame());
             playerAccount.setRank(playerAccountDTO.getRank());
 

@@ -22,7 +22,7 @@ public class PlayerAccount {
 
     @Setter
     @Column(name = "player_account_name", nullable = false)
-    private String playAccountName;
+    private String playerAccountName;
 
     @Setter
     @Column(name = "game", nullable = false)
@@ -47,8 +47,8 @@ public class PlayerAccount {
     private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
 
-    public PlayerAccount(String playAccountName, Game game, String rank, User user) {
-        this.playAccountName = playAccountName;
+    public PlayerAccount(String playerAccountName, Game game, String rank, User user) {
+        this.playerAccountName = playerAccountName;
         this.game = game;
         this.rank = rank;
         this.user = user;
@@ -58,7 +58,7 @@ public class PlayerAccount {
         if (playerAccountDTO.getId() != 0) {
             this.id = playerAccountDTO.getId();
         }
-        this.playAccountName = playerAccountDTO.getPlayAccountName();
+        this.playerAccountName = playerAccountDTO.getPlayerAccountName();
         this.game = playerAccountDTO.getGame();
         this.rank = playerAccountDTO.getRank();
 
