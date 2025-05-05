@@ -2,11 +2,13 @@
 GET http://localhost:7070/api/auth/test/
 
 ### Create a new user - this one will only get a USER role by default
-POST http://localhost:7070/api/auth/register/
+POST http://localhost:7070/api/auth/register
+Content-Type: application/json
 
 {
     "username": "user",
-    "password": "test123"
+    "password": "test123",
+    "email": "user@example.com"
 }
 
 ###

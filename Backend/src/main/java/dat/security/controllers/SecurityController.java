@@ -83,9 +83,12 @@ public class SecurityController implements ISecurityController {
         return (ctx) -> {
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
-                UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-                User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
-
+                    UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
+                    User created = securityDAO.createUser(
+                            userInput.getUsername(),
+                            userInput.getPassword(),
+                            userInput.getEmail()
+                    );
                 String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)

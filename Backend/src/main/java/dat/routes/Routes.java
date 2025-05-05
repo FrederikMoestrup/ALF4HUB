@@ -3,7 +3,10 @@ package dat.routes;
 
 import io.javalin.apibuilder.EndpointGroup;
 
+import static dat.security.routes.SecurityRoutes.getSecuredRoutes;
+import static dat.security.routes.SecurityRoutes.getSecurityRoutes;
 import static io.javalin.apibuilder.ApiBuilder.*;
+
 
 public class Routes {
 
@@ -17,6 +20,8 @@ public class Routes {
             path("/teams", teamRoute.getRoutes());
             path("/player-accounts", playerAccountRoute.getRoutes());
             path("/tournaments", tournamentRoute.getRoutes());
+            path("/", getSecurityRoutes());
+            path("/", getSecuredRoutes());
         };
     }
 }

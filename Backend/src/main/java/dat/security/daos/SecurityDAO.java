@@ -6,11 +6,9 @@ import dat.entities.User;
 import dat.security.exceptions.ApiException;
 import dat.security.exceptions.ValidationException;
 import dat.dtos.UserDTO;
-import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -31,6 +29,7 @@ public class SecurityDAO implements ISecurityDAO {
         return emf.createEntityManager();
     }
 
+
     @Override
     public UserDTO getVerifiedUser(String username, String password) throws ValidationException {
         try (EntityManager em = getEntityManager()) {
@@ -44,13 +43,19 @@ public class SecurityDAO implements ISecurityDAO {
         }
     }
 
+
     @Override
-    public User createUser(String username, String password) {
+    public User createUser(String username, String password, String email) {
         try (EntityManager em = getEntityManager()) {
-            User userEntity = em.find(User.class, username);
-            if (userEntity != null)
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
+            query.setParameter("username", username);
+            List<User> result = query.getResultList();
+            if (!result.isEmpty()) {
                 throw new EntityExistsException("User with username: " + username + " already exists");
-            userEntity = new User(username, password);
+            }
+
+            User userEntity = new User(username, password);
+            userEntity.setEmail(email);
             em.getTransaction().begin();
             Role userRole = em.find(Role.class, "user");
 
