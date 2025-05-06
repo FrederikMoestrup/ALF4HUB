@@ -25,7 +25,7 @@ public abstract class JoinRequest {
     protected LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "requester_id", nullable = false)
     protected User requester;
 
     public JoinRequest(User requester) {
