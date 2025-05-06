@@ -45,7 +45,7 @@ public class TeamJoinRequestDAO {
     }
 
 
-    public TeamJoinRequestDTO create(JoinRequestStatus status, int requesterId, int teamId, int playerAccountId) throws ApiException{
+    public TeamJoinRequestDTO create(int requesterId, int teamId, int playerAccountId) throws ApiException{
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 

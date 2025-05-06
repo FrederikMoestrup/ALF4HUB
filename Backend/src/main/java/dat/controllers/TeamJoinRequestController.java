@@ -47,9 +47,8 @@ public class TeamJoinRequestController {
         int requesterId = Integer.parseInt(ctx.pathParam("user_id"));
         int teamId = Integer.parseInt(ctx.pathParam("team_id"));
         int playerAccountId = Integer.parseInt(ctx.pathParam("player_account_id"));
-        JoinRequestStatus status = JoinRequestStatus.valueOf(ctx.pathParam("status").toUpperCase());
 
-        TeamJoinRequestDTO createdTeamDTO = teamJoinRequestDAO.create(status, requesterId, teamId, playerAccountId);
+        TeamJoinRequestDTO createdTeamDTO = teamJoinRequestDAO.create(requesterId, teamId, playerAccountId);
         ctx.res().setStatus(201);
         ctx.json(createdTeamDTO, TeamJoinRequestDTO.class);
     }
