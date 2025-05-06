@@ -1,8 +1,8 @@
 package dat.entities;
 
+import dat.dtos.TeamJoinRequestDTO;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
 @NoArgsConstructor
@@ -23,6 +23,15 @@ public class TeamJoinRequest extends JoinRequest {
         super(requester);
         this.team = team;
         this.playerAccount = playerAccount;
+    }
+
+    public TeamJoinRequest(TeamJoinRequestDTO teamJoinRequestDTO) {
+        super(new User(teamJoinRequestDTO.getRequester()));
+        this.id = teamJoinRequestDTO.getId();
+        this.status = teamJoinRequestDTO.getJoinRequestStatus();
+        this.createdAt = teamJoinRequestDTO.getCreatedAt();
+        this.team = new Team(teamJoinRequestDTO.getTeam());
+        this.playerAccount = new PlayerAccount(teamJoinRequestDTO.getPlayerAccount());
     }
 
     public User getReceiver() {
