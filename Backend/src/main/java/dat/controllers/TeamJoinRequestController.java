@@ -44,12 +44,12 @@ public class TeamJoinRequestController {
     }
 
     public void create(Context ctx) throws ApiException{
-        int requesterId = Integer.parseInt(ctx.pathParam("requester_id"));
+        int requesterId = Integer.parseInt(ctx.pathParam("user_id"));
         int teamId = Integer.parseInt(ctx.pathParam("team_id"));
         int playerAccountId = Integer.parseInt(ctx.pathParam("player_account_id"));
         JoinRequestStatus status = JoinRequestStatus.valueOf(ctx.pathParam("status").toUpperCase());
 
-        TeamJoinRequestDTO createdTeamDTO = teamJoinRequestDAO.create(status, requesterId,teamId, playerAccountId);
+        TeamJoinRequestDTO createdTeamDTO = teamJoinRequestDAO.create(status, requesterId, teamId, playerAccountId);
         ctx.res().setStatus(201);
         ctx.json(createdTeamDTO, TeamJoinRequestDTO.class);
     }
@@ -95,7 +95,7 @@ public class TeamJoinRequestController {
 
     public void getRequestsForTeamCaptain(Context ctx) throws ApiException {
         try {
-            int captainId = Integer.parseInt(ctx.pathParam("team_captain_id"));
+            int captainId = Integer.parseInt(ctx.pathParam("user_id"));
             List<TeamJoinRequestDTO> requests = teamJoinRequestDAO.getRequestsForTeamCaptain(captainId);
             ctx.res().setStatus(200);
             ctx.json(requests, TeamJoinRequestDTO.class);
