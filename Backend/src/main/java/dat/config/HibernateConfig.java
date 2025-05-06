@@ -109,7 +109,8 @@ public class HibernateConfig {
         props.put("hibernate.connection.password", "postgres");
         props.put("hibernate.archive.autodetection", "class");
         props.put("hibernate.show_sql", "true");
-        props.put("hibernate.hbm2ddl.auto", "create-drop"); //update for production
+        props.put("hibernate.hbm2ddl.auto", "create-drop"); //update for production props.put("hibernate.hbm2ddl.auto", "update");
+
         return props;
     }
 }

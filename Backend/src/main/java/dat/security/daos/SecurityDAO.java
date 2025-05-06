@@ -40,14 +40,14 @@ public class SecurityDAO implements ISecurityDAO {
                 user = query.getSingleResult();
             } catch (NoResultException e) {
                 // No user with that username → treated as “not authorized”
-                throw new EntityNotFoundException("No user found with username: " + username);
+                throw new EntityNotFoundException("Invalid password or username");
             }
 
             if (user == null)
-                throw new EntityNotFoundException("No user found with username: " + username); //RuntimeException
+                throw new EntityNotFoundException("Invalid password or username"); //RuntimeException
             user.getRoles().size(); // force roles to be fetched from db
             if (!user.verifyPassword(password))
-                throw new ValidationException("Wrong password");
+                throw new ValidationException("Invalid password or username");
             return new UserDTO(user.getUsername(), user.getRoles().stream().map(r -> r.getRoleName()).collect(Collectors.toSet()));
         }
     }
