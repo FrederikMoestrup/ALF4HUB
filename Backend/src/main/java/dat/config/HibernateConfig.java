@@ -47,6 +47,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Team.class);
         configuration.addAnnotatedClass(Tournament.class);
         configuration.addAnnotatedClass(TournamentTeam.class);
+        configuration.addAnnotatedClass(TeamJoinRequest.class);
 
     }
 

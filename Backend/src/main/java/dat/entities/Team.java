@@ -1,7 +1,6 @@
 package dat.entities;
 
 import dat.dtos.*;
-import dat.enums.Game;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
