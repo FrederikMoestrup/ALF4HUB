@@ -94,17 +94,18 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
                 throw new ApiException(404, "Team not found");
             }
 
-            PlayerAccount existingPlayer = em.find(PlayerAccount.class, playerDTO.getId());
-            if (existingPlayer == null) {
-                throw new ApiException(404, "Player not found");
+            PlayerAccount playerAccount = em.find(PlayerAccount.class, playerDTO.getId());
+            if (playerAccount == null) {
+                throw new ApiException(404, "PlayerAccount not found");
             }
 
-            team.addPlayerAccount(existingPlayer);
-            em.getTransaction().commit();
+            team.addPlayerAccount(playerAccount);
 
+            em.getTransaction().commit();
             return new TeamDTO(team);
         }
     }
+
 
     //Ift. spilleren får en email notifikation, skal email være en del af enten user eller playeraccount entititer
     public TeamDTO removePlayer(Integer teamId, PlayerAccountDTO playerDTO) throws ApiException {

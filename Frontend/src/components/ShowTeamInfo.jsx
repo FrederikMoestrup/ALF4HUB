@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import InactiveButton from "../InactiveButton";
+import InactiveButton from "./InactiveButton";
 
 const PlayerCard = styled.div`
   background:rgb(161, 157, 157);
@@ -57,7 +57,12 @@ const RemoveButton = styled.button`
   cursor: pointer;
 `;
 
-const ShowTeamInfo = ({team, isCaptain}) =>{
+const ShowTeamInfo = ({ team, isCaptain, onRemovePlayer }) => {
+  const handleRemove = () => {
+    if (window.confirm(`Are you sure you want to remove ${team.playAccountName}?`)) {
+      onRemovePlayer?.(team.id);
+    }
+  };
 
     
     return (
@@ -66,7 +71,7 @@ const ShowTeamInfo = ({team, isCaptain}) =>{
           <PlayerImage src="https://via.placeholder.com/100"/>
           <PlayerName>{team.playAccountName}</PlayerName>
           <RankRectangle>{team.rank}</RankRectangle>
-          <RemoveButton>Remove</RemoveButton>
+          {!isCaptain && <RemoveButton onClick={handleRemove}>Remove</RemoveButton>}
           <InactiveButton playerAccount={team}/>
         </PlayerCard>
       );

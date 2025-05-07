@@ -6,20 +6,6 @@ function InactiveButton({ playerAccount }) {
     const [player, setPlayer] = useState(playerAccount);
     const [errorMessage, setErrorMessage] = useState('');
 
-    /*const toggleActive = async () => {
-        try {
-            const updatedPlayer = await apiFacade.togglePlayerStatus(player);
-            console.log("Updated player from backend:", updatedPlayer.active); // <-- Add this
-            setPlayer({
-                ...player,
-                ...updatedPlayer,
-            }) // Update the state with the new status
-            setErrorMessage(''); // Clear any previous error
-        } catch (error) {
-            setErrorMessage(error.message || 'Failed to update status. Please try again.');
-        }
-    };*/
-
     const toggleActive = () => {
         apiFacade.togglePlayerStatus(player).then((response) => {
             console.log("Updated player from backend:", player); // <-- Add this
