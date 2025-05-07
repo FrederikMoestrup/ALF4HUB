@@ -29,7 +29,7 @@ function CreateTournament() {
             setName('');
             setStartDate('');
             setEndDate('');
-            navigate('/tournament');
+            navigate('/tournaments');
         }, 3000);
     };
 
