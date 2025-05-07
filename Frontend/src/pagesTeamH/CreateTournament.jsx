@@ -2,40 +2,46 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';  // Importer useNavigate til navigation
 import {useState} from 'react'; // Importer useState til at håndtere state
 import '../index.css';
-import apiFacede from "./apiFacede.js";  // Husk at importere CSS'en
+import apiFacade from './apiFacade.js';
 
 function CreateTournament() {
-    const navigate = useNavigate();  // Hent navigate funktionen fra useNavigate
-    const [showMessage, setShowMessage] = useState(false);  // State til at håndtere visning af succes besked
-    const [error, setError] = useState('');  // State til at håndtere fejl
-    const [showError, setShowError] = useState(false);  // State til at håndtere visning af fejlbesked
-    const [tournamentName, setTournamentName] = useState('');  // State til at håndtere turneringsnavn
-    const [startDate, setStartDate] = useState('');  // State til at håndtere startdato
-    const [endDate, setEndDate] = useState('');  // State til at håndtere slutdato
+    const [tournamentName, setTournamentName] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
+
+    const navigate = useNavigate();
 
     // Funktion til at navigere tilbage til Home-siden
     const goBack = () => {
         navigate('/Home');
     };
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setSuccess(false);
+
+
         if (!tournamentName || !startDate || !endDate) {
-            setShowError(true);
-            setError("Please fill in all fields.");
+            setError('Please fill in all fields.');
+            setSuccess(false);
+            return;
+        }
+        if (new Date(endDate) < new Date(startDate)) {
+            setError('Start date must be before end date.');
             return;
         }
 
         try {
-                await apiFacede.createTournament(tournamentName, startDate, endDate);
-                setShowMessage(true);
-                setTournamentName('');
-                setStartDate('');
-                setEndDate('');
-                navigate('/tournaments');
-
+            await apiFacade.createTournament(tournamentName, startDate, endDate);
+            setSuccess(true);
+            setTournamentName('');
+            setStartDate('');
+            setEndDate('');
         } catch (err) {
-            console.error("Error creating tournament:", err.message);
-            setShowError(true);
-            setError(err.message);
+            console.error(err);
+            setError('Fejl: ' + err.message);
         }
     };
 
@@ -48,36 +54,42 @@ function CreateTournament() {
                     <h1>Create your next tournament</h1>
                 </div>
 
-                <div className="headline">
-                    <h2>Create your tournament</h2>
-                </div>
-
-                <div className="form">
+                <form className="form" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Choose name for tournament"
                         className="input-field"
                         value={tournamentName}
-                        onChange={(e) => setTournamentName(e.target.value)}
+                        onChange={(e) => {
+                            setTournamentName(e.target.value);
+                            setError('');
+                        }}
                     />
                     <div className="date-fields">
                         <input
                             type="date"
                             className="input-field"
                             value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            onChange={(e) => {
+                                setStartDate(e.target.value);
+                                setError('');
+                            }}
                         />
                         <input
                             type="date"
                             className="input-field"
                             value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            onChange={(e) => {
+                                setEndDate(e.target.value);
+                                setError('');
+                            }}
                         />
                     </div>
-                    <button className="create-btn" onClick={handleSubmit}>Create</button>
-                    {showMessage && <p className="success-message">Tournament created successfully!</p>}
-                    {showError && <p className="error-message">Please fill in all fields.</p>}
-                </div>
+                    <button type="submit" className="create-btn">Confirm</button>
+
+                    {error && <p className="error-message">{error}</p>}
+                    {success && <p className="success-message">Tournament is created!</p>}
+                </form>
 
                 <aside className="sidebar">
                     <h3>My tournaments</h3>
@@ -89,8 +101,6 @@ function CreateTournament() {
                     </ul>
                 </aside>
             </div>
-
-
 
             <footer className="infoFooter">
                 <p>Altf4hub</p>
