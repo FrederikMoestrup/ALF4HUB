@@ -2,11 +2,14 @@ package dat.dtos;
 
 import dat.entities.Team;
 import dat.entities.Tournament;
+import dat.entities.TournamentTeam;
 import dat.enums.Game;
+import dat.enums.TournamentStatus;
 import lombok.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -21,12 +24,12 @@ public class TournamentDTO {
     private double prizePool;
     private String rules;
     private String entryRequirements;
-    private String status;
+    private TournamentStatus tournamentStatus;
     private String startDate;
     private String startTime;
     private String endDate;
     private String endTime;
-    private List<TeamDTO> teams;
+    private List<TournamentTeamDTO> tournamentTeams = new ArrayList<>();
     private UserDTO host;
 
     public TournamentDTO(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
