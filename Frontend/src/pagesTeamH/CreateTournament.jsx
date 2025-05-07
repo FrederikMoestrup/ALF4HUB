@@ -1,14 +1,63 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';  // Importer useNavigate til navigation
-import '../index.css';  // Husk at importere CSS'en
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import '../index.css';
+import apiFacade from '../utilTeamH/apiFacade';
+import styled from 'styled-components';
+
+const StyledError = styled.p`
+  background-color: #ffe0e0;
+  color: #a00;
+  padding: 10px;
+  border: 1px solid #a00;
+  border-radius: 6px;
+  text-align: center;
+  max-width: 400px;
+  margin: 1rem auto;
+`;
 
 function CreateTournament() {
-    const navigate = useNavigate();  // Hent navigate funktionen fra useNavigate
+    const [name, setName] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
 
-    // Funktion til at navigere tilbage til Home-siden
+    const navigate = useNavigate();
+
     const goBack = () => {
         navigate('/Home');
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSuccess(false);
+        setError('');
+    
+        if (!name || !startDate || !endDate) {
+            setError('Alle felter skal udfyldes');
+            return;
+        }
+    
+        if (new Date(endDate) < new Date(startDate)) {
+            setError('Slutdato må ikke være før startdato');
+            return;
+        }
+    
+        try {
+            const nameExists = await apiFacade.checkTournamentNameExists(name);
+    
+            if (nameExists) {
+                setError('En turnering med dette navn findes allerede');
+            } else {
+                setSuccess(true);
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Fejl: ' + err.message);
+        }
+    };
+    
+    
 
     return (
         <>
@@ -18,26 +67,42 @@ function CreateTournament() {
                     <h1>Create your next tournament</h1>
                 </div>
 
-                <div className="form">
+                <form className="form" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Choose name for tournament"
                         className="input-field"
+                        value={name}
+                        onChange={(e) => {
+                            setName(e.target.value);
+                            setError('');
+                        }}
                     />
                     <div className="date-fields">
                         <input
                             type="date"
-                            placeholder="Start date"
                             className="input-field"
+                            value={startDate}
+                            onChange={(e) => {
+                                setStartDate(e.target.value);
+                                setError('');
+                            }}
                         />
                         <input
                             type="date"
-                            placeholder="End date"
                             className="input-field"
+                            value={endDate}
+                            onChange={(e) => {
+                                setEndDate(e.target.value);
+                                setError('');
+                            }}
                         />
                     </div>
-                    <button className="confirm-btn">Confirm</button>
-                </div>
+                    <button type="submit" className="confirm-btn">Confirm</button>
+
+                    {error && <StyledError>{error}</StyledError>}
+                    {success && <p className="success-message">Turneringen er oprettet!</p>}
+                </form>
 
                 <aside className="sidebar">
                     <h3>My tournaments</h3>
@@ -48,7 +113,6 @@ function CreateTournament() {
                         <li>Tournament 4</li>
                     </ul>
                 </aside>
-
             </div>
 
             <footer className="infoFooter">
