@@ -9,7 +9,9 @@ import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 
 public class TournamentController {
 
@@ -107,4 +109,22 @@ public class TournamentController {
                 .check(t -> t.getEndTime() != null && !t.getEndTime().isEmpty(), "End time must be set")
                 .get();
     }
+
+    public void checkNameExists(Context ctx) throws ApiException{
+        String name = ctx.queryParam("name");
+        if (name == null || name.isEmpty()) {
+            throw new ApiException(400, "Missing or invalid parameter: name");
+        }
+
+        boolean exists = tournamentDAO.nameExists(name);
+        String message = exists
+                ? "Tournament name is already taken"
+                : "Tournament name is available";
+
+        ctx.json(Map.of(
+                "exists", exists,
+                "message", message
+        ));
+    }
+
 }

@@ -42,13 +42,18 @@ public class SecurityController implements ISecurityController {
 
     private SecurityController() { }
 
-    public static SecurityController getInstance() { // Singleton because we don't want multiple instances of the same class
+    public static SecurityController getInstance() {
         if (instance == null) {
             instance = new SecurityController();
-            securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("guidetrip"));
+            if (HibernateConfig.getTest()) {
+                securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactoryForTest());
+            } else {
+                securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("guidetrip"));
+            }
         }
         return instance;
     }
+
     public static SecurityController getInstanceForTest(EntityManagerFactory _emf) { // Singleton because we don't want multiple instances of the same class
         if (instance == null) {
             instance = new SecurityController();
@@ -83,6 +88,7 @@ public class SecurityController implements ISecurityController {
         return (ctx) -> {
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
+                System.out.println("Raw JSON body: " + ctx.body());
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
                 User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
 
@@ -131,6 +137,7 @@ public class SecurityController implements ISecurityController {
     @Override
     // Check if the user's roles contain any of the allowed roles
     public boolean authorize(UserDTO user, Set<RouteRole> allowedRoles) {
+
         if (user == null) {
             throw new UnauthorizedResponse("You need to log in, dude!");
         }
