@@ -91,11 +91,15 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             em.getTransaction().commit();
 
             return new BlogPostDTO(blogPost);
+
+        } catch (ApiException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ApiException(500,"Noget gik galt under opdateringen. Prøv igen");
+            throw new ApiException(500, "Noget gik galt under opdateringen. Prøv igen senere");
         }
     }
+
 
     @Override
     public BlogPostDTO delete(Long id) throws ApiException {
