@@ -45,6 +45,25 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
+POST http://localhost:7070/api/tournaments/
+Content-Type: application/json
+Accept: application/json
+
+{
+  "tournamentName": "VALORANT Spring Cup",
+  "game": "VALORANT",
+  "tournamentSize": 16,
+  "teamSize": 5,
+  "prizePool": 1000,
+  "rules": "Standard tournament rules",
+  "entryRequirements": "Minimum age 16",
+  "status": "UPCOMING",
+  "startDate": "2025-06-01",
+  "startTime": "12:00",
+  "endDate": "2025-06-10",
+  "endTime": "18:00"
+}
+
 
 # Tjek om turneringnavnet eksisterer
 GET http://localhost:7070/api/tournaments/checkname?name=VALORANT Spring Cup
