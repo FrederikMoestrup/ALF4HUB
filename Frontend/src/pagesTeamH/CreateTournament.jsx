@@ -39,6 +39,7 @@ function CreateTournament() {
             return;
         }
 
+
     try {
             await apiFacade.createTournament(tournamentName, startDate, endDate);
             setSuccess(true);
