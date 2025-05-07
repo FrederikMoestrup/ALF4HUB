@@ -89,6 +89,55 @@ const apiFacade = {
       throw error;
     }
   },
+
+  removePlayerFromTeam: async (teamId, playerId) => {
+    try {
+      const response = await fetch(`${API_URL}/teams/${teamId}/remove-player`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: playerId }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to remove player');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error removing player:', error);
+      throw error;
+    }
+  },
+
+  addPlayerToTeam: async (teamId, playerId) => {
+    try {
+      const response = await fetch(`${API_URL}/teams/${teamId}/invite-player`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: playerId }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.message || 'Failed to invite player to the team');
+      }
+
+      const data = await response.json();
+      console.log('Player successfully added to the team:', data);
+      return data;
+    } catch (error) {
+      console.error('Error adding player to team:', error);
+      throw error;
+    }
+  },
+
+
+
 };
 
 export default apiFacade;
