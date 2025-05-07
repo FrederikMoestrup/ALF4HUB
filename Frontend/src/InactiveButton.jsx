@@ -1,25 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import apiFacade from './util/apiFacade';
 import './App.css';
 
 function InactiveButton({ playerAccount }) {
-    const [isActive, setIsActive] = useState(playerAccount.isActive);
+    const [player, setPlayer] = useState(playerAccount);
     const [errorMessage, setErrorMessage] = useState('');
 
-    useEffect(() => {
-        setIsActive(playerAccount.isActive);
-    }, [playerAccount]);
-
-    const toggleActive = async () => {
+    /*const toggleActive = async () => {
         try {
-            const updatedPlayer = await apiFacade.togglePlayerStatus(playerAccount);
-            setIsActive(updatedPlayer.isActive); // Update the state with the new status
+            const updatedPlayer = await apiFacade.togglePlayerStatus(player);
+            console.log("Updated player from backend:", updatedPlayer.active); // <-- Add this
+            setPlayer({
+                ...player,
+                ...updatedPlayer,
+            }) // Update the state with the new status
             setErrorMessage(''); // Clear any previous error
-            setIsActive(!isActive); // Toggle the active state
         } catch (error) {
             setErrorMessage(error.message || 'Failed to update status. Please try again.');
         }
-    };
+    };*/
+
+    const toggleActive = () => {
+        apiFacade.togglePlayerStatus(player).then((response) => {
+            console.log("Updated player from backend:", player); // <-- Add this
+            console.log("Updated response from backend:", response); // <-- Add this
+            setPlayer(response);
+        }).catch((error) => {
+            console.error("Error updating player status:", error);
+            setErrorMessage('Failed to update status. Please try again.');
+        });
+    }
 
     return (
         <div>
@@ -27,14 +37,14 @@ function InactiveButton({ playerAccount }) {
                 onClick={toggleActive}
                 style={{
                     padding: '10px 20px',
-                    backgroundColor: isActive ? 'green' : 'red',
+                    backgroundColor: player.isActive ? 'green' : 'red',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
                     cursor: 'pointer',
                 }}
             >
-                {isActive ? 'Active' : 'Inactive'}
+                {player.isActive ? 'Active' : 'Inactive'}
             </button>
 
             {errorMessage && (
