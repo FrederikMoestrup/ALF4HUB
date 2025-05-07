@@ -10,6 +10,7 @@ function CreateTournament() {
     const [endDate, setEndDate] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+    const today = new Date();
 
     const navigate = useNavigate();
 
@@ -33,7 +34,13 @@ function CreateTournament() {
             return;
         }
 
-        try {
+        if (new Date(startDate) < today) {
+            setError('Start date must be today or in the future.');
+            return;
+        }
+
+
+    try {
             await apiFacade.createTournament(tournamentName, startDate, endDate);
             setSuccess(true);
             setTournamentName('');
