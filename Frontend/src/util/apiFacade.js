@@ -13,6 +13,7 @@ const apiFacade = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+
         },
       });
 
@@ -23,6 +24,7 @@ const apiFacade = {
 
       const data = await response.json();
       console.log('Fetched player accounts:', data);
+
 
       return data.content || data;
     } catch (error) {
@@ -83,7 +85,7 @@ const apiFacade = {
 
       return await response; // Return the updated player
     } catch (error) {
-      console.error("Error updating player status:", error);
+      console.error('Error updating player status:', error);
       throw error;
     }
   },
