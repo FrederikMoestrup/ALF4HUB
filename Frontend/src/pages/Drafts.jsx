@@ -2,8 +2,10 @@ import { use, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
     GlobalStyle, Container, Navbar, HomeButton, ProfileButton, NavLinks, Content, FormWrapper,
-    FormTitle, Form, Label, Input, Textarea, ButtonsContent, Button, RequiredText, Footer
+    FormTitle, Form, Label, Input, Textarea, ButtonsContent, Button, RequiredText, Footer,
   } from "../styles/createBlogPostStyles";
+  import { BlogCard, ButtonContainer, BlogContainer, Section, SectionTitle, BlogSectionLeft, BlogSectionRight,
+  } from "../styles/blogPostFrontPageStyles";
 
 function Drafts() {
     const [drafts, setDrafts] = useState([]);
@@ -61,7 +63,8 @@ function Drafts() {
 
       const fetchDrafts = async () => {
         try {
-            const response = await fetch("http://localhost:7070/api/blogpost/draft", {
+            // const response = await fetch("http://localhost:7070/api/blogpost/draft", {
+            const response = await fetch("http://localhost:7070/api/blogpost", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -103,7 +106,26 @@ function Drafts() {
            </Navbar>
    
            <Content>
-            <div>hello</div>
+            <FormWrapper>
+            <BlogContainer>
+                        <BlogSectionLeft>
+                          <SectionTitle>Your unpublished drafts</SectionTitle>
+                          {drafts.length < 1 ? <p Style="color: #3b3b3b;">No recent posts yet.</p> : null}
+                          <ul Style="list-style-type: none; padding: 0;">
+                          {
+                            drafts.map((draft, index) => (
+                              <div>
+                            <li key={index} Style="border-bottom: 1px solid #9b9b9b; padding: 10px;">
+                              <h2 Style="color: #3b3b3b;">{draft.title}</h2>
+                              <p Style="color: #3b3b3b;">Tags: {draft.tags}</p>
+                              <p Style="color: #3b3b3b;">{draft.content}</p>
+                              </li>
+                              </div>
+                            ))}
+                            </ul>
+                        </BlogSectionLeft>
+                      </BlogContainer>
+            </FormWrapper>
            </Content>
    
            <Footer>
