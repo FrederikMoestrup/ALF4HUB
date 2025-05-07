@@ -54,6 +54,11 @@ public class TournamentController {
             return;
         }
 
+        if (tournamentDAO.nameExists(tournamentDTO.getTournamentName())) {
+            ctx.status(400).result("Tournament name already exists");
+            return;
+        }
+
         TournamentDTO createdTournamentDTO = tournamentDAO.create(tournamentDTO);
         ctx.res().setStatus(201);
         ctx.json(createdTournamentDTO, TournamentDTO.class);
