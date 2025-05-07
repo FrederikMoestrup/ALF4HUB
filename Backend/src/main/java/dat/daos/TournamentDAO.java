@@ -51,6 +51,7 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
         }
     }
 
+
     @Override
     public TournamentDTO update(Integer id, TournamentDTO tournamentDTO) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
