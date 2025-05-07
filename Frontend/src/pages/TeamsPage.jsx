@@ -1,53 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
-const TeamsPage = () => {
-  const [teams, setTeams] = useState([
-    { 
-      id: 1, 
-      name: 'The serious people', 
-      logo: '🎮',
-      members: 5,
-      description: 'A competitive team',
-      tournaments: 3
-    },
-    { 
-      id: 2, 
-      name: 'Whatever kids', 
-      logo: '🐱',
-      members: 4,
-      description: 'aight',
-      tournaments: 2
-    },
-    { 
-      id: 3, 
-      name: 'The mentally unstable', 
-      logo: '☠️',
-      members: 6,
-      description: 'hardstyle or die',
-      tournaments: 5
-    },
-    { 
-      id: 4, 
-      name: 'Sicko mode', 
-      logo: '☠️',
-      members: 3,
-      description: 'Casual team',
-      tournaments: 1
-    },
-    { 
-      id: 5, 
-      name: 'Omega Squad', 
-      logo: 'Ω',
-      members: 5,
-      description: 'We believe in science 🤓',
-      tournaments: 4
-    }
-  ]);
 
+const TeamsPage = () => {
+  const url = "http://localhost:7070/api/teams"; // Replace with your API endpoint
+  const [teams, setTeams] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log("Fetched teams:", data);
+        setTeams(data);
+      } catch (error) {
+        console.error("Error fetching teams:", error);
+      }
+    };
+  
+    fetchTeams();
+  }, []);
+  
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -59,10 +35,12 @@ const TeamsPage = () => {
 
   // Filter teams based on search term and active filter
   const filteredTeams = teams.filter(team => {
-    const matchesSearch = team.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const name = team?.name ?? '';
+    const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = !filterActive || team.tournaments > 2;
     return matchesSearch && matchesFilter;
   });
+  
 
   return (
     <div>
