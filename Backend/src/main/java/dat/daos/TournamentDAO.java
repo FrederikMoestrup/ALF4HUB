@@ -67,7 +67,7 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
             tournament.setPrizePool(tournamentDTO.getPrizePool());
             tournament.setRules(tournamentDTO.getRules());
             tournament.setEntryRequirements(tournamentDTO.getEntryRequirements());
-            tournament.setStatus(tournamentDTO.getStatus());
+            tournament.setTournamentStatus(tournamentDTO.getTournamentStatus());
             tournament.setStartDate(tournamentDTO.getStartDate());
             tournament.setStartTime(tournamentDTO.getStartTime());
             tournament.setEndDate(tournamentDTO.getEndDate());
@@ -88,7 +88,7 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
                 throw new ApiException(404, "Tournament not found");
             }
 
-            tournament.getTeams().size();
+            tournament.getTournamentTeams().size();
             em.remove(tournament);
             em.getTransaction().commit();
             return new TournamentDTO(tournament);

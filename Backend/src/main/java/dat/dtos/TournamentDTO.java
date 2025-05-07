@@ -20,7 +20,6 @@ public class TournamentDTO {
     private int teamSize;
     private double prizePool;
     private String rules;
-    private String requiredRank;
     private String entryRequirements;
     private String status;
     private String startDate;
@@ -31,23 +30,22 @@ public class TournamentDTO {
     private UserDTO host;
 
     public TournamentDTO(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
-                         String rules,String requiredRank, String entryRequirements, String status,
-                         String startDate, String startTime, String endDate, String endTime, UserDTO host) {
+                         String rules, String entryRequirements, TournamentStatus tournamentStatus,
+                         String startDate, String startTime, String endDate, String endTime, UserDTO host, List<TournamentTeamDTO> tournamentTeams) {
         this.tournamentName = tournamentName;
         this.game = game;
         this.tournamentSize = tournamentSize;
         this.teamSize = teamSize;
         this.prizePool = prizePool;
         this.rules = rules;
-        this.requiredRank = requiredRank;
         this.entryRequirements = entryRequirements;
-        this.status = status;
+        this.tournamentStatus = tournamentStatus;
         this.startDate = startDate;
         this.startTime = startTime;
         this.endDate = endDate;
         this.endTime = endTime;
-        this.teams = new ArrayList<>();
         this.host = host;
+        this.tournamentTeams = tournamentTeams;
     }
 
     public TournamentDTO(Tournament tournament){
@@ -58,20 +56,17 @@ public class TournamentDTO {
         this.teamSize = tournament.getTeamSize();
         this.prizePool = tournament.getPrizePool();
         this.rules = tournament.getRules();
-        this.requiredRank = tournament.getRequiredRank();
         this.entryRequirements = tournament.getEntryRequirements();
-        this.status = tournament.getStatus();
+        this.tournamentStatus = tournament.getTournamentStatus();
         this.startDate = tournament.getStartDate();
         this.startTime = tournament.getStartTime();
         this.endDate = tournament.getEndDate();
         this.endTime = tournament.getEndTime();
 
-        this.teams = new ArrayList<>();
-        if(tournament.getTeams() != null && !tournament.getTeams().isEmpty()) {
-            for (Team team : tournament.getTeams()) {
-                TeamDTO teamDTO = new TeamDTO(team);
-                this.teams.add(teamDTO);
-            }
+        if (tournament.getTournamentTeams() != null && !tournament.getTournamentTeams().isEmpty()) {
+            this.tournamentTeams = tournament.getTournamentTeams().stream()
+                    .map(TournamentTeamDTO::new)
+                    .collect(Collectors.toList());
         }
 
         if(tournament.getHost() != null) {

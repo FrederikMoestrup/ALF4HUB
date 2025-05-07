@@ -37,27 +37,27 @@ public class Populate
             User user5 = new User("User5", "1234");
             User user6 = new User("User6", "1234");
 
-            PlayerAccount playerAccountCap1 = new PlayerAccount("Cap1Account", true, LEAGUE_OF_LEGENDS, "Platinum", cap1);
-            PlayerAccount playerAccountCap2 = new PlayerAccount("Cap2Account", true, LEAGUE_OF_LEGENDS, "Gold", cap2);
-            PlayerAccount playerAccountCap3 = new PlayerAccount("Cap3Account", true, LEAGUE_OF_LEGENDS, "Diamond", cap3);
-            PlayerAccount playerAccountCap4 = new PlayerAccount("Cap4Account", true, DOTA_2, "Platinum", cap4);
-            PlayerAccount playerAccountCap5 = new PlayerAccount("Cap5Account", true, DOTA_2, "Gold", cap5);
-            PlayerAccount playerAccountCap6 = new PlayerAccount("Cap6Account", true, DOTA_2, "Diamond", cap6);
+            PlayerAccount playerAccountCap1 = new PlayerAccount("Cap1Account", LEAGUE_OF_LEGENDS, "Platinum", cap1);
+            PlayerAccount playerAccountCap2 = new PlayerAccount("Cap2Account", LEAGUE_OF_LEGENDS, "Gold", cap2);
+            PlayerAccount playerAccountCap3 = new PlayerAccount("Cap3Account", LEAGUE_OF_LEGENDS, "Diamond", cap3);
+            PlayerAccount playerAccountCap4 = new PlayerAccount("Cap4Account", DOTA_2, "Platinum", cap4);
+            PlayerAccount playerAccountCap5 = new PlayerAccount("Cap5Account", DOTA_2, "Gold", cap5);
+            PlayerAccount playerAccountCap6 = new PlayerAccount("Cap6Account", DOTA_2, "Diamond", cap6);
 
-            PlayerAccount playerAccount1 = new PlayerAccount("Mads Mikkelsen", true, LEAGUE_OF_LEGENDS, "Bronze", user1);
-            PlayerAccount playerAccount2 = new PlayerAccount("Nikolaj Coster", true, LEAGUE_OF_LEGENDS, "Silver", user2);
-            PlayerAccount playerAccount3 = new PlayerAccount("Pilou Asbæk", true, LEAGUE_OF_LEGENDS, "Gold", user3);
-            PlayerAccount playerAccount4 = new PlayerAccount("Anders Matthesen", true, DOTA_2, "Platinum", user4);
-            PlayerAccount playerAccount5 = new PlayerAccount("Mick Øgendahl", true, DOTA_2, "Diamond", user5);
-            PlayerAccount playerAccount6 = new PlayerAccount("Jonatan Spang", true, DOTA_2, "Challenger", user6);
+            PlayerAccount playerAccount1 = new PlayerAccount("Mads Mikkelsen", LEAGUE_OF_LEGENDS, "Bronze", user1);
+            PlayerAccount playerAccount2 = new PlayerAccount("Nikolaj Coster", LEAGUE_OF_LEGENDS, "Silver", user2);
+            PlayerAccount playerAccount3 = new PlayerAccount("Pilou Asbæk", LEAGUE_OF_LEGENDS, "Gold", user3);
+            PlayerAccount playerAccount4 = new PlayerAccount("Anders Matthesen", DOTA_2, "Platinum", user4);
+            PlayerAccount playerAccount5 = new PlayerAccount("Mick Øgendahl", DOTA_2, "Diamond", user5);
+            PlayerAccount playerAccount6 = new PlayerAccount("Jonatan Spang", DOTA_2, "Challenger", user6);
 
-            Team team1 = new Team("Supra", LEAGUE_OF_LEGENDS, cap1);
-            Team team2 = new Team("Champions", LEAGUE_OF_LEGENDS, cap2);
-            Team team3 = new Team("Eagles", LEAGUE_OF_LEGENDS, cap3);
+            Team team1 = new Team("Supra", cap1);
+            Team team2 = new Team("Champions", cap2);
+            Team team3 = new Team("Eagles", cap3);
 
-            Team team4 = new Team("Brainstorm Titans", DOTA_2, cap4);
-            Team team5 = new Team("Alliance", DOTA_2, cap5);
-            Team team6 = new Team("The Caffeine Crew", DOTA_2, cap6);
+            Team team4 = new Team("Brainstorm Titans", cap4);
+            Team team5 = new Team("Alliance", cap5);
+            Team team6 = new Team("The Caffeine Crew", cap6);
 
             team1.addPlayerAccount(playerAccountCap1);
             team1.addPlayerAccount(playerAccount1);
@@ -72,6 +72,7 @@ public class Populate
             team6.addPlayerAccount(playerAccountCap6);
 
 
+            /*
             Tournament tournament1 = new Tournament("League of Legends Championship", LEAGUE_OF_LEGENDS,
                     16, 5, 5000.0, "Standard rules apply", "None", "UPCOMING",
                     "2025-06-01", "10:00", "2025-06-05", "18:00", cap1);
@@ -82,7 +83,7 @@ public class Populate
 
             team1.setTournament(tournament1);
             team2.setTournament(tournament2);
-
+            */
             List<User> users = List.of(cap1, cap2, cap3, cap4, cap5, cap6, user1, user2, user3, user4, user5, user6);
             users.forEach(em::persist);
 
@@ -99,9 +100,11 @@ public class Populate
             List<Team> teams = List.of(team1, team2, team3, team4, team5, team6);
             teams.forEach(em::persist);
 
+            /*
             // Persist all tournaments
             List<Tournament> tournaments = List.of(tournament1, tournament2);
             tournaments.forEach(em::persist);
+             */
 
             em.getTransaction().commit();
         }

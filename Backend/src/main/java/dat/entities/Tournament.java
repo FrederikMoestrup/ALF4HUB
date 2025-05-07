@@ -71,22 +71,17 @@ public class Tournament {
     @Column(name = "end_time", nullable = false)
     private String endTime;
 
-    @Setter
-    @Column(name = "required_rank", nullable = false)
-    private String requiredRank;
-
-
     //Relations
-    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private List<Team> teams;
+    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "host_id")
+    @JoinColumn(name = "host_id", nullable = false)
     private User host;
 
     public Tournament(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
-                      String rules,String requiredRank, String entryRequirements, String status,
+                      String rules, String entryRequirements, TournamentStatus tournamentStatus,
                       String startDate, String startTime, String endDate, String endTime, User host) {
         this.tournamentName = tournamentName;
         this.game = game;
@@ -94,7 +89,6 @@ public class Tournament {
         this.teamSize = teamSize;
         this.prizePool = prizePool;
         this.rules = rules;
-        this.requiredRank = requiredRank;
         this.entryRequirements = entryRequirements;
         this.status = status;
         this.startDate = startDate;
@@ -115,7 +109,6 @@ public class Tournament {
         this.teamSize = tournamentDTO.getTeamSize();
         this.prizePool = tournamentDTO.getPrizePool();
         this.rules = tournamentDTO.getRules();
-        this.requiredRank = tournamentDTO.getRequiredRank();
         this.entryRequirements = tournamentDTO.getEntryRequirements();
         this.status = tournamentDTO.getStatus();
         this.startDate = tournamentDTO.getStartDate();
@@ -128,49 +121,36 @@ public class Tournament {
             this.host.addTournament(this);
         }
 
-        this.teams = new ArrayList<>();
-        if(tournamentDTO.getTeams() != null){
-            setTeams(tournamentDTO.getTeams().stream()
-                    .map(Team::new)
+        if (tournamentDTO.getTournamentTeams() != null) {
+            setTournamentTeams(tournamentDTO.getTournamentTeams().stream()
+                    .map(TournamentTeam::new)
                     .collect(Collectors.toList()));
         }
+
     }
 
-    public Tournament(String s, Game game, int i, int i1, double v, String s1, String inviteOnly, String upcoming, String date, String time, String date1, String time1, User cap2) {
-    }
-
-    public void setTeams(List<Team> teams) {
-        if(teams != null) {
-            this.teams = teams;
-            for (Team team : teams) {
-                team.setTournament(this);
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if(tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTournament(this);
             }
         }
     }
 
-    public void addTeam(Team team) {
-        if (team != null && !teams.contains(team)) {
-            this.teams.add(team);
-            team.setTournament(this);
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTournament(this);
         }
     }
 
-    public void validatePlayerForTournament(String rank, Team team) {
-        if (rank == null || rank.isEmpty()) {
-            throw new IllegalArgumentException("Rank is required");
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
         }
-
-        this.requiredRank = rank;
-
-        List<PlayerAccount> validPlayers = team.getTeamAccounts().stream()
-                .filter(PlayerAccount::isActive)
-                .filter(playerAccount -> playerAccount.getRank().equals(this.requiredRank))
-                .filter(playerAccount -> playerAccount.getGame().equals(this.game))
-                .collect(Collectors.toList());
-
-        if (validPlayers.isEmpty()) {
-             throw new IllegalArgumentException("No players meet the required rank and game for the tournament");
-        }
+        tournamentTeams.remove(tournamentTeam);
+        tournamentTeam.setTournament(null);
     }
 
 }
