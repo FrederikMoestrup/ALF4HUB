@@ -65,4 +65,13 @@ Accept: application/json
 }
 
 
+# Tjek om turneringnavnet eksisterer
+GET http://localhost:7070/api/tournaments/checkname?name=VALORANT Spring Cup
+Accept: application/json
+
+
+###
+=======
+
+
 

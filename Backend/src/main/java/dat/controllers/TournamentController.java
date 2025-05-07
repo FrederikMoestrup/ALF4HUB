@@ -4,10 +4,14 @@ import dat.config.HibernateConfig;
 import dat.daos.TournamentDAO;
 import dat.dtos.TournamentDTO;
 import dat.exceptions.ApiException;
+import dat.services.OffensiveWordsCheck;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 
 public class TournamentController {
 
@@ -44,6 +48,19 @@ public class TournamentController {
 
     public void create(Context ctx) {
         TournamentDTO tournamentDTO = validateEntity(ctx);
+
+        OffensiveWordsCheck checker = new OffensiveWordsCheck("badwordslist.txt");
+        Optional<String> offensiveWord = checker.findFirstOffensiveWord(tournamentDTO.getTournamentName());
+        if (offensiveWord.isPresent()) {
+            ctx.status(400).result("Tournament name contains offensive word: " + offensiveWord.get());
+            return;
+        }
+
+        if (tournamentDAO.nameExists(tournamentDTO.getTournamentName())) {
+            ctx.status(400).result("Tournament name already exists");
+            return;
+        }
+
         TournamentDTO createdTournamentDTO = tournamentDAO.create(tournamentDTO);
         ctx.res().setStatus(201);
         ctx.json(createdTournamentDTO, TournamentDTO.class);
@@ -92,4 +109,22 @@ public class TournamentController {
                 .check(t -> t.getEndTime() != null && !t.getEndTime().isEmpty(), "End time must be set")
                 .get();
     }
+
+    public void checkNameExists(Context ctx) throws ApiException{
+        String name = ctx.queryParam("name");
+        if (name == null || name.isEmpty()) {
+            throw new ApiException(400, "Missing or invalid parameter: name");
+        }
+
+        boolean exists = tournamentDAO.nameExists(name);
+        String message = exists
+                ? "Tournament name is already taken"
+                : "Tournament name is available";
+
+        ctx.json(Map.of(
+                "exists", exists,
+                "message", message
+        ));
+    }
+
 }
