@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:7070/api";
+const API_URL = 'http://localhost:7070/api';
 
 const apiFacade = {
-  searchPlayers: async (searchTerm = "", page = 1, size = 10) => {
+  searchPlayers: async (searchTerm = '', page = 1, size = 10) => {
     try {
       const queryParams = new URLSearchParams({
         search: searchTerm,
@@ -9,29 +9,24 @@ const apiFacade = {
         size: size,
       });
 
-      const response = await fetch(
-        `${API_URL}/player-accounts?${queryParams.toString()}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/player-accounts?${queryParams.toString()}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(
-          errorResponse.message || "Failed to fetch player accounts"
-        );
+        throw new Error(errorResponse.message || 'Failed to fetch player accounts');
       }
 
       const data = await response.json();
-      console.log("Fetched player accounts:", data);
+      console.log('Fetched player accounts:', data);
 
       return data.content || data;
     } catch (error) {
-      console.error("Error fetching player accounts:", error);
+      console.error('Error fetching player accounts:', error);
       throw error;
     }
   },
@@ -39,22 +34,22 @@ const apiFacade = {
   getAllTeams: async () => {
     try {
       const response = await fetch(`${API_URL}/teams`, {
-        method: "GET",
+        method: 'GET',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(errorResponse.message || "Failed to fetch teams");
+        throw new Error(errorResponse.message || 'Failed to fetch teams');
       }
 
       const data = await response.json();
-      console.log("Fetched all teams:", data);
+      console.log('Fetched all teams:', data);
       return data;
     } catch (error) {
-      console.error("Error fetching all teams:", error);
+      console.error('Error fetching all teams:', error);
       throw error;
     }
   },
@@ -63,9 +58,8 @@ const apiFacade = {
     try {
       const updatedStatus = !player.isActive;
 
-      const response = await fetch(
-        `${API_URL}/player-accounts/${player.id}/status?status=${updatedStatus}`,
-        {
+      const response = await fetch(`${API_URL}/player-accounts/${player.id}/status?status=${updatedStatus}`,
+          {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
