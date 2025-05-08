@@ -40,6 +40,7 @@ const Register = () => {
   return (
     <div className="register-page">
      <img src={Logo} alt="Logo for the page" className="logo-img" />
+     <h1>Registrer</h1>
       <form className="register-form" onSubmit={handleSubmit}>
         <div className="input-group">
           <label htmlFor="username">Brugernavn</label>

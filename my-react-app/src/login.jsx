@@ -41,6 +41,8 @@ const Login = () => {
   return (
     <div className="login-page">
       <img src={Logo} alt="Logo for the page" className="logo-img" />
+      <h1>Log Ind</h1>
+      <p>Har du ikke en konto? opret en <Link to="/register">Registrer her</Link></p>
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="input-group">
           <label htmlFor="username">Brugernavn</label>
@@ -69,7 +71,6 @@ const Login = () => {
         {errorMsg && <p style={{ color: 'red' }}>{errorMsg}</p>}
         <button type="submit">Login</button>
       </form>
-      <p>Har du ikke en konto? opret en <Link to="/register">Registrer her</Link></p>
     </div>
   );
 };

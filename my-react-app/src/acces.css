@@ -117,7 +117,8 @@ opacity: 0;
   max-width: 100%;
   height: auto;
   display: block;
-  margin-bottom: 30px;
+  margin: auto;
+  margin-bottom: 120px;
 }
 
 @media (max-width: 768px) {
