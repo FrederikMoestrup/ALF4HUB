@@ -1,10 +1,8 @@
 package dat.config;
 
 
-import dat.entities.PlayerAccount;
-import dat.entities.Team;
-import dat.entities.Tournament;
-import dat.entities.User;
+import dat.entities.*;
+import dat.enums.TournamentStatus;
 import jakarta.persistence.EntityManagerFactory;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,14 +11,11 @@ import java.util.List;
 import static dat.enums.Game.DOTA_2;
 import static dat.enums.Game.LEAGUE_OF_LEGENDS;
 
-public class Populate
-{
+public class Populate {
 
-    public static void populateDatabase(EntityManagerFactory emf)
-    {
+    public static void populateDatabase(EntityManagerFactory emf) {
 
-        try (var em = emf.createEntityManager())
-        {
+        try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
             User cap1 = new User("Cap1", "1234");
@@ -71,19 +66,29 @@ public class Populate
             team5.addPlayerAccount(playerAccount5);
             team6.addPlayerAccount(playerAccountCap6);
 
-
-            /*
             Tournament tournament1 = new Tournament("League of Legends Championship", LEAGUE_OF_LEGENDS,
-                    16, 5, 5000.0, "Standard rules apply", "None", "UPCOMING",
+                    16, 5, 5000.0,
+                    "Standard rules apply", "None", TournamentStatus.NOT_STARTED,
                     "2025-06-01", "10:00", "2025-06-05", "18:00", cap1);
 
             Tournament tournament2 = new Tournament("DOTA 2 International", DOTA_2,
-                    16, 5, 10000.0, "DOTA 2 rules", "Invite only", "UPCOMING",
+                    16, 5, 10000.0, "DOTA 2 rules",
+                    "Invite only", TournamentStatus.NOT_STARTED,
                     "2025-07-01", "11:00", "2025-07-10", "20:00", cap2);
 
-            team1.setTournament(tournament1);
-            team2.setTournament(tournament2);
-            */
+            TournamentTeam tournamentTeam1 = new TournamentTeam("Supra", LEAGUE_OF_LEGENDS, cap1);
+            tournamentTeam1.setTeam(team1);
+            tournamentTeam1.setTournament(tournament1);
+            tournamentTeam1.setTournamentStatus(TournamentStatus.NOT_STARTED);
+            tournamentTeam1.setTournamentTeamAccounts(List.of(playerAccountCap1, playerAccount1));
+
+            TournamentTeam tournamentTeam2 = new TournamentTeam("Champions", LEAGUE_OF_LEGENDS, cap2);
+            tournamentTeam2.setTeam(team2);
+            tournamentTeam2.setTournament(tournament1);
+            tournamentTeam2.setTournamentStatus(TournamentStatus.NOT_STARTED);
+            tournamentTeam2.setTournamentTeamAccounts(List.of(playerAccountCap2, playerAccount2));
+
+
             List<User> users = List.of(cap1, cap2, cap3, cap4, cap5, cap6, user1, user2, user3, user4, user5, user6);
             users.forEach(em::persist);
 
@@ -100,34 +105,38 @@ public class Populate
             List<Team> teams = List.of(team1, team2, team3, team4, team5, team6);
             teams.forEach(em::persist);
 
-            /*
+
             // Persist all tournaments
-            List<Tournament> tournaments = List.of(tournament1, tournament2);
-            tournaments.forEach(em::persist);
-             */
+            em.persist(tournament1);
+            em.persist(tournament2);
+
+            em.persist(tournamentTeam1);
+            em.persist(tournamentTeam2);
+
 
             em.getTransaction().commit();
         }
     }
 
 
-    public static void clearDatabase(EntityManagerFactory emf)
-    {
-        try (var em = emf.createEntityManager())
-        {
+    public static void clearDatabase(EntityManagerFactory emf) {
+        try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
             // delete from all tables
+            em.createQuery("DELETE FROM TournamentTeam").executeUpdate();
             em.createQuery("DELETE FROM Team").executeUpdate();
             em.createQuery("DELETE FROM Tournament").executeUpdate();
             em.createQuery("DELETE FROM PlayerAccount").executeUpdate();
             em.createQuery("DELETE FROM User").executeUpdate();
+
 
             // reset sequences
             em.createNativeQuery("ALTER SEQUENCE player_account_player_account_id_seq RESTART WITH 1").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE team_team_id_seq RESTART WITH 1").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE tournament_tournament_id_seq RESTART WITH 1").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE users_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE tournament_team_tournament_team_id_seq RESTART WITH 1").executeUpdate();
 
             em.getTransaction().commit();
         }
