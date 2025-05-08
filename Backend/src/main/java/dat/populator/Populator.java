@@ -46,18 +46,19 @@ public class Populator {
 
         // Step 2: Users
         List<User> users = createUsers(roles);
-        persist(users);
 
         // Step 3: Player Accounts
         List<PlayerAccount> playerAccounts = createPlayerAccounts(users);
         //persist(playerAccounts);
 
         // Step 4: Teams
-        List<Team> teams = createTeams(playerAccounts);
+        List<Team> teams = createTeams(roles, playerAccounts);
         //persist(teams);
 
         // Step 5: Tournaments
         List<Tournament> tournaments = createTournaments(users, teams);
+
+        persist(users);
         persist(tournaments);
     }
 
@@ -67,13 +68,13 @@ public class Populator {
                 new Role("admin"),
                 new Role("player"),
                 new Role("moderator"),
-                new Role("captain")
+                new Role("team_captain")
         );
     }
 
     public List<User> createUsers(List<Role> roles) {
         List<UserGenerator.UserType> userTypes = List.of(
-                new UserGenerator.UserType("User", List.of(roles.get(0), roles.get(2)), 16),
+                new UserGenerator.UserType("User", List.of(roles.get(0), roles.get(2)), 22),
                 new UserGenerator.UserType("Admin", List.of(roles.get(1)), 2)
         );
 
@@ -83,8 +84,8 @@ public class Populator {
     }
 
     public List<PlayerAccount> createPlayerAccounts(List<User> users) {
-        List<User> counterStrikeUsers = users.subList(0, 10);
-        List<User> rocketLeagueUsers = users.subList(4, 16);
+        List<User> counterStrikeUsers = users.subList(0, 10); // 10
+        List<User> rocketLeagueUsers = users.subList(10, 22); // 12
 
         PlayerAccountGenerator counterStrikePlayerAccountGenerator = new PlayerAccountGenerator(counterStrikeUsers, Game.COUNTER_STRIKE, random);
         PlayerAccountGenerator rocketLeaguePlayerAccountGenerator = new PlayerAccountGenerator(rocketLeagueUsers, Game.ROCKET_LEAGUE, random);
@@ -96,30 +97,44 @@ public class Populator {
         return playerAccounts;
     }
 
-    public List<Team> createTeams(List<PlayerAccount> playerAccounts) {
-        List<PlayerAccount> counterStrikePlayerAccounts = playerAccounts.subList(0, 10);
-        List<PlayerAccount> rocketLeaguePlayerAccounts = playerAccounts.subList(10, 19);
+    public List<Team> createTeams(List<Role> roles, List<PlayerAccount> playerAccounts) {
+        List<PlayerAccount> counterStrikePlayerAccounts = playerAccounts.subList(0, 10); // 10
+        List<PlayerAccount> rocketLeaguePlayerAccounts = playerAccounts.subList(10, 19); // 9
 
-        TeamGenerator counterStrikeTeamGenerator = new TeamGenerator(counterStrikePlayerAccounts, Game.COUNTER_STRIKE, 5, 2, random);
-        TeamGenerator rocketLeagueTeamGenerator = new TeamGenerator(rocketLeaguePlayerAccounts, Game.ROCKET_LEAGUE, 3, 3, random);
+        List<List<PlayerAccount>> counterStrikeTeamAccounts = List.of(
+                counterStrikePlayerAccounts.subList(0, 5), // 5
+                counterStrikePlayerAccounts.subList(5, 8) // 3
+        );
+
+        List<List<PlayerAccount>> rocketLeagueTeamAccounts = List.of(
+                rocketLeaguePlayerAccounts.subList(0, 3), // 3
+                rocketLeaguePlayerAccounts.subList(3, 6), // 3
+                rocketLeaguePlayerAccounts.subList(6, 8) // 2
+        );
+
+        TeamGenerator counterStrikeTeamGenerator = new TeamGenerator(counterStrikeTeamAccounts, Game.COUNTER_STRIKE, random);
+        TeamGenerator rocketLeagueTeamGenerator = new TeamGenerator(rocketLeagueTeamAccounts, Game.ROCKET_LEAGUE, random);
 
         List<Team> teams = new ArrayList<>();
         teams.addAll(counterStrikeTeamGenerator.generate());
         teams.addAll(rocketLeagueTeamGenerator.generate());
 
+        teams.forEach(team -> team.getTeamCaptain().addRole(roles.get(4)));
+
         return teams;
     }
 
     public List<Tournament> createTournaments(List<User> users, List<Team> teams) {
-        List<User> hosts = users.subList(16, 18);
+        List<User> hosts = users.subList(16, 18); // 2
+
+        List<Team> counterStrikeTeams = teams.subList(0, 2);
+        List<Team> rocketLeagueTeams = teams.subList(2, 5);
 
         TournamentGenerator counterStrikeTournamentGenerator = new TournamentGenerator(
-                teams.stream().filter(t -> t.getGame() == Game.COUNTER_STRIKE).toList(),
-                hosts, Game.COUNTER_STRIKE, 1, 2, 5, random
+                counterStrikeTeams, hosts, Game.COUNTER_STRIKE, 1, 2, 5, random
         );
         TournamentGenerator rocketLeagueTournamentGenerator = new TournamentGenerator(
-                teams.stream().filter(t -> t.getGame() == Game.ROCKET_LEAGUE).toList(),
-                hosts, Game.ROCKET_LEAGUE, 1, 2, 3, random
+                rocketLeagueTeams, hosts, Game.ROCKET_LEAGUE, 1, 2, 3, random
         );
 
         List<Tournament> tournaments = new ArrayList<>();

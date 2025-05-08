@@ -5,6 +5,7 @@ import dat.dtos.TeamDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.exceptions.ApiException;
+import dat.security.entities.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -47,6 +48,9 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Team team = new Team(teamDTO);
+
+            team.getTeamCaptain().addRole(new Role("team_captain"));
+
             em.persist(team);
             em.getTransaction().commit();
             return new TeamDTO(team);

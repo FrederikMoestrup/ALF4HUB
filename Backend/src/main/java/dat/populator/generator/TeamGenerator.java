@@ -2,6 +2,7 @@ package dat.populator.generator;
 
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
+import dat.entities.User;
 import dat.enums.Game;
 
 import java.util.*;
@@ -9,17 +10,13 @@ import java.util.*;
 public class TeamGenerator implements TestDataGenerator<Team> {
 
     private final Set<String> usedTeamNames = new HashSet<>();
-    private final List<PlayerAccount> playerAccounts;
+    private final List<List<PlayerAccount>> teamAccounts;
     private final Game game;
-    private final int teamSize;
-    private final int teamCount;
     private final Random random;
 
-    public TeamGenerator(List<PlayerAccount> playerAccounts, Game game, int teamSize, int teamCount, Random random) {
-        this.playerAccounts = playerAccounts;
+    public TeamGenerator(List<List<PlayerAccount>> teamAccounts, Game game, Random random) {
+        this.teamAccounts = teamAccounts;
         this.game = game;
-        this.teamSize = teamSize;
-        this.teamCount = teamCount;
         this.random = random;
     }
 
@@ -27,18 +24,13 @@ public class TeamGenerator implements TestDataGenerator<Team> {
     public List<Team> generate() {
         List<Team> teams = new ArrayList<>();
 
-        int totalAccountsNeeded = teamCount * teamSize;
-        if (playerAccounts.size() < totalAccountsNeeded) {
-            throw new IllegalArgumentException("Not enough player accounts for requested teams and team size.");
-        }
-
-        for (int i = 0; i < teamCount; i++) {
-            List<PlayerAccount> teamAccounts = playerAccounts.subList(i * teamSize, (i + 1) * teamSize);
+        for (List<PlayerAccount> accounts : teamAccounts) {
             String teamName = generateUniqueTeamName();
-            PlayerAccount captain = teamAccounts.get(random.nextInt(teamAccounts.size()));
+            PlayerAccount captainPlayerAccount = accounts.get(0);
+            User teamCaptain = captainPlayerAccount.getUser();
 
-            Team team = new Team(teamName, game, captain.getUser());
-            team.setTeamAccounts(new ArrayList<>(teamAccounts));
+            Team team = new Team(teamName, game, teamCaptain);
+            team.setTeamAccounts(accounts);
             teams.add(team);
         }
 
