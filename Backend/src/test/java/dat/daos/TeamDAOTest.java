@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class TeamDAOTest {
     private static EntityManagerFactory emf;
     private TeamDAO teamDAO;
-    private PlayerAccountDAO playerAccountDAO;
 
     @BeforeAll
     static void setupClass() {
@@ -41,7 +40,6 @@ class TeamDAOTest {
     @BeforeEach
     void setUp() {
         teamDAO = TeamDAO.getInstance(emf);
-        playerAccountDAO = PlayerAccountDAO.getInstance(emf);
         Populate.populateDatabase(emf);
     }
 
@@ -55,10 +53,11 @@ class TeamDAOTest {
         TeamDTO teamDTO = teamDAO.getById(1);
         assertNotNull(teamDTO);
         assertEquals("Supra", teamDTO.getTeamName());
-        assertEquals(Game.LEAGUE_OF_LEGENDS, teamDTO.getGame());
         assertEquals("Cap1", teamDTO.getTeamCaptain().getUsername());
-        //assertEquals("League of Legends Championship",teamDTO.getTournament().getTournamentName());
         assertEquals(2, teamDTO.getTeamAccounts().size());
+
+        assertFalse(teamDTO.getTournamentTeams().isEmpty());
+        //assertEquals("League of Legends Championship", teamDTO.getTournamentTeams().get(0).getTournament().getTournamentName());
     }
 
     @Test
@@ -76,23 +75,14 @@ class TeamDAOTest {
 
     @Test
     void create() throws ApiException {
-        //PlayerAccountDTO captainDTO = playerAccountDAO.getById(1);
         TeamDTO teamDTO = new TeamDTO();
         teamDTO.setTeamName("NewTestTeam");
-        teamDTO.setGame(Game.COUNTER_STRIKE);
-        //teamDTO.setTeamCaptain(captainDTO.getUser());
-        //teamDTO.setTeamAccounts(List.of(captainDTO));
 
         TeamDTO createdTeam = teamDAO.create(teamDTO);
 
         assertNotNull(createdTeam);
         assertEquals("NewTestTeam", createdTeam.getTeamName());
-        assertEquals(Game.COUNTER_STRIKE, createdTeam.getGame());
-
-        //assertEquals("Cap1",createdTeam.getTeamCaptain().getUsername());
-        //assertNull(createdTeam.getTournament());
-        //assertEquals(1,createdTeam.getTeamAccounts().size());
-        //assertEquals("Cap1Account", createdTeam.getTeamAccounts().get(0).getPlayAccountName());
+        assertTrue(createdTeam.getTeamAccounts().isEmpty());
     }
 
     @Test
@@ -104,11 +94,10 @@ class TeamDAOTest {
         PlayerAccount newPlayer = em.find(PlayerAccount.class, 3);
 
         team.setTeamName("UpdatedTestTeam");
-        team.setGame(Game.COUNTER_STRIKE);
-        //team.setTournament(null);
         team.setTeamCaptain(newPlayer.getUser());
         team.addPlayerAccount(newPlayer);
 
+        team.getTournamentTeams().size(); // forces lazy loading
         em.getTransaction().commit();
         em.close();
 
@@ -117,11 +106,8 @@ class TeamDAOTest {
         assertNotNull(updatedTeam);
         assertEquals("UpdatedTestTeam", updatedTeam.getTeamName());
         assertEquals(3, updatedTeam.getTeamAccounts().size());
-        assertEquals(Game.COUNTER_STRIKE, updatedTeam.getGame());
-        assertEquals("Cap3Account", updatedTeam.getTeamAccounts().get(2).getPlayAccountName());
-        //assertEquals("League of Legends Championship", updatedTeam.getTournament().getTournamentName());
+        assertEquals("Cap3Account", updatedTeam.getTeamAccounts().get(2).getPlayerAccountName());
         assertEquals("Cap3", updatedTeam.getTeamCaptain().getUsername());
-        assertEquals(3, updatedTeam.getTeamAccounts().size());
     }
 
 
@@ -137,6 +123,4 @@ class TeamDAOTest {
         List<TeamDTO> teams = teamDAO.getAll();
         assertEquals(5, teams.size());
     }
-
-    //to do add test for removeplayerfromteam
 }

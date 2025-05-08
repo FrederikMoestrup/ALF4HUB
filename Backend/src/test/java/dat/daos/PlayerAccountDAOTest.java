@@ -4,6 +4,7 @@ import dat.config.HibernateConfig;
 import dat.config.Populate;
 import dat.dtos.PlayerAccountDTO;
 import dat.dtos.TeamDTO;
+import dat.dtos.TournamentTeamDTO;
 import dat.dtos.UserDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.User;
@@ -54,8 +55,7 @@ class PlayerAccountDAOTest {
         PlayerAccountDTO playerAccountDTO = playerAccountDAO.getAll().get(0);
 
         assertNotNull(playerAccountDTO);
-        assertEquals("Cap1Account", playerAccountDTO.getPlayAccountName());
-        assertTrue(playerAccountDTO.isActive());
+        assertEquals("Cap1Account", playerAccountDTO.getPlayerAccountName());
         assertEquals(Game.LEAGUE_OF_LEGENDS, playerAccountDTO.getGame());
         assertEquals("Platinum", playerAccountDTO.getRank());
 
@@ -64,9 +64,14 @@ class PlayerAccountDAOTest {
         assertEquals("Cap1", playerAccountDTO.getUser().getUsername());
 
         //team test
-        //assertNotNull(playerAccountDTO.getTeams());
-        //assertFalse(playerAccountDTO.getTeams().isEmpty());
+        assertNotNull(playerAccountDTO.getTeams());
+        assertTrue(playerAccountDTO.getTeams().isEmpty());
         //assertEquals("Supra", playerAccountDTO.getTeams().get(0).getTeamName());
+
+        //tournament team test
+        assertNotNull(playerAccountDTO.getTournamentTeams());
+        assertTrue(playerAccountDTO.getTournamentTeams().isEmpty());
+        //assertEquals("Supra", playerAccountDTO.getTournamentTeams().get(0).getTournamentTeamName());
     }
 
     @Test
@@ -82,14 +87,13 @@ class PlayerAccountDAOTest {
 
         assertNotNull(playerAccounts);
         assertEquals(12, playerAccounts.size());
-        assertEquals("Cap1Account", playerAccounts.get(0).getPlayAccountName());
+        assertEquals("Cap1Account", playerAccounts.get(0).getPlayerAccountName());
     }
 
     @Test
     void create() {
         PlayerAccountDTO dto = new PlayerAccountDTO();
-        dto.setPlayAccountName("NewTestAccount");
-        dto.setActive(true);
+        dto.setPlayerAccountName("NewTestAccount");
         dto.setGame(Game.DOTA_2);
         dto.setRank("Platinum");
         //dto.setUser(new UserDTO("NewUser", "1234"));
@@ -97,24 +101,23 @@ class PlayerAccountDAOTest {
         PlayerAccountDTO created = playerAccountDAO.create(dto);
 
         assertNotNull(created);
-        assertEquals("NewTestAccount", created.getPlayAccountName());
-        assertTrue(created.isActive());
+        assertEquals("NewTestAccount", created.getPlayerAccountName());
         assertEquals(Game.DOTA_2, created.getGame());
         assertEquals("Platinum", created.getRank());
         //assertEquals("NewUser", created.getUser().getUsername());
-        assertNull(created.getTeams());
-        //assertTrue(created.getTeams().isEmpty());
 
+        assertNotNull(created.getTeams());
+        assertTrue(created.getTeams().isEmpty());
 
-        //should a newly created player have a null or empty team list?
+        assertNotNull(created.getTournamentTeams());
+        assertTrue(created.getTournamentTeams().isEmpty());
     }
 
 
     @Test
     void update() throws ApiException {
         PlayerAccountDTO dto = playerAccountDAO.getById(1);
-        dto.setPlayAccountName("UpdatedTestAccount");
-        dto.setActive(false);
+        dto.setPlayerAccountName("UpdatedTestAccount");
         dto.setGame(Game.COUNTER_STRIKE);
         dto.setRank("Diamond");
         //dto.setUser();
@@ -123,15 +126,16 @@ class PlayerAccountDAOTest {
         PlayerAccountDTO updated = playerAccountDAO.update(dto.getId(), dto);
 
         assertNotNull(updated);
-        assertEquals("UpdatedTestAccount", updated.getPlayAccountName());
-        assertFalse(updated.isActive());
+        assertEquals("UpdatedTestAccount", updated.getPlayerAccountName());
         assertEquals(Game.COUNTER_STRIKE, updated.getGame());
         assertEquals("Diamond", updated.getRank());
         //assertEquals("Cap1", updated.getUser().getUsername());
-        //assertTrue(updated.getTeams().isEmpty());
 
-        // need to also check teamaccount team_account
+        assertNotNull(updated.getTeams());
+        assertTrue(updated.getTeams().isEmpty());
 
+        assertNotNull(updated.getTournamentTeams());
+        assertTrue(updated.getTournamentTeams().isEmpty());
     }
 
 
@@ -140,7 +144,7 @@ class PlayerAccountDAOTest {
         PlayerAccountDTO dto = playerAccountDAO.getById(1);
 
         assertNotNull(dto);
-        assertEquals("Cap1Account", dto.getPlayAccountName());
+        assertEquals("Cap1Account", dto.getPlayerAccountName());
 
         playerAccountDAO.delete(dto.getId());
 
@@ -155,8 +159,6 @@ class PlayerAccountDAOTest {
         assertNotNull(players);
         assertFalse(players.isEmpty());
         assertEquals(2, players.size());
-        assertEquals("Cap1Account", players.get(0).getPlayAccountName());
+        assertEquals("Cap1Account", players.get(0).getPlayerAccountName());
     }
-
-
 }
