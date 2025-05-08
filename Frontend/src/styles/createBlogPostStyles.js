@@ -8,7 +8,6 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     box-sizing: border-box;
     font-family: 'Segoe UI', sans-serif;
-    color: pink;
   }
 `;
 
