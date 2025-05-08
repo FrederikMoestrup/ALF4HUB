@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import apiFacade from './util/apiFacade';
-import './App.css';
+import apiFacade from '../util/apiFacade';
+import '../App.css';
 
 function InactiveButton({ playerAccount }) {
     const [player, setPlayer] = useState(playerAccount);
