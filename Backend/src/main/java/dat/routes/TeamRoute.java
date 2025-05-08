@@ -16,8 +16,8 @@ public class TeamRoute {
         return () -> {
             get("/", teamController::getAll, Role.USER);
             get("/{id}",teamController::getById, Role.USER);
-            post("/", teamController::create, Role.ADMIN);
-            put("/{id}", teamController::update, Role.ADMIN);
+            post("/", teamController::create, Role.USER);
+            put("/{id}", teamController::update, Role.USER);
             delete("/{id}", teamController::delete, Role.ADMIN);
         };
     }
