@@ -6,7 +6,6 @@ import dat.dtos.TeamDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.entities.User;
-import dat.enums.Game;
 import dat.exceptions.ApiException;
 import dat.populator.Populator;
 import dat.security.entities.Role;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -83,10 +83,10 @@ class TeamDAOTest {
 
         TeamDTO expected = new TeamDTO(
                 "BC94",
-                Game.ROCKET_LEAGUE,
                 teamAccounts.get(0).getUser(),
                 null,
-                teamAccounts
+                teamAccounts,
+                new ArrayList<>()
         );
 
         TeamDTO actual = teamDAO.create(expected);
@@ -144,7 +144,7 @@ class TeamDAOTest {
         TeamDTO teamDTO = teamDTOList.get(0);
 
         System.out.println("Before adding player:");
-        teamDTO.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayAccountName()));
+        teamDTO.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayerAccountName()));
 
         PlayerAccountDTO newPlayer = playerAccountDTOList.stream()
                 .filter(pa -> teamDTO.getTeamAccounts().stream()
@@ -155,10 +155,9 @@ class TeamDAOTest {
         TeamDTO updatedTeam = teamDAO.invitePlayer(teamDTO.getId(), newPlayer);
 
         System.out.println("After adding player:");
-        updatedTeam.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayAccountName()));
+        updatedTeam.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayerAccountName()));
 
         assertThat(updatedTeam.getTeamAccounts(), hasSize(teamDTO.getTeamAccounts().size() + 1));
         assertThat(updatedTeam.getTeamAccounts(), hasItem(samePropertyValuesAs(newPlayer)));
     }
-
 }
