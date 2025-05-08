@@ -15,6 +15,7 @@ public class BlogRoute {
             get("/", blogController::getAll, Role.ANYONE); // This could be admin depending on frontend layout
             get("/preview", blogController::getAllPreview, Role.ANYONE); // This could be admin depending on frontend layout
             get("/{id}",blogController::getById, Role.ANYONE);
+            get("/draft/{id}", blogController::getDraftByUserId, Role.ANYONE);
             post("/", blogController::create, Role.ANYONE);
             post("/draft", blogController::createDraft, Role.ANYONE);
         };

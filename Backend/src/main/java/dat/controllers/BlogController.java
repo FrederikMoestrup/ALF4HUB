@@ -62,6 +62,21 @@ public class BlogController {
         }
     }
 
+    public void getDraftByUserId(Context ctx) throws ApiException {
+        try {
+            int userId = Integer.parseInt(ctx.pathParam("id"));
+            List<BlogPostDTO> blogDTOs = blogPostDAO.getDraftByUserId(userId);
+
+            if (blogDTOs == null || blogDTOs.isEmpty()) {
+                ctx.status(200).result("No drafts found");
+            } else {
+                ctx.status(200).json(blogDTOs, BlogPostDTO.class);
+            }
+        } catch (Exception e) {
+            ctx.status(500).result("Internal server error: " + e.getMessage());
+        }
+    }
+
     public void create(Context ctx) throws ApiException {
         try {
             BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);

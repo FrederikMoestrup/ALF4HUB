@@ -9,6 +9,7 @@ import {
 
 function Drafts() {
     const [drafts, setDrafts] = useState([]);
+    const userId = 1; // hardcoded until login works
 
     const exampleBlogPosts = [
         {
@@ -63,8 +64,7 @@ function Drafts() {
 
       const fetchDrafts = async () => {
         try {
-            // const response = await fetch("http://localhost:7070/api/blogpost/draft", {
-            const response = await fetch("http://localhost:7070/api/blogpost", {
+            const response = await fetch("http://localhost:7070/api/blogpost/draft/" + userId, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,7 +82,7 @@ function Drafts() {
 
     useEffect(() => {
         fetchDrafts(); // currently fails "on purpose"
-        setDrafts(exampleBlogPosts);
+        // setDrafts(exampleBlogPosts);
     }, []);
 
   return (
@@ -106,26 +106,22 @@ function Drafts() {
            </Navbar>
    
            <Content>
-            <FormWrapper>
             <BlogContainer>
                         <BlogSectionLeft>
                           <SectionTitle>Your unpublished drafts</SectionTitle>
-                          {drafts.length < 1 ? <p Style="color: #3b3b3b;">No recent posts yet.</p> : null}
+                          {drafts.length < 1 ? <p>No recent posts yet.</p> : null}
                           <ul Style="list-style-type: none; padding: 0;">
                           {
-                            drafts.map((draft, index) => (
-                              <div>
-                            <li key={index} Style="border-bottom: 1px solid #9b9b9b; padding: 10px;">
-                              <h2 Style="color: #3b3b3b;">{draft.title}</h2>
-                              <p Style="color: #3b3b3b;">Tags: {draft.tags}</p>
-                              <p Style="color: #3b3b3b;">{draft.content}</p>
-                              </li>
-                              </div>
+                            drafts.map((draft) => (
+                            <BlogCard key={draft.id} Style="border-left: 5px solid red;">
+                              <h3>{draft.title}</h3>
+                              <p>{draft.content}</p>
+                              <small>Posted on {draft.createdAt}</small>
+                            </BlogCard>
                             ))}
                             </ul>
                         </BlogSectionLeft>
                       </BlogContainer>
-            </FormWrapper>
            </Content>
    
            <Footer>
@@ -135,16 +131,6 @@ function Drafts() {
              </p>
            </Footer>
          </Container >
-   
-         {/* <PopUpMessage
-           isOpen={error !== "" || success}
-           message={error || getSuccessMessage()}
-           onClose={() => {
-             setError("");
-             setSuccess(false);
-           }}
-           type={error ? "error" : "success"}
-         /> */}
        </>
   );
 }
