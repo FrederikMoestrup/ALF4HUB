@@ -47,6 +47,8 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Team.class);
         configuration.addAnnotatedClass(Tournament.class);
         configuration.addAnnotatedClass(BlogPost.class);
+        configuration.addAnnotatedClass(TournamentTeam.class);
+
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String DBName) {

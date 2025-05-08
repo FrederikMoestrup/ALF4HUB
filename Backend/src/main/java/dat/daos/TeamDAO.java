@@ -61,7 +61,6 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
             }
 
             team.setTeamName(teamDTO.getTeamName());
-            team.setGame(teamDTO.getGame());
 
             em.getTransaction().commit();
             return new TeamDTO(team);

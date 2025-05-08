@@ -84,7 +84,7 @@ public class TournamentController {
                 .check(t -> t.getPrizePool() >= 0, "Prize pool must be 0 or greater")
                 .check(t -> t.getRules() != null && !t.getRules().isEmpty(), "Rules must be set")
                 .check(t -> t.getEntryRequirements() != null && !t.getEntryRequirements().isEmpty(), "Entry requirements must be set")
-                .check(t -> t.getStatus() != null && !t.getStatus().isEmpty(), "Status must be set")
+                .check(t -> t.getTournamentStatus() != null, "Tournament Status must be set")
                 .check(t -> t.getStartDate() != null && !t.getStartDate().isEmpty(), "Start date must be set")
                 .check(t -> t.getStartTime() != null && !t.getStartTime().isEmpty(), "Start time must be set")
                 .check(t -> t.getEndDate() != null && !t.getEndDate().isEmpty(), "End date must be set")

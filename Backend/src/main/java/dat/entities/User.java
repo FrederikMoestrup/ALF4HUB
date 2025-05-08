@@ -35,7 +35,7 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "username", length = 25)
+    @Column(name = "username", length = 25, nullable = false, unique = true)
     private String username;
     @Basic(optional = false)
     @Column(name = "password")
@@ -46,15 +46,15 @@ public class User implements Serializable, ISecurityUser {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<PlayerAccount> playerAccounts = new ArrayList<>();
 
     //As a host
-    @OneToMany(mappedBy = "host", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Tournament> tournaments = new ArrayList<>();;
+    @OneToMany(mappedBy = "host", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Tournament> tournaments = new ArrayList<>();
 
     //As a team captain
-    @OneToMany(mappedBy = "teamCaptain", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "teamCaptain", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Team> teams = new ArrayList<>();
 
     //One user can have multiple blogposts, but a blogpost belongs to one user
@@ -109,6 +109,11 @@ public class User implements Serializable, ISecurityUser {
         if (dto.getTeams() != null) {
             setTeams(dto.getTeams().stream()
                     .map(Team::new)
+                    .collect(Collectors.toList()));
+        }
+        if (dto.getTournamentTeams() != null) {
+            setTournamentTeams(dto.getTournamentTeams().stream()
+                    .map(TournamentTeam::new)
                     .collect(Collectors.toList()));
         }
     }
@@ -179,8 +184,35 @@ public class User implements Serializable, ISecurityUser {
         }
     }
 
-    //Blogposts methods:
-    //husk kommentar
+    public void removeTeam(Team team) {
+        if (team == null || !teams.contains(team)) {
+            return;
+        }
+        teams.remove(team);
+    }
+
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if(tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTournamentTeamCaptain(this);
+            }
+        }
+    }
+
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTournamentTeamCaptain(this);
+        }
+    }
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+    }
 
     public void setBlogPosts(List<BlogPost> blogPosts) {
         if(blogPosts != null) {
