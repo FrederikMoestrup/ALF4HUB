@@ -82,6 +82,7 @@ const UserItem = styled.div`
   justify-content: space-between;
   align-items: center;
   transition: background-color 0.2s ease;
+  color: #000;
   &:hover {
     background-color: #e0e0e0;
   }
