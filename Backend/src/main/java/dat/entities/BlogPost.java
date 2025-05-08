@@ -39,8 +39,6 @@ public class BlogPost {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
-    // A user can have multiple blog posts, but a blog post belongs to one user
-    // Who should be responsible for the relation and where should it be managed?
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -48,7 +46,7 @@ public class BlogPost {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 5000) // Possibly a different length - maybe use @Lob?
+    @Column(nullable = false, length = 5000)
     private String content;
 
     @CreationTimestamp
@@ -59,7 +57,6 @@ public class BlogPost {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Should there be a default, perhaps PENDING_REVIEW or DRAFT?
     @Enumerated(EnumType.STRING)
     private BlogPostStatus status;
 
@@ -72,5 +69,4 @@ public class BlogPost {
         this.updatedAt = blogPostDTO.getUpdatedAt();
         this.status = blogPostDTO.getStatus();
     }
-
 }
