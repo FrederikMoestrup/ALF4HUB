@@ -5,6 +5,7 @@ import dat.entities.BlogPost;
 import dat.enums.BlogPostStatus;
 import dat.exceptions.ApiException;
 import jakarta.persistence.*;
+import org.hibernate.ObjectNotFoundException;
 
 import java.util.List;
 
@@ -109,13 +110,19 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             BlogPost blogPost = em.find(BlogPost.class, id);
             if (blogPost == null) {
                 throw new ApiException(404, "Blogpost med ID " + id + " blev ikke fundet.");
+
             }
 
             em.remove(blogPost);
             em.getTransaction().commit();
 
             return new BlogPostDTO(blogPost);
-        } catch (Exception e) {
+        }
+        catch (ApiException e) {
+            throw e;
+        }
+        catch (Exception e) {
+
             e.printStackTrace();
             throw new ApiException(500, "Noget gik galt under sletningen. Prøv igen.");
         }

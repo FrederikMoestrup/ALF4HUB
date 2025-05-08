@@ -15,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class BlogPostDAOTest {
@@ -118,7 +119,35 @@ class BlogPostDAOTest {
 
 
     @Test
-    void delete() {
+    void delete() throws ApiException {
+        List<BlogPostDTO> allPosts = blogPostDAO.getAll();
+
+        // Printing all posts before any deletion
+        allPosts.forEach(blogPostDTO -> System.out.println(blogPostDTO.getId() + ", " + blogPostDTO.getTitle() + ", " + blogPostDTO.getContent()));
+
+        BlogPostDTO existingPost = allPosts.get(0);
+        BlogPostDTO deletedPost = blogPostDAO.delete(existingPost.getId());
+        List<BlogPostDTO> allPostsAfterDelete = blogPostDAO.getAll();
+
+        assertThat(deletedPost.getId(), equalTo(existingPost.getId()));
+        assertThat(deletedPost.getTitle(), equalTo(existingPost.getTitle()));
+        assertThat(deletedPost.getContent(), equalTo(existingPost.getContent()));
+        assertThat(deletedPost.getStatus(), equalTo(existingPost.getStatus()));
+        assertThat(deletedPost.getUserId(), equalTo(existingPost.getUserId()));
+
+        // Printing all posts after one of them has been deleted
+        allPostsAfterDelete.forEach(blogPostDTO -> System.out.println(blogPostDTO.getId() + ", " + blogPostDTO.getTitle() + ", " + blogPostDTO.getContent()));
+
+        assertFalse(blogPostDAO.getAll().contains(existingPost));
+
+
+        ApiException exception = assertThrowsExactly(ApiException.class, () -> {
+            blogPostDAO.delete(9999L);
+        });
+        assertThat(exception.getStatusCode(), equalTo(404));
+
+
+
     }
 }
 
