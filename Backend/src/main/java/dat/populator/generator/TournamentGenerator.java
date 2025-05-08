@@ -1,9 +1,9 @@
 package dat.populator.generator;
 
-import dat.entities.Team;
 import dat.entities.Tournament;
 import dat.entities.User;
 import dat.enums.Game;
+import dat.enums.TournamentStatus;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +12,6 @@ import java.util.*;
 public class TournamentGenerator implements TestDataGenerator<Tournament> {
 
     private final Set<String> usedTournamentNames = new HashSet<>();
-    private final List<Team> teams;
     private final List<User> hosts;
     private final Game game;
     private final int tournamentCount;
@@ -20,8 +19,7 @@ public class TournamentGenerator implements TestDataGenerator<Tournament> {
     private final int maxTeamSize;
     private final Random random;
 
-    public TournamentGenerator(List<Team> teams, List<User> hosts, Game game, int tournamentCount, int minTeamSize, int maxTeamSize, Random random) {
-        this.teams = teams;
+    public TournamentGenerator(List<User> hosts, Game game, int tournamentCount, int minTeamSize, int maxTeamSize, Random random) {
         this.hosts = hosts;
         this.game = game;
         this.tournamentCount = tournamentCount;
@@ -40,27 +38,26 @@ public class TournamentGenerator implements TestDataGenerator<Tournament> {
             double prizePool = 100 + (random.nextDouble() * 9900);
             String rules = TestDataConstants.RULE_SETS[random.nextInt(TestDataConstants.RULE_SETS.length)];
             String entryRequirements = TestDataConstants.ENTRY_REQUIREMENTS[random.nextInt(TestDataConstants.ENTRY_REQUIREMENTS.length)];
-            String status = TestDataConstants.STATUSES[random.nextInt(TestDataConstants.STATUSES.length)];
-            User host = hosts.get(random.nextInt(hosts.size()));
 
-            // Pick teams for this tournament
-            int teamsForTournament = Math.min(tournamentSize, teams.size());
-            List<Team> selectedTeams = teams.subList(0, teamsForTournament);
+            TournamentStatus[] statuses = TournamentStatus.values();
+            TournamentStatus status = statuses[random.nextInt(statuses.length)];
+
+            User host = hosts.get(random.nextInt(hosts.size()));
 
             // Generate time info
             LocalDateTime now = LocalDateTime.now();
             LocalDateTime start, end;
 
             switch (status) {
-                case "UPCOMING":
+                case NOT_STARTED:
                     start = now.plusDays(1 + random.nextInt(7)).withHour(18).withMinute(0).withSecond(0).withNano(0);
                     end = start.plusHours(2 + random.nextInt(5 * 24));
                     break;
-                case "ONGOING":
+                case IN_PROGRESS:
                     start = now.minusDays(1 + random.nextInt(3)).withHour(18).withMinute(0).withSecond(0).withNano(0);
                     end = now.plusDays(1 + random.nextInt(3)).withHour(22).withMinute(0).withSecond(0).withNano(0);
                     break;
-                case "COMPLETED":
+                case COMPLETED:
                     start = now.minusDays(2 + random.nextInt(9)).withHour(15 + random.nextInt(8)).withMinute(0).withSecond(0).withNano(0);
                     end = start.plusHours(2 + random.nextInt(5 * 24));
 
@@ -85,7 +82,7 @@ public class TournamentGenerator implements TestDataGenerator<Tournament> {
                     name,
                     game,
                     tournamentSize,
-                    selectedTeams.get(0).getTeamAccounts().size(), // team size
+                    5,
                     prizePool,
                     rules,
                     entryRequirements,
@@ -97,7 +94,6 @@ public class TournamentGenerator implements TestDataGenerator<Tournament> {
                     host
             );
 
-            tournament.setTeams(new ArrayList<>(selectedTeams));
             tournaments.add(tournament);
         }
 

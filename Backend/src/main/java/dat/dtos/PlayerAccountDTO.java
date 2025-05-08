@@ -3,11 +3,13 @@ package dat.dtos;
 import dat.entities.PlayerAccount;
 import dat.enums.Game;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class PlayerAccountDTO {
 
     private int id;

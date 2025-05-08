@@ -2,7 +2,6 @@ package dat.populator.generator;
 
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
-import dat.enums.Game;
 
 import java.util.*;
 
@@ -10,14 +9,12 @@ public class TeamGenerator implements TestDataGenerator<Team> {
 
     private final Set<String> usedTeamNames = new HashSet<>();
     private final List<PlayerAccount> playerAccounts;
-    private final Game game;
     private final int teamSize;
     private final int teamCount;
     private final Random random;
 
-    public TeamGenerator(List<PlayerAccount> playerAccounts, Game game, int teamSize, int teamCount, Random random) {
+    public TeamGenerator(List<PlayerAccount> playerAccounts, int teamSize, int teamCount, Random random) {
         this.playerAccounts = playerAccounts;
-        this.game = game;
         this.teamSize = teamSize;
         this.teamCount = teamCount;
         this.random = random;
@@ -37,7 +34,7 @@ public class TeamGenerator implements TestDataGenerator<Team> {
             String teamName = generateUniqueTeamName();
             PlayerAccount captain = teamAccounts.get(random.nextInt(teamAccounts.size()));
 
-            Team team = new Team(teamName, game, captain.getUser());
+            Team team = new Team(teamName, captain.getUser());
             team.setTeamAccounts(new ArrayList<>(teamAccounts));
             teams.add(team);
         }

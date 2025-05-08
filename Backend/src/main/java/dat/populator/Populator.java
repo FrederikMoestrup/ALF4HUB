@@ -54,10 +54,10 @@ public class Populator {
 
         // Step 4: Teams
         List<Team> teams = createTeams(playerAccounts);
-        //persist(teams);
+        persist(teams);
 
         // Step 5: Tournaments
-        List<Tournament> tournaments = createTournaments(users, teams);
+        List<Tournament> tournaments = createTournaments(users);
         persist(tournaments);
     }
 
@@ -100,8 +100,8 @@ public class Populator {
         List<PlayerAccount> counterStrikePlayerAccounts = playerAccounts.subList(0, 10);
         List<PlayerAccount> rocketLeaguePlayerAccounts = playerAccounts.subList(10, 19);
 
-        TeamGenerator counterStrikeTeamGenerator = new TeamGenerator(counterStrikePlayerAccounts, Game.COUNTER_STRIKE, 5, 2, random);
-        TeamGenerator rocketLeagueTeamGenerator = new TeamGenerator(rocketLeaguePlayerAccounts, Game.ROCKET_LEAGUE, 3, 3, random);
+        TeamGenerator counterStrikeTeamGenerator = new TeamGenerator(counterStrikePlayerAccounts, 5, 2, random);
+        TeamGenerator rocketLeagueTeamGenerator = new TeamGenerator(rocketLeaguePlayerAccounts, 3, 3, random);
 
         List<Team> teams = new ArrayList<>();
         teams.addAll(counterStrikeTeamGenerator.generate());
@@ -110,15 +110,13 @@ public class Populator {
         return teams;
     }
 
-    public List<Tournament> createTournaments(List<User> users, List<Team> teams) {
+    public List<Tournament> createTournaments(List<User> users) {
         List<User> hosts = users.subList(16, 18);
 
         TournamentGenerator counterStrikeTournamentGenerator = new TournamentGenerator(
-                teams.stream().filter(t -> t.getGame() == Game.COUNTER_STRIKE).toList(),
                 hosts, Game.COUNTER_STRIKE, 1, 2, 5, random
         );
         TournamentGenerator rocketLeagueTournamentGenerator = new TournamentGenerator(
-                teams.stream().filter(t -> t.getGame() == Game.ROCKET_LEAGUE).toList(),
                 hosts, Game.ROCKET_LEAGUE, 1, 2, 3, random
         );
 
