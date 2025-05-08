@@ -25,24 +25,6 @@ public class ProfanityFilter {
         useDefaultWordFilter();
     }
 
-    public static String censorText(String text) {
-        // replaces every char of a filtered word with * and returns a censored string
-        String[] words = text.split("\\s+");
-        StringBuilder censoredText = new StringBuilder();
-
-        for (String word : words) {
-            String cleanWord = word.replaceAll("[^a-zA-Z]", "").toLowerCase(); // Remove punctuation for matching
-            if (BAD_WORDS.contains(cleanWord)) {
-                censoredText.append("*".repeat(cleanWord.length()));
-            } else {
-                censoredText.append(word);
-            }
-            censoredText.append(" ");
-        }
-
-        return censoredText.toString().trim();
-    }
-
     public static boolean containsProfanity(String text) {
         // easily lets you detect if a string contains filtered words
         String[] words = text.split("\\s+");

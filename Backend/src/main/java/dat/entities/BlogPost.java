@@ -20,14 +20,14 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(
                 name = "BlogPost.getAll",
-                query = "SELECT bp FROM BlogPost bp"
+                query = "SELECT b FROM BlogPost b WHERE b.status = 'PUBLISHED'"
         ),
         @NamedQuery(
                 name = "BlogPost.findAllWithOnlyContentPreview",
-                query = "SELECT new dat.dtos.BlogPostDTO(bp.id,CAST(bp.user.id AS Long), bp.title, SUBSTRING(bp.content, 1, 150), bp.createdAt, bp.updatedAt, bp.status) FROM BlogPost bp"
+                query = "SELECT new dat.dtos.BlogPostDTO(bp.id,CAST(bp.user.id AS Long), bp.title, SUBSTRING(bp.content, 1, 150), bp.createdAt, bp.updatedAt, bp.status) FROM BlogPost bp WHERE bp.status = 'PUBLISHED'"
         ),
         @NamedQuery(
-                name = "BlogPost.findDraftsByUser",
+                name = "BlogPost.getDraftsByUserId",
                 query = "SELECT bp FROM BlogPost bp WHERE bp.user.id = :userId AND bp.status = 'DRAFT'"
         )
 })

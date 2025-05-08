@@ -27,11 +27,6 @@ class ProfanityFilterTest {
     }
 
     @Test
-    void censorText() {
-        // no idea how to really test this, it replaces words like "shit" with "****"
-    }
-
-    @Test
     void containsProfanity() {
         Boolean check1;
         Boolean check2;
