@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 import {
     GlobalStyle, Container, Navbar, HomeButton, ProfileButton, NavLinks, Content, FormWrapper,
     FormTitle, Form, Label, Input, Textarea, ButtonsContent, Button, RequiredText, Footer,
