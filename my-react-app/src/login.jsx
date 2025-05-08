@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './acces.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Logo from './assets/ALTF4HUB.png';
 
 
 const Login = () => {
@@ -39,7 +40,7 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      <h2>Place holder for logo (ALTF4HUB)</h2>
+      <img src={Logo} alt="Logo for the page" className="logo-img" />
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="input-group">
           <label htmlFor="username">Brugernavn</label>

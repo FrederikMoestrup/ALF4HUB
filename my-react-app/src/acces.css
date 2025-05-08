@@ -113,6 +113,13 @@ opacity: 0;
   max-width: 225px; 
 }
 
+.logo-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-bottom: 30px;
+}
+
 @media (max-width: 768px) {
   .login-page .container,
   .register-page .container {
