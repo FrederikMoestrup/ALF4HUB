@@ -23,6 +23,7 @@ function CreateTournament() {
         setError('');
         setSuccess(false);
 
+        today.setHours(0, 0, 0, 0); // Sætter tid til midnat for at sammenligne datoer korrekt
 
         if (!tournamentName || !startDate || !endDate) {
             setError('Please fill in all fields.');
