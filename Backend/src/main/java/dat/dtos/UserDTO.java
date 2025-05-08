@@ -3,10 +3,7 @@ package dat.dtos;
 import dat.entities.User;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -17,48 +14,28 @@ public class UserDTO {
     private String username;
     private String password;
     private Set<String> roles = new HashSet();
-    private List<PlayerAccountDTO> playerAccounts;
-    private List<TournamentDTO> tournaments;
-    private List<TeamDTO> teams;
+    private List<PlayerAccountDTO> playerAccounts = new ArrayList<>();
+    private List<TournamentDTO> tournaments = new ArrayList<>();
+    private List<TeamDTO> teams = new ArrayList<>();
+    private List<TournamentTeamDTO> tournamentTeams = new ArrayList<>();
 
     public UserDTO(String username, Set<String> roles,
                    List<PlayerAccountDTO> playerAccounts,
                    List<TournamentDTO> tournaments,
-                   List<TeamDTO> teams) {
+                   List<TeamDTO> teams, List<TournamentTeamDTO> tournamentTeams) {
         this.username = username;
         this.roles = roles;
         this.playerAccounts = playerAccounts;
         this.tournaments = tournaments;
         this.teams = teams;
+        this.tournamentTeams = tournamentTeams;
     }
 
     public UserDTO(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
         this.roles = user.getRolesAsStrings();
-
-        if (user.getPlayerAccounts() != null) {
-            this.playerAccounts = user.getPlayerAccounts().stream()
-                    .map(PlayerAccountDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTournaments() != null) {
-            this.tournaments = user.getTournaments().stream()
-                    .map(TournamentDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTeams() != null) {
-            this.teams = user.getTeams().stream()
-                    .map(TeamDTO::new)
-                    .collect(Collectors.toList());
-        }
     }
-
-
-
-
 
 
 
