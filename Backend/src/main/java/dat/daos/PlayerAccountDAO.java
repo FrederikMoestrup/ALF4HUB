@@ -33,7 +33,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
     }
 
     @Override
-    public List<PlayerAccountDTO> getAll(){
+    public List<PlayerAccountDTO> getAll() {
         try (EntityManager em = emf.createEntityManager()) {
             List<PlayerAccount> playerAccounts = em.createQuery("SELECT p FROM PlayerAccount p", PlayerAccount.class).getResultList();
             return playerAccounts.stream().map(PlayerAccountDTO::new).toList();
@@ -64,19 +64,6 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             playerAccount.setGame(playerAccountDTO.getGame());
             playerAccount.setRank(playerAccountDTO.getRank());
 
-            em.getTransaction().commit();
-            return new PlayerAccountDTO(playerAccount);
-        }
-    }
-
-    public PlayerAccountDTO updateStatus(Integer id, boolean isActive) throws ApiException {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            PlayerAccount playerAccount = em.find(PlayerAccount.class, id);
-            if (playerAccount == null) {
-                throw new ApiException(404, "PlayerAccount not found");
-            }
-            playerAccount.setActive(isActive);
             em.getTransaction().commit();
             return new PlayerAccountDTO(playerAccount);
         }

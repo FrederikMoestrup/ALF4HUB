@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import InactiveButton from "./InactiveButton";
 
 const PlayerCard = styled.div`
   background:rgb(161, 157, 157);
@@ -63,7 +62,6 @@ const ShowTeamInfo = ({ team, isCaptain, onRemovePlayer }) => {
       onRemovePlayer?.(team.id);
     }
   };
-
     
     return (
         <PlayerCard >
@@ -72,7 +70,6 @@ const ShowTeamInfo = ({ team, isCaptain, onRemovePlayer }) => {
           <PlayerName>{team.playAccountName}</PlayerName>
           <RankRectangle>{team.rank}</RankRectangle>
           {!isCaptain && <RemoveButton onClick={handleRemove}>Remove</RemoveButton>}
-          <InactiveButton playerAccount={team}/>
         </PlayerCard>
       );
 };

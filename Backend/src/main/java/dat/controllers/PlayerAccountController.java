@@ -62,18 +62,6 @@ public class PlayerAccountController {
         }
     }
 
-    public void updateStatus(Context ctx) throws ApiException {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            boolean status = Boolean.parseBoolean(ctx.queryParam("status"));
-            PlayerAccountDTO playerAccountDTO = playerAccountDAO.updateStatus(id, status);
-            ctx.res().setStatus(200);
-            ctx.json(playerAccountDTO, PlayerAccountDTO.class);
-        } catch (NumberFormatException e) {
-            throw new ApiException(400, "Missing or invalid parameter: id");
-        }
-    }
-
     public void delete(Context ctx) throws ApiException {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));

@@ -17,7 +17,6 @@ public class PlayerAccountRoute {
             get("/{id}", playerAccountController::getById, Role.USER);
             post("/", playerAccountController::create, Role.USER);
             put("/{id}", playerAccountController::update, Role.USER);
-            put("/{id}/status", playerAccountController::updateStatus, Role.ANYONE);
             delete("/{id}", playerAccountController::delete, Role.ADMIN);
         };
     }
