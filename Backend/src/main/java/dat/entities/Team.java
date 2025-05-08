@@ -23,21 +23,11 @@ public class Team {
     @Column(name = "team_name", nullable = false)
     private String teamName;
 
-    @Setter
-    @Column(name = "game", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Game game;
-
     //Relations
     @Setter
     @ManyToOne
     @JoinColumn(name = "team_captain_id")
     private User teamCaptain;
-
-    @Setter
-    @ManyToOne
-    @JoinColumn(name = "tournament_id")
-    private Tournament tournament;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -47,12 +37,13 @@ public class Team {
     )
     private List<PlayerAccount> teamAccounts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "team", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
-    public Team(String teamName, Game game, User teamCaptain) {
+
+    public Team(String teamName, User teamCaptain) {
         this.teamName = teamName;
-        this.game = game;
         this.teamCaptain = teamCaptain;
-        this.teamAccounts = new ArrayList<>();
     }
 
     public Team(TeamDTO teamDTO) {
@@ -60,19 +51,12 @@ public class Team {
             this.id = teamDTO.getId();
         }
         this.teamName = teamDTO.getTeamName();
-        this.game = teamDTO.getGame();
 
         if (teamDTO.getTeamCaptain() != null) {
             this.teamCaptain = new User(teamDTO.getTeamCaptain());
             this.teamCaptain.addTeam(this);
         }
 
-        if (teamDTO.getTournament() != null) {
-            this.tournament = new Tournament(teamDTO.getTournament());
-            this.tournament.addTeam(this);
-        }
-
-        this.teamAccounts = new ArrayList<>();
         if (teamDTO.getTeamAccounts() != null && !teamDTO.getTeamAccounts().isEmpty()) {
             setTeamAccounts(teamDTO.getTeamAccounts().stream()
                     .map(PlayerAccount::new)
@@ -97,8 +81,35 @@ public class Team {
     }
 
     public void removePlayerAccount(PlayerAccount playerAccount) {
+        if (playerAccount == null || !teamAccounts.contains(playerAccount)) {
+            return;
+        }
         teamAccounts.remove(playerAccount);
         playerAccount.removeTeam(this);
+    }
+
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if (tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTeam(this);
+            }
+        }
+    }
+
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTeam(this);
+        }
+    }
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+        tournamentTeam.setTeam(null);
     }
 
 }

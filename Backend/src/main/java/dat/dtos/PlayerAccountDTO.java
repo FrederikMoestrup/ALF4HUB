@@ -11,38 +11,31 @@ import java.util.List;
 public class PlayerAccountDTO {
 
     private int id;
-    private String playAccountName;
-    private boolean isActive;
+    private String playerAccountName;
     private Game game;
     private String rank;
     private UserDTO user;
-    private List<TeamDTO> teams;
+    private List<TeamDTO> teams = new ArrayList<>();
+    private List<TournamentTeamDTO> tournamentTeams = new ArrayList<>();
 
-
-    public PlayerAccountDTO() {
-    }
-
-    public PlayerAccountDTO(String playAccountName, boolean isActive, Game game, String rank,
-                            UserDTO user, List<TeamDTO> teams) {
-        this.playAccountName = playAccountName;
-        this.isActive = isActive;
+    public PlayerAccountDTO(String playerAccountName, Game game, String rank,
+                            UserDTO user, List<TeamDTO> teams, List<TournamentTeamDTO> tournamentTeams) {
+        this.playerAccountName = playerAccountName;
         this.game = game;
         this.rank = rank;
         this.user = user;
         this.teams = teams;
+        this.tournamentTeams = tournamentTeams;
     }
 
     public PlayerAccountDTO(PlayerAccount playerAccount) {
         this.id = playerAccount.getId();
-        this.playAccountName = playerAccount.getPlayAccountName();
-        this.isActive = playerAccount.isActive();
+        this.playerAccountName = playerAccount.getPlayerAccountName();
         this.game = playerAccount.getGame();
         this.rank = playerAccount.getRank();
 
         if (playerAccount.getUser() != null) {
             this.user = new UserDTO(playerAccount.getUser());
         }
-
-        this.teams = new ArrayList<>();
     }
 }

@@ -33,7 +33,7 @@ Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
 ### Add admin role to user
-POST http://localhost:7070/api/auth/user/addrole/
+POST http://localhost:7070/api/auth/user/1/addrole/
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -54,3 +54,177 @@ Authorization: Bearer {{jwt_token}}
 }
 
 
+
+//Player Account
+
+GET http://localhost:7070/api/player-accounts
+Authorization: Bearer {{jwt_token}}
+
+###
+
+GET http://localhost:7070/api/player-accounts/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+POST http://localhost:7070/api/player-accounts
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "playerAccountName": "ProGamer123",
+  "game": "LEAGUE_OF_LEGENDS",
+  "rank": "DIAMOND"
+}
+
+###
+
+PUT http://localhost:7070/api/player-accounts/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "playerAccountName": "ProGamer123",
+  "game": "LEAGUE_OF_LEGENDS",
+  "rank": "DIAMOND",
+  "active": true
+}
+
+###
+
+DELETE http://localhost:7070/api/player-accounts/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+//Team
+
+GET http://localhost:7070/api/teams
+Authorization: Bearer {{jwt_token}}
+
+###
+
+GET http://localhost:7070/api/teams/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+POST http://localhost:7070/api/teams
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "teamName": "ProGamerTeam"
+}
+
+###
+
+PUT http://localhost:7070/api/teams/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "teamName": "ProGamer1234"
+}
+
+###
+
+DELETE http://localhost:7070/api/teams/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+//TournamentTeam
+
+GET http://localhost:7070/api/tournament-teams
+Authorization: Bearer {{jwt_token}}
+
+###
+
+GET http://localhost:7070/api/tournament-teams/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+POST http://localhost:7070/api/tournament-teams
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "tournamentTeamName": "ProGamerTeam",
+  "game": "LEAGUE_OF_LEGENDS"
+}
+
+###
+
+PUT http://localhost:7070/api/tournament-teams/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "tournamentTeamName": "ProGamer1234",
+  "game": "LEAGUE_OF_LEGENDS"
+}
+
+###
+
+DELETE http://localhost:7070/api/tournament-teams/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+
+//Tournament
+
+GET http://localhost:7070/api/tournaments
+Authorization: Bearer {{jwt_token}}
+
+###
+
+GET http://localhost:7070/api/tournaments/1
+Authorization: Bearer {{jwt_token}}
+
+###
+
+POST http://localhost:7070/api/tournaments
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "tournamentName": "ProGamerTournament",
+  "game": "LEAGUE_OF_LEGENDS",
+  "tournamentSize": 2,
+  "teamSize": 2,
+  "rules": "No cheating, no toxicity",
+  "entryRequirements": "Must be a registered player",
+  "status": "ACTIVE",
+  "startDate": "2023-10-01T10:00:00Z",
+  "startTime": "2023-10-01T10:00:00Z",
+  "endDate": "2023-10-31T10:00:00Z",
+  "endTime": "2023-10-31T10:00:00Z"
+}
+
+###
+
+PUT http://localhost:7070/api/tournaments/1
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "tournamentName": "ProGamerTournament",
+  "game": "DOTA_2",
+  "tournamentSize": 2,
+  "teamSize": 2,
+  "rules": "No cheating, no toxicity",
+  "entryRequirements": "Must be a registered player",
+  "status": "ACTIVE",
+  "startDate": "2023-10-01T10:00:00Z",
+  "startTime": "2023-10-01T10:00:00Z",
+  "endDate": "2023-10-31T10:00:00Z",
+  "endTime": "2023-10-31T10:00:00Z"
+}
+
+###
+
+DELETE http://localhost:7070/api/tournaments/1
+Authorization: Bearer {{jwt_token}}

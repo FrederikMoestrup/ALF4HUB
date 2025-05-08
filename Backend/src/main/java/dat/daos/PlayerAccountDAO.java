@@ -60,8 +60,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
                 throw new ApiException(404, "PlayerAccount not found");
             }
 
-            playerAccount.setPlayAccountName(playerAccountDTO.getPlayAccountName());
-            playerAccount.setActive(playerAccountDTO.isActive());
+            playerAccount.setPlayerAccountName(playerAccountDTO.getPlayerAccountName());
             playerAccount.setGame(playerAccountDTO.getGame());
             playerAccount.setRank(playerAccountDTO.getRank());
 
@@ -91,7 +90,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             if (playerAccount == null) {
                 throw new ApiException(404, "PlayerAccount not found");
             }
-
+            playerAccount.getTeams().size();
             em.remove(playerAccount);
             em.getTransaction().commit();
             return new PlayerAccountDTO(playerAccount);
