@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:7070/api'; 
+const API_URL = 'http://localhost:7070/api';
 
 const apiFacade = {
   searchPlayers: async (searchTerm = '', page = 1, size = 10) => {
@@ -13,7 +13,7 @@ const apiFacade = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          
+
         },
       });
 
@@ -25,7 +25,7 @@ const apiFacade = {
       const data = await response.json();
       console.log('Fetched player accounts:', data);
 
-      
+
       return data.content || data;
     } catch (error) {
       console.error('Error fetching player accounts:', error);
@@ -56,31 +56,40 @@ const apiFacade = {
     }
   },
 
-  togglePlayerStatus: async (playerAccount) => {
+  togglePlayerStatus: async (player) => {
     try {
-      const response = await fetch(`${API_URL}/player-accounts/${playerAccount.id}/status`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...playerAccount,
-          isActive: !playerAccount.isActive, // Toggle the status
-        }),
-      });
+      const updatedStatus = !player.isActive;
 
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(errorResponse.message || 'Failed to update player status');
-      }
+      const response = await fetch(`${API_URL}/player-accounts/${player.id}/status?status=${updatedStatus}`,
+          {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...player,
+            isActive: updatedStatus,
+          }),
+        }
+      )
+        .then((response) => response.json())
+        .then((response) => {
+          return {
+            ...response,
+            isActive: response.active,
+          };
+        })
+        .catch(() => {
+          throw new Error("Failed to update player status");
+        });
 
-      return await response.json(); // Return the updated player account
+      return await response; // Return the updated player
     } catch (error) {
       console.error('Error updating player status:', error);
       throw error;
     }
   },
-  
+
   removePlayerFromTeam: async (teamId, playerId) => {
     try {
       const response = await fetch(`${API_URL}/teams/${teamId}/remove-player`, {
@@ -90,12 +99,12 @@ const apiFacade = {
         },
         body: JSON.stringify({ id: playerId }),
       });
-  
+
       if (!response.ok) {
         const errorResponse = await response.json();
         throw new Error(errorResponse.message || 'Failed to remove player');
       }
-  
+
       return await response.json();
     } catch (error) {
       console.error('Error removing player:', error);
@@ -110,7 +119,7 @@ const apiFacade = {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: playerId }), 
+        body: JSON.stringify({ id: playerId }),
       });
 
       if (!response.ok) {
@@ -126,7 +135,7 @@ const apiFacade = {
       throw error;
     }
   },
-  
+
 
 
 };
