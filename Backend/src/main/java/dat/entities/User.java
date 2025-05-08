@@ -57,6 +57,9 @@ public class User implements Serializable, ISecurityUser {
     @OneToMany(mappedBy = "teamCaptain", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Team> teams = new ArrayList<>();
 
+    @OneToMany(mappedBy = "tournamentTeamCaptain", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
+
     //One user can have multiple blogposts, but a blogpost belongs to one user
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<BlogPost> blogPosts = new ArrayList<>();
