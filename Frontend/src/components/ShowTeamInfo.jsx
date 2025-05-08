@@ -58,7 +58,7 @@ const RemoveButton = styled.button`
 
 const ShowTeamInfo = ({ team, isCaptain, onRemovePlayer }) => {
   const handleRemove = () => {
-    if (window.confirm(`Are you sure you want to remove ${team.playAccountName}?`)) {
+    if (window.confirm(`Are you sure you want to remove ${team.playerAccountName}?`)) {
       onRemovePlayer?.(team.id);
     }
   };
@@ -67,7 +67,7 @@ const ShowTeamInfo = ({ team, isCaptain, onRemovePlayer }) => {
         <PlayerCard >
           {isCaptain && <Crown>👑</Crown>}
           <PlayerImage src="https://via.placeholder.com/100"/>
-          <PlayerName>{team.playAccountName}</PlayerName>
+          <PlayerName>{team.playerAccountName}</PlayerName>
           <RankRectangle>{team.rank}</RankRectangle>
           {!isCaptain && <RemoveButton onClick={handleRemove}>Remove</RemoveButton>}
         </PlayerCard>

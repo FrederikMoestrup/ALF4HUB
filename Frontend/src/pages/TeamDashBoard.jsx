@@ -148,7 +148,7 @@ function TeamDashBoard() {
         team={{
           teamCaptain: team.teamCaptain,
           rank: account.rank,
-          playAccountName: account.playAccountName ?? "Unknown",
+          playerAccountName: account.playerAccountName ?? "Unknown",
           id: account.id,
           game: account.game
         }}

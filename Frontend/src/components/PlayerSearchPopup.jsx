@@ -119,7 +119,7 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
       setFilteredPlayers(players);
     } else {
       const filtered = players.filter(player =>
-        player.playAccountName.toLowerCase().includes(searchTerm.toLowerCase())
+        player.playerAccountName.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredPlayers(filtered);
     }
@@ -150,7 +150,7 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
             {filteredPlayers.length > 0 ? (
               filteredPlayers.map((player) => (
                 <UserItem key={player.id} onClick={() => handleSelect(player)}>
-                  {player.playAccountName} (Rank: {player.rank || 'N/A'})
+                  {player.playerAccountName} (Rank: {player.rank || 'N/A'})
                   <AddPlayerButton playerAccount={player} teamId={teamId} />
                 </UserItem>
               ))
