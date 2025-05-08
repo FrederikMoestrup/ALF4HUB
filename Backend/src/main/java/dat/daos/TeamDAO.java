@@ -75,7 +75,7 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
             if (team == null) {
                 throw new ApiException(404, "Team not found");
             }
-
+            team.detachFromAllTournamentTeams();
             em.remove(team);
             em.getTransaction().commit();
             return new TeamDTO(team);

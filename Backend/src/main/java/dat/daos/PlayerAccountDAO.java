@@ -80,6 +80,8 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
                 throw new ApiException(404, "PlayerAccount not found");
             }
             playerAccount.getTeams().size();
+            playerAccount.detachFromAllTeams();
+            playerAccount.detachFromAllTournamentTeams();
             em.remove(playerAccount);
             em.getTransaction().commit();
             return new PlayerAccountDTO(playerAccount);
