@@ -1,6 +1,7 @@
 # ALF4HUB
 
 Scrummaster opgaver Sprint 2 (Christian):
+
 Har kodet frontend-funktionalitet til at vise alle blogposts.
 
 Har forberedt vores user story til Sprint 2.
