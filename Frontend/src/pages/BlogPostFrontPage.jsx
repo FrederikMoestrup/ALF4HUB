@@ -44,9 +44,7 @@ function BlogPostFrontPage() {
             <NavLink to="/createblogpost">
               <Button>Create blogpost</Button>
             </NavLink>
-            <NavLink to="/drafts">
-              <Button>Drafts</Button>
-            </NavLink>
+            <Button>Drafts</Button>
           </ButtonContainer>
 
           {/* Blog container */}
