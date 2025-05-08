@@ -4,7 +4,6 @@ package dat.routes;
 import dat.controllers.TeamController;
 import dat.security.enums.Role;
 import io.javalin.apibuilder.EndpointGroup;
-import org.eclipse.jetty.security.RoleRunAsToken;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
 
@@ -16,7 +15,7 @@ public class TeamRoute {
 
         return () -> {
             get("/", teamController::getAll, Role.ANYONE);
-            get("/{id}",teamController::getById, Role.ANYONE);
+            get("/{id}", teamController::getById, Role.ANYONE);
             post("/", teamController::create, Role.ANYONE);
             put("/{id}", teamController::update, Role.ANYONE);
             delete("/{id}", teamController::delete, Role.ANYONE);

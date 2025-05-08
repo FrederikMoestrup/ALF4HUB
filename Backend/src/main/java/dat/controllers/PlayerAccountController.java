@@ -62,18 +62,6 @@ public class PlayerAccountController {
         }
     }
 
-    public void updateStatus(Context ctx) throws ApiException {
-        try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            boolean status = Boolean.parseBoolean(ctx.queryParam("status"));
-            PlayerAccountDTO playerAccountDTO = playerAccountDAO.updateStatus(id, status);
-            ctx.res().setStatus(200);
-            ctx.json(playerAccountDTO, PlayerAccountDTO.class);
-        } catch (NumberFormatException e) {
-            throw new ApiException(400, "Missing or invalid parameter: id");
-        }
-    }
-
     public void delete(Context ctx) throws ApiException {
         try {
             int id = Integer.parseInt(ctx.pathParam("id"));
@@ -89,7 +77,7 @@ public class PlayerAccountController {
 
     public PlayerAccountDTO validateEntity(Context ctx) {
         return ctx.bodyValidator(PlayerAccountDTO.class)
-                .check(p -> p.getPlayAccountName() != null && !p.getPlayAccountName().isEmpty(), "Play account name must be set")
+                .check(p -> p.getPlayerAccountName() != null && !p.getPlayerAccountName().isEmpty(), "Play account name must be set")
                 .check(p -> p.getGame() != null, "Game must be associated")
                 .check(p -> p.getRank() != null && !p.getRank().isEmpty(), "Rank must be set")
                 .get();

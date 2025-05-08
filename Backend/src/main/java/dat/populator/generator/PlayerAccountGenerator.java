@@ -29,10 +29,9 @@ public class PlayerAccountGenerator implements TestDataGenerator<PlayerAccount> 
 
     private PlayerAccount createRandomPlayerAccount(Game game, User user) {
         String name = generateUniquePlayerAccountName();
-        boolean isActive = random.nextDouble() < 0.75; // 75%
         String rank = createRandomPlayerAccountRank(game);
 
-        return new PlayerAccount(name, isActive, game, rank, user);
+        return new PlayerAccount(name, game, rank, user);
     }
 
     private String createRandomPlayerAccountRank(Game game) {

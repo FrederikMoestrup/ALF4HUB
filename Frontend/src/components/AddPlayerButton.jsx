@@ -7,7 +7,7 @@ function AddPlayerButton({ playerAccount, teamId }) {
 
     const handleAdd = async () => {
         const confirmAdd = window.confirm(
-            `Are you sure you want to add "${playerAccount.playAccountName || 'this player'}" to the team?`
+            `Are you sure you want to add "${playerAccount.playerAccountName || 'this player'}" to the team?`
         );
         if (!confirmAdd) return;
 
