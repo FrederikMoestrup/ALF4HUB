@@ -2,6 +2,7 @@ package dat.daos;
 
 import dat.config.HibernateConfig;
 
+import dat.config.Populate;
 import dat.dtos.TournamentDTO;
 import dat.enums.Game;
 import dat.enums.TournamentStatus;
@@ -34,36 +35,14 @@ class TournamentDAOTest {
 
     @BeforeEach
     void setUp() {
-
-        //will refactor to use populate class after dto stack overflow fix
         tournamentDAO = TournamentDAO.getInstance(emf);
 
-        TournamentDTO tournamentDTO = new TournamentDTO();
-        tournamentDTO.setTournamentName("TestTournament");
-        tournamentDTO.setGame(Game.LEAGUE_OF_LEGENDS);
-        tournamentDTO.setTournamentSize(16);
-        tournamentDTO.setTeamSize(5);
-        tournamentDTO.setPrizePool(5000.0);
-        tournamentDTO.setRules("Standard rules");
-        tournamentDTO.setEntryRequirements("Open to all");
-        tournamentDTO.setTournamentStatus(TournamentStatus.NOT_STARTED);
-        tournamentDTO.setStartDate("2025-05-01");
-        tournamentDTO.setStartTime("10:00");
-        tournamentDTO.setEndDate("2025-05-03");
-        tournamentDTO.setEndTime("18:00");
-        //tournamentDTO.setHost(null);
-
-        tournamentDAO.create(tournamentDTO);
+        Populate.populateDatabase(emf);
     }
 
     @AfterEach
     void tearDown() {
-        try (var em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            em.createQuery("DELETE FROM Tournament").executeUpdate();
-            em.createNativeQuery("ALTER SEQUENCE tournament_tournament_id_seq RESTART WITH 1").executeUpdate();
-            em.getTransaction().commit();
-        }
+        Populate.clearDatabase(emf);
     }
 
 
@@ -72,7 +51,7 @@ class TournamentDAOTest {
         TournamentDTO tournamentDTO = tournamentDAO.getById(1);
 
         assertNotNull(tournamentDTO);
-        assertEquals("TestTournament", tournamentDTO.getTournamentName());
+        assertEquals("League of Legends Championship", tournamentDTO.getTournamentName());
         assertEquals(Game.LEAGUE_OF_LEGENDS, tournamentDTO.getGame());
     }
 
@@ -89,7 +68,7 @@ class TournamentDAOTest {
         List<TournamentDTO> tournaments = tournamentDAO.getAll();
 
         assertNotNull(tournaments);
-        assertEquals(1, tournaments.size());
+        assertEquals(2, tournaments.size());
     }
 
     @Test
@@ -107,7 +86,7 @@ class TournamentDAOTest {
         newTournament.setStartTime("10:00");
         newTournament.setEndDate("2025-06-03");
         newTournament.setEndTime("18:00");
-        newTournament.setHost(null);
+        //newTournament.setHost();
 
         TournamentDTO created = tournamentDAO.create(newTournament);
 
@@ -142,12 +121,13 @@ class TournamentDAOTest {
     @Test
     void delete() throws ApiException {
         TournamentDTO tournamentBeforeDelete = tournamentDAO.getById(1);
-        assertNotNull(tournamentBeforeDelete);
 
-        assertEquals("TestTournament", tournamentBeforeDelete.getTournamentName());
-        tournamentDAO.delete(1);
+        assertNotNull(tournamentBeforeDelete);
+        assertEquals("League of Legends Championship", tournamentBeforeDelete.getTournamentName());
+
+        tournamentDAO.delete(tournamentBeforeDelete.getId());
 
         List<TournamentDTO> tournaments = tournamentDAO.getAll();
-        assertTrue(tournaments.isEmpty());
+        assertEquals(1, tournaments.size());
     }
 }
