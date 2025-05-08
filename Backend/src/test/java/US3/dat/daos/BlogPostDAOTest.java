@@ -3,7 +3,9 @@ package US3.dat.daos;
 import dat.config.HibernateConfig;
 import dat.daos.BlogPostDAO;
 import dat.dtos.BlogPostDTO;
+import dat.dtos.UserDTO;
 import dat.entities.BlogPost;
+import dat.entities.User;
 import dat.enums.BlogPostStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -37,15 +39,20 @@ class BlogPostDAOTest {
     void setUp() {
         blogPostDAO = BlogPostDAO.getInstance(emf);
 
-        // Create DTO test data
+        //Create user dto test data
+        UserDTO userDTO1 = new UserDTO("username1", "test1");
+        UserDTO userDTO2 = new UserDTO("username2", "test2");
+        UserDTO userDTO3 = new UserDTO("username3", "test3");
+
+        // Create blog post DTO test data
         BlogPostDTO blogPostDTO = new BlogPostDTO();
-        blogPostDTO.setUserId(10L);
+        blogPostDTO.setUserId(1L);
         blogPostDTO.setTitle("Test Title");
         blogPostDTO.setContent("Test Content");
         blogPostDTO.setStatus(BlogPostStatus.READY);
 
         BlogPostDTO blogPostDTO2 = new BlogPostDTO();
-        blogPostDTO2.setUserId(20L);
+        blogPostDTO2.setUserId(2L);
         blogPostDTO2.setTitle("Test Title 2");
         blogPostDTO2.setContent("Test Content 2. " +
                 "This is a longer content to test the preview. " +
@@ -60,15 +67,24 @@ class BlogPostDAOTest {
         blogPostDTO2.setStatus(BlogPostStatus.READY);
 
         // Transform to entity test data
+        List<User> userEntities = new ArrayList<>();
+        User u1 = new User(userDTO1.getUsername(), userDTO1.getPassword());
+        User u2 = new User(userDTO2.getUsername(), userDTO2.getPassword());
+        User u3 = new User(userDTO3.getUsername(), userDTO3.getPassword());
+        userEntities.add(u1);
+        userEntities.add(u2);
+        userEntities.add(u3);
+
         List<BlogPost> blogPostsEntities = new ArrayList<>();
-        BlogPost bp1 = new BlogPost(blogPostDTO);
-        BlogPost bp2 = new BlogPost(blogPostDTO2);
+        BlogPost bp1 = new BlogPost(blogPostDTO, u1);
+        BlogPost bp2 = new BlogPost(blogPostDTO2, u2);
         blogPostsEntities.add(bp1);
         blogPostsEntities.add(bp2);
 
         // Persist the test data
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
+            userEntities.forEach(em::persist);
             blogPostsEntities.forEach(em::persist);
             em.getTransaction().commit();
         }
@@ -79,7 +95,9 @@ class BlogPostDAOTest {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createQuery("DELETE FROM BlogPost").executeUpdate();
+            em.createQuery("DELETE FROM User").executeUpdate();
             em.createNativeQuery("ALTER SEQUENCE blog_post_id_seq RESTART WITH 1").executeUpdate();
+            em.createNativeQuery("ALTER SEQUENCE users_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
         }
     }
@@ -89,7 +107,7 @@ class BlogPostDAOTest {
         BlogPostDTO foundBlogPost = blogPostDAO.getById(1L);
 
         assertThat(foundBlogPost, is(notNullValue()));
-        assertThat(foundBlogPost.getUserId(), is(10L));
+        assertThat(foundBlogPost.getUserId(), is(1L));
         assertThat(foundBlogPost.getTitle(), is("Test Title"));
         assertThat(foundBlogPost.getContent(), is("Test Content"));
     }
@@ -125,7 +143,7 @@ class BlogPostDAOTest {
     @Test
     void create() {
         BlogPostDTO blogPostDTO = new BlogPostDTO();
-        blogPostDTO.setUserId(30L);
+        blogPostDTO.setUserId(3L);
         blogPostDTO.setTitle("Another Test Title");
         blogPostDTO.setContent("Another Test Content");
         blogPostDTO.setStatus(BlogPostStatus.READY);
@@ -133,18 +151,18 @@ class BlogPostDAOTest {
         BlogPostDTO createdBlogPost = blogPostDAO.create(blogPostDTO);
 
         assertThat(createdBlogPost.getId(), is(notNullValue()));
-        assertThat(createdBlogPost.getUserId(), is(30L));
+        assertThat(createdBlogPost.getUserId(), is(3L));
         assertThat(createdBlogPost.getTitle(), is("Another Test Title"));
         assertThat(createdBlogPost.getContent(), is("Another Test Content"));
     }
 
     @Test
-    void createWithPendingReviewStatus() {
+    void createWithDraftStatus() {
         BlogPostDTO blogPostDTO = new BlogPostDTO();
-        blogPostDTO.setUserId(30L);
+        blogPostDTO.setUserId(3L);
         blogPostDTO.setTitle("Another Test Title again");
         blogPostDTO.setContent("Another Test Content again");
-        blogPostDTO.setStatus(BlogPostStatus.PENDING_REVIEW);
+        blogPostDTO.setStatus(BlogPostStatus.DRAFT);
 
         assertThrowsExactly(
                 IllegalStateException.class,

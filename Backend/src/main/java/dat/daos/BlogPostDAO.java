@@ -2,6 +2,7 @@ package dat.daos;
 
 import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
+import dat.entities.User;
 import dat.enums.BlogPostStatus;
 import jakarta.persistence.*;
 
@@ -44,6 +45,16 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         }
     }
 
+    public List<BlogPostDTO> getDraftByUserId(int userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.getDraftsByUserId", BlogPost.class);
+            query.setParameter("userId", userId);
+            List<BlogPost> blogPosts = query.getResultList();
+
+            return blogPosts.stream().map(BlogPostDTO::new).toList();
+        }
+    }
+
     public List<BlogPostDTO> getAllWithOnlyContentPreview() {
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<BlogPostDTO> blogPostDTOs = em.createNamedQuery("BlogPost.findAllWithOnlyContentPreview", BlogPostDTO.class);
@@ -57,14 +68,18 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
     public BlogPostDTO create(BlogPostDTO blogPostDTO) {
         try (EntityManager em = emf.createEntityManager()) {
 
+            // TODO: Perhaps replace with the getById method from User DAO later (if there is one)?
+            int userId = blogPostDTO.getUserId().intValue();
+            User user = em.find(User.class,  userId);
+            if (user == null) {
+                throw new EntityNotFoundException("User with id " + userId + " not found.");
+            }
+
             if (blogPostDTO.getStatus() != BlogPostStatus.READY) {
                 throw new IllegalStateException("Blog post is not ready to be saved - it needs to be reviewed.");
             }
 
-            BlogPost newBlogPost = new BlogPost(blogPostDTO);
-            // TODO: Set the new status to PUBLISHED or DRAFT depending on the context
-            // Currently we're only able to publish in our given US
-            // We might have to take in status in the param in the future
+            BlogPost newBlogPost = new BlogPost(blogPostDTO, user);
             newBlogPost.setStatus(BlogPostStatus.PUBLISHED);
 
             em.getTransaction().begin();
@@ -74,6 +89,28 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             return new BlogPostDTO(newBlogPost);
         }
     }
+
+    public BlogPostDTO saveAsDraft(BlogPostDTO blogPostDTO) {
+        try (EntityManager em = emf.createEntityManager()) {
+
+            // TODO: Perhaps replace with the getById method from User DAO later (if there is one)?
+            int userId = blogPostDTO.getUserId().intValue();
+            User user = em.find(User.class,  userId);
+            if (user == null) {
+                throw new EntityNotFoundException("User with id " + userId + " not found.");
+            }
+
+            BlogPost newDraft = new BlogPost(blogPostDTO, user);
+            newDraft.setStatus(BlogPostStatus.DRAFT);
+
+            em.getTransaction().begin();
+            em.persist(newDraft);
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(newDraft);
+        }
+    }
+
 
     @Override
     public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) {

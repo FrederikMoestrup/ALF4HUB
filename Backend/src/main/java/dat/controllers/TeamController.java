@@ -78,7 +78,6 @@ public class TeamController {
     public TeamDTO validateEntity(Context ctx) {
         return ctx.bodyValidator(TeamDTO.class)
                 .check(t -> t.getTeamName() != null && !t.getTeamName().isEmpty(), "Team name must be set")
-                .check(t -> t.getGame() != null, "Game must be associated")
                 .get();
     }
 }
