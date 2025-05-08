@@ -4,6 +4,7 @@ import dat.config.HibernateConfig;
 
 import dat.dtos.TournamentDTO;
 import dat.enums.Game;
+import dat.enums.TournamentStatus;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -45,7 +46,7 @@ class TournamentDAOTest {
         tournamentDTO.setPrizePool(5000.0);
         tournamentDTO.setRules("Standard rules");
         tournamentDTO.setEntryRequirements("Open to all");
-        tournamentDTO.setStatus("Upcoming");
+        tournamentDTO.setTournamentStatus(TournamentStatus.NOT_STARTED);
         tournamentDTO.setStartDate("2025-05-01");
         tournamentDTO.setStartTime("10:00");
         tournamentDTO.setEndDate("2025-05-03");
@@ -101,7 +102,7 @@ class TournamentDAOTest {
         newTournament.setPrizePool(2000.0);
         newTournament.setRules("Standard rules");
         newTournament.setEntryRequirements("Open to all");
-        newTournament.setStatus("Upcoming");
+        newTournament.setTournamentStatus(TournamentStatus.NOT_STARTED);
         newTournament.setStartDate("2025-06-01");
         newTournament.setStartTime("10:00");
         newTournament.setEndDate("2025-06-03");
@@ -124,7 +125,7 @@ class TournamentDAOTest {
         tournamentToUpdate.setPrizePool(3000.0);
         tournamentToUpdate.setRules("Updated rules");
         tournamentToUpdate.setEntryRequirements("Open to all");
-        tournamentToUpdate.setStatus("Upcoming");
+        tournamentToUpdate.setTournamentStatus(TournamentStatus.NOT_STARTED);
         tournamentToUpdate.setStartDate("2025-07-01");
         tournamentToUpdate.setStartTime("10:00");
         tournamentToUpdate.setEndDate("2025-07-03");
