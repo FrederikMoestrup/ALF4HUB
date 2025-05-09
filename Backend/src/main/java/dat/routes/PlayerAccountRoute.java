@@ -13,7 +13,7 @@ public class PlayerAccountRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            get("/", playerAccountController::getAll, Role.ANYONE);
+            get("/", playerAccountController::getAll, Role.USER);
             get("/{id}", playerAccountController::getById, Role.USER);
             post("/", playerAccountController::create, Role.USER);
             put("/{id}", playerAccountController::update, Role.USER);
