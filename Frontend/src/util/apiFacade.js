@@ -92,12 +92,11 @@ const apiFacade = {
 
   removePlayerFromTeam: async (teamId, playerId) => {
     try {
-      const response = await fetch(`${API_URL}/teams/${teamId}/remove-player`, {
+      const response = await fetch(`${API_URL}/teams/${teamId}/remove-player/${playerId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: playerId }),
+        }
       });
 
       if (!response.ok) {
@@ -114,12 +113,11 @@ const apiFacade = {
 
   addPlayerToTeam: async (teamId, playerId) => {
     try {
-      const response = await fetch(`${API_URL}/teams/${teamId}/invite-player`, {
+      const response = await fetch(`${API_URL}/teams/${teamId}/invite-player/${playerId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: playerId }),
+        }
       });
 
       if (!response.ok) {

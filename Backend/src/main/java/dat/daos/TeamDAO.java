@@ -1,6 +1,5 @@
 package dat.daos;
 
-import dat.dtos.PlayerAccountDTO;
 import dat.dtos.TeamDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
@@ -84,7 +83,7 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
         }
     }
 
-    public TeamDTO invitePlayer(Integer teamId, PlayerAccountDTO playerDTO) throws ApiException {
+    public TeamDTO invitePlayer(Integer teamId, Integer playerAccountId) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
@@ -93,7 +92,7 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
                 throw new ApiException(404, "Team not found");
             }
 
-            PlayerAccount playerAccount = em.find(PlayerAccount.class, playerDTO.getId());
+            PlayerAccount playerAccount = em.find(PlayerAccount.class, playerAccountId);
             if (playerAccount == null) {
                 throw new ApiException(404, "PlayerAccount not found");
             }
@@ -107,7 +106,7 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
 
 
     //Ift. spilleren får en email notifikation, skal email være en del af enten user eller playeraccount entititer
-    public TeamDTO removePlayer(Integer teamId, PlayerAccountDTO playerDTO) throws ApiException {
+    public TeamDTO removePlayer(Integer teamId, Integer playerAccountId) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
@@ -116,7 +115,7 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
                 throw new ApiException(404, "Team not found");
             }
 
-            PlayerAccount existingPlayer = em.find(PlayerAccount.class, playerDTO.getId());
+            PlayerAccount existingPlayer = em.find(PlayerAccount.class, playerAccountId);
             if (existingPlayer == null) {
                 throw new ApiException(404, "Player not found");
             }

@@ -19,8 +19,8 @@ public class TeamRoute {
             post("/", teamController::create, Role.ANYONE);
             put("/{id}", teamController::update, Role.ANYONE);
             delete("/{id}", teamController::delete, Role.ANYONE);
-            post("/{id}/invite-player", teamController::invitePlayer, Role.ANYONE);//maybe change role to TeamCaptain at some point?
-            delete("/{id}/remove-player", teamController::removePlayer, Role.ANYONE); //yes should prob be TEAM_CAPTAIN
+            post("/{id}/invite-player/{playerAccountId}", teamController::invitePlayer, Role.ANYONE);//maybe change role to TeamCaptain at some point?
+            delete("/{id}/remove-player/{playerAccountId}", teamController::removePlayer, Role.ANYONE); //yes should prob be TEAM_CAPTAIN
         };
     }
 }
