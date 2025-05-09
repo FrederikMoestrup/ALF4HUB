@@ -90,7 +90,7 @@ public class PlayerAccountController {
 
     public PlayerAccountDTO validateEntity(Context ctx) {
         return ctx.bodyValidator(PlayerAccountDTO.class)
-                .check(p -> p.getPlayAccountName() != null && !p.getPlayAccountName().isEmpty(), "Play account name must be set")
+                .check(p -> p.getPlayerAccountName() != null && !p.getPlayerAccountName().isEmpty(), "Play account name must be set")
                 .check(p -> p.getGame() != null, "Game must be associated")
                 .check(p -> p.getRank() != null && !p.getRank().isEmpty(), "Rank must be set")
                 .get();

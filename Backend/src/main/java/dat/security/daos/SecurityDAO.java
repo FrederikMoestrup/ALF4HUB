@@ -42,7 +42,9 @@ public class SecurityDAO implements ISecurityDAO {
                 // No user with that username → treated as “not authorized”
                 throw new EntityNotFoundException("Invalid password or username");
             }
-
+            // Commented code from dev, duplicate funcitonality for login:
+            // List<User> users = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", username).getResultList();
+            // User user = users.get(0);
             if (user == null)
                 throw new EntityNotFoundException("Invalid password or username"); //RuntimeException
             user.getRoles().size(); // force roles to be fetched from db
@@ -60,6 +62,10 @@ public class SecurityDAO implements ISecurityDAO {
             query.setParameter("username", username);
             List<User> result = query.getResultList();
             if (!result.isEmpty()) {
+            // Commented code from dev, duplicate funcitonality for creating user:
+            // List<User> users = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", username).getResultList();
+
+            // if (!users.isEmpty()) {
                 throw new EntityExistsException("User with username: " + username + " already exists");
             }
 
@@ -79,7 +85,7 @@ public class SecurityDAO implements ISecurityDAO {
             em.getTransaction().commit();
 
             if(username.equals("admin")){
-                addRole(new UserDTO(username, password), "admin");
+                addRole(users.get(0).getId(), "admin");
             }
 
             return userEntity;
@@ -90,13 +96,15 @@ public class SecurityDAO implements ISecurityDAO {
     }
 
     @Override
-    public User addRole(UserDTO userDTO, String newRole) {
+    public User addRole(int id, String newRole) {
         try (EntityManager em = getEntityManager()) {
             TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
             query.setParameter("username", userDTO.getUsername());
             User user = query.getSingleResult();
+            // Commented code from dev:
+            // User user = em.find(User.class, id);
             if (user == null)
-                throw new EntityNotFoundException("No user found with username: " + userDTO.getUsername());
+                throw new EntityNotFoundException("No user found with user id: " + id);
             em.getTransaction().begin();
             Role role = em.find(Role.class, newRole);
             if (role == null) {

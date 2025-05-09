@@ -15,8 +15,8 @@ public class TournamentRoute {
         return () -> {
             get("/", tournamentController::getAll, Role.USER);
             get("/{id}", tournamentController::getById, Role.USER);
-            post("/", tournamentController::create, Role.ADMIN);
-            put("/{id}", tournamentController::update, Role.ADMIN);
+            post("/", tournamentController::create, Role.USER);
+            put("/{id}", tournamentController::update, Role.USER);
             delete("/{id}", tournamentController::delete, Role.ADMIN);
         };
     }

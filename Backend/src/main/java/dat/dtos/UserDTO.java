@@ -3,10 +3,7 @@ package dat.dtos;
 import dat.entities.User;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -18,21 +15,22 @@ public class UserDTO {
     private String password;
     private String email;
     private Set<String> roles = new HashSet();
-    private List<PlayerAccountDTO> playerAccounts;
-    private List<TournamentDTO> tournaments;
-    private List<TeamDTO> teams;
+    private List<PlayerAccountDTO> playerAccounts = new ArrayList<>();
+    private List<TournamentDTO> tournaments = new ArrayList<>();
+    private List<TeamDTO> teams = new ArrayList<>();
+    private List<TournamentTeamDTO> tournamentTeams = new ArrayList<>();
     private int strikes;
 
     public UserDTO(String username, Set<String> roles,
                    List<PlayerAccountDTO> playerAccounts,
                    List<TournamentDTO> tournaments,
-                   List<TeamDTO> teams) {
+                   List<TeamDTO> teams, List<TournamentTeamDTO> tournamentTeams) {
         this.username = username;
         this.roles = roles;
         this.playerAccounts = playerAccounts;
         this.tournaments = tournaments;
         this.teams = teams;
-
+        this.tournamentTeams = tournamentTeams;
     }
 
     public UserDTO(User user) {
@@ -60,10 +58,6 @@ public class UserDTO {
                     .collect(Collectors.toList());
         }
     }
-
-
-
-
 
 
 
