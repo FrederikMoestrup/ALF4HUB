@@ -56,40 +56,6 @@ const apiFacade = {
     }
   },
 
-  togglePlayerStatus: async (player) => {
-    try {
-      const updatedStatus = !player.isActive;
-
-      const response = await fetch(`${API_URL}/player-accounts/${player.id}/status?status=${updatedStatus}`,
-          {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...player,
-            isActive: updatedStatus,
-          }),
-        }
-      )
-        .then((response) => response.json())
-        .then((response) => {
-          return {
-            ...response,
-            isActive: response.active,
-          };
-        })
-        .catch(() => {
-          throw new Error("Failed to update player status");
-        });
-
-      return await response; // Return the updated player
-    } catch (error) {
-      console.error('Error updating player status:', error);
-      throw error;
-    }
-  },
-
   removePlayerFromTeam: async (teamId, playerId) => {
     try {
       const response = await fetch(`${API_URL}/teams/${teamId}/remove-player/${playerId}`, {
