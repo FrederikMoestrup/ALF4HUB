@@ -1,12 +1,8 @@
 package dat.controllers;
 
 import dat.config.HibernateConfig;
-import dat.daos.PlayerAccountDAO;
 import dat.daos.TeamDAO;
-import dat.dtos.PlayerAccountDTO;
 import dat.dtos.TeamDTO;
-import dat.entities.PlayerAccount;
-import dat.entities.Team;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
@@ -16,18 +12,14 @@ import java.util.List;
 public class TeamController {
 
     private final TeamDAO teamDAO;
-    private final PlayerAccountDAO playerAccountDAO;
 
     public TeamController() {
-        if  (HibernateConfig.getTest()) {
+        if (HibernateConfig.getTest()) {
             EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
             this.teamDAO = TeamDAO.getInstance(emf);
-            this.playerAccountDAO = PlayerAccountDAO.getInstance(emf);
         } else {
             EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
             this.teamDAO = TeamDAO.getInstance(emf);
-            this.playerAccountDAO = PlayerAccountDAO.getInstance(emf);
-
         }
     }
 
@@ -44,7 +36,7 @@ public class TeamController {
         }
     }
 
-    public void getAll(Context ctx){
+    public void getAll(Context ctx) {
         List<TeamDTO> teamDTOs = teamDAO.getAll();
         ctx.res().setStatus(200);
         ctx.json(teamDTOs, TeamDTO.class);
@@ -63,9 +55,9 @@ public class TeamController {
             TeamDTO teamDTO = teamDAO.update(id, validateEntity(ctx));
             ctx.res().setStatus(200);
             ctx.json(teamDTO, TeamDTO.class);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
-        }catch (ApiException e) {
+        } catch (ApiException e) {
             throw new ApiException(404, "Team not found");
         }
     }
@@ -82,6 +74,7 @@ public class TeamController {
             throw new ApiException(404, "Team not found");
         }
     }
+
     public void invitePlayer(Context ctx) throws ApiException {
         try {
             int teamId = Integer.parseInt(ctx.pathParam("id"));
@@ -95,7 +88,6 @@ public class TeamController {
             throw new ApiException(400, "Invalid team ID format");
         }
     }
-
 
     public void removePlayer(Context ctx) throws ApiException {
         try {
