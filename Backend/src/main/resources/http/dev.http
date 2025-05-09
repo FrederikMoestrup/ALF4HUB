@@ -45,6 +45,10 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
+
+
+
+=======
 //Player Account
 
 GET http://localhost:7070/api/player-accounts
@@ -210,3 +214,4 @@ Authorization: Bearer {{jwt_token}}
 
 DELETE http://localhost:7070/api/tournaments/1
 Authorization: Bearer {{jwt_token}}
+

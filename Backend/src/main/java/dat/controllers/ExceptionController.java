@@ -1,5 +1,6 @@
 package dat.controllers;
 
+import dat.dtos.TournamentDTO;
 import dat.exceptions.ApiException;
 import dat.exceptions.Message;
 import dat.routes.Routes;
