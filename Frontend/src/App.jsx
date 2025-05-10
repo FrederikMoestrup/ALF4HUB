@@ -1,3 +1,5 @@
+
+import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
@@ -9,10 +11,16 @@ import Register from './components/Register';
 import Logo from './assets/ALTF4HUB.png';
 
 
+import LeaveTeam from './components/LeaveTeam';
+
 function App() {
 
   return (
     <>
+    <Routes>
+       <Route path="/LeaveTeam" element={<LeaveTeam />} />
+    </Routes>
+
       <Navbar />
         <main style={{ backgroundColor: '#0e0f13', height: '100vh', color: 'white', padding: '20px' }}>
           <Routes>

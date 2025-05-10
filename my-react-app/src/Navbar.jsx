@@ -9,14 +9,9 @@ const Navbar = () => {
     <header className="navbar">
 
       <div className="nav-left">
-        <FontAwesomeIcon icon={faHome} />
-
-      
-      <div className="nav-left">
         <Link to="/">
           <FontAwesomeIcon icon={faHome} />
         </Link>
-
       </div>
       <div className="nav-center">
         <a href="#">Turneringer</a>
@@ -24,13 +19,9 @@ const Navbar = () => {
         <a href="#">Forum</a>
       </div>
       <div className="nav-right">
-
-        <FontAwesomeIcon icon={faUser} />
-
         <Link to="/login">
           <FontAwesomeIcon icon={faUser} className="user-icon" />
         </Link>
-
       </div>
     </header>
   );

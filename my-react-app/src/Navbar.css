@@ -1,38 +1,4 @@
 .navbar {
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #12141b;
-    padding: 0 20px;
-    height: 40px;
-    color: white;
-  }
-  
-  .nav-left,
-  .nav-right {
-    display: flex;
-    align-items: center;
-  }
-  
-  .nav-center {
-    display: flex;
-    gap: 30px;
-    align-items: center;
-  }
-  
-  .nav-center a {
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
-  }
-  
-  .navbar svg {
-    font-size: 16px;
-    cursor: pointer;
-  }
-
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -99,5 +65,4 @@
     margin-right: 6px;
   }
 }
-
 
