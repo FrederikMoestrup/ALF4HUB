@@ -66,21 +66,15 @@ public class SecurityController implements ISecurityController {
                 UserDTO verifiedUser = securityDAO.getVerifiedUser(user.getUsername(), user.getPassword());
                 String token = createToken(verifiedUser);
 
-
                 ctx.status(200).json(returnObject
                         .put("token", token)
                         .put("username", verifiedUser.getUsername()));
 
             } catch (EntityNotFoundException | ValidationException e) {
                 ctx.status(401);
+                System.out.println(e.getMessage());
                 ctx.json(returnObject.put("msg", e.getMessage()));
-            } catch (Exception e) {
-                // Fanger alt andet og returnerer 500
-                e.printStackTrace();
-                ctx.status(500);
-                ctx.json(returnObject.put("msg", "Unexpected error: " + e.getMessage()));
             }
-
         };
     }
 
@@ -89,12 +83,9 @@ public class SecurityController implements ISecurityController {
         return (ctx) -> {
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
-                    UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-                    User created = securityDAO.createUser(
-                            userInput.getUsername(),
-                            userInput.getPassword(),
-                            userInput.getEmail()
-                    );
+                UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
+                User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
+
                 String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)

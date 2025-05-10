@@ -10,6 +10,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -98,4 +99,3 @@ public class SecurityDAO implements ISecurityDAO {
         }
     }
 }
-
