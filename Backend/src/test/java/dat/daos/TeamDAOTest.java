@@ -131,7 +131,7 @@ class TeamDAOTest {
         TeamDTO team = teamDTOList.get(0);
         PlayerAccountDTO playerToRemove = team.getTeamAccounts().get(0);
 
-        TeamDTO updatedTeam = teamDAO.removePlayer(team.getId(), playerToRemove);
+        TeamDTO updatedTeam = teamDAO.removePlayer(team.getId(), playerToRemove.getId());
 
         assertThat(
                 updatedTeam.getTeamAccounts().stream().map(PlayerAccountDTO::getId).toList(),
@@ -152,7 +152,7 @@ class TeamDAOTest {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No suitable player to add"));
 
-        TeamDTO updatedTeam = teamDAO.invitePlayer(teamDTO.getId(), newPlayer);
+        TeamDTO updatedTeam = teamDAO.invitePlayer(teamDTO.getId(), newPlayer.getId());
 
         System.out.println("After adding player:");
         updatedTeam.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayerAccountName()));
