@@ -94,6 +94,12 @@ public class User implements Serializable, ISecurityUser {
         this.roles = roleEntityList;
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     public User(UserDTO dto) {
         this.username = dto.getUsername();
         if (dto.getRoles() != null) {
@@ -196,7 +202,6 @@ public class User implements Serializable, ISecurityUser {
     public int getStrikes() {
         return strikes;
     }
-
 
     public void removeTeam(Team team) {
         if (team == null || !teams.contains(team)) {
