@@ -1,3 +1,5 @@
+package resources.feature;
+
 import dat.config.HibernateConfig;
 import dat.daos.UserDAO;
 import dat.entities.User;

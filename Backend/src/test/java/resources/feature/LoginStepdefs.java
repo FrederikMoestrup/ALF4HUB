@@ -1,4 +1,4 @@
-package resources;
+package resources.feature;
 
 import static org.junit.jupiter.api.Assertions.*;
 
