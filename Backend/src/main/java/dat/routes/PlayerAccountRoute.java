@@ -18,6 +18,7 @@ public class PlayerAccountRoute {
             post("/", playerAccountController::create, Role.USER);
             put("/{id}", playerAccountController::update, Role.USER);
             delete("/{id}", playerAccountController::delete, Role.ADMIN);
+            post("/{playerAccountId}/leave-team/{teamId}", playerAccountController::leaveTeam, Role.USER);
         };
     }
 }

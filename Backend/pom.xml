@@ -57,6 +57,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Cucumber JUnit 5 dependency -->
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>7.19.0</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.mindrot</groupId>
             <artifactId>jbcrypt</artifactId>
@@ -69,6 +77,22 @@
             <version>9.0.1</version>
         </dependency>
 
+
+        <!-- Email Sending (Apache Commons Email 1.x - Stable) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>1.5</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Underlying Mail API (for Commons Email 1.x) -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+            <scope>runtime</scope>
+        </dependency>
         <!-- SLF4J API -->
         <dependency>
             <groupId>org.slf4j</groupId>
