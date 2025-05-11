@@ -1,10 +1,10 @@
 package dat.dtos;
 
 import dat.entities.User;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -14,7 +14,7 @@ public class UserDTO {
     private String username;
     private String password;
     private String email;
-    private Set<String> roles = new HashSet();
+    private Set<String> roles = new HashSet<>();
     private List<PlayerAccountDTO> playerAccounts = new ArrayList<>();
     private List<TournamentDTO> tournaments = new ArrayList<>();
     private List<TeamDTO> teams = new ArrayList<>();
@@ -59,9 +59,6 @@ public class UserDTO {
         }
     }
 
-
-
-
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -91,21 +88,9 @@ public class UserDTO {
         return new UserDTOBuilder();
     }
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public Set<String> getRoles() {
-        return this.roles;
-    }
-
     public String toString() {
         String var10000 = this.getUsername();
-        return "UserDTO(username=" + var10000 + ", password=" + this.getPassword() + ", roles=" + this.getRoles() + ")";
+        return "UserDTO(id=" + id + ", username=" + var10000 + ", password=" + this.getPassword() + ", roles=" + this.getRoles() + ")";
     }
 
     public UserDTO(String username, String password, Set<String> roles) {

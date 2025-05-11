@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class User implements Serializable, ISecurityUser {
 
     @Serial
@@ -66,6 +67,10 @@ public class User implements Serializable, ISecurityUser {
     @OneToMany(mappedBy = "tournamentTeamCaptain", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
+    //One user can have multiple blogposts, but a blogpost belongs to one user
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<BlogPost> blogPosts = new ArrayList<>();
+
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {
             return null;
@@ -101,6 +106,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public User(UserDTO dto) {
+        this.id = dto.getId();
         this.username = dto.getUsername();
         if (dto.getRoles() != null) {
             this.roles = dto.getRoles().stream()
@@ -211,7 +217,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-        if(tournamentTeams != null) {
+        if (tournamentTeams != null) {
             this.tournamentTeams = tournamentTeams;
             for (TournamentTeam tournamentTeam : tournamentTeams) {
                 tournamentTeam.setTournamentTeamCaptain(this);
@@ -232,6 +238,24 @@ public class User implements Serializable, ISecurityUser {
         }
         tournamentTeams.remove(tournamentTeam);
     }
+
+    public void setBlogPosts(List<BlogPost> blogPosts) {
+        if(blogPosts != null) {
+            this.blogPosts = blogPosts;
+            for (BlogPost blogPost : blogPosts) {
+                blogPost.setUser(this);
+            }
+        }
+    }
+
+    public void addBlogPost(BlogPost blogPost) {
+        if (blogPost != null && !blogPosts.contains(blogPost)) {
+            this.blogPosts.add(blogPost);
+            blogPost.setUser(this);
+        }
+    }
+
+
 
 }
 

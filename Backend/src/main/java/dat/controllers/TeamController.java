@@ -14,7 +14,7 @@ public class TeamController {
     private final TeamDAO teamDAO;
 
     public TeamController() {
-        if  (HibernateConfig.getTest()) {
+        if (HibernateConfig.getTest()) {
             EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
             this.teamDAO = TeamDAO.getInstance(emf);
         } else {
@@ -36,10 +36,10 @@ public class TeamController {
         }
     }
 
-    public void getAll(Context ctx){
-            List<TeamDTO> teamDTOs = teamDAO.getAll();
-            ctx.res().setStatus(200);
-            ctx.json(teamDTOs, TeamDTO.class);
+    public void getAll(Context ctx) {
+        List<TeamDTO> teamDTOs = teamDAO.getAll();
+        ctx.res().setStatus(200);
+        ctx.json(teamDTOs, TeamDTO.class);
     }
 
     public void create(Context ctx) {
@@ -55,9 +55,9 @@ public class TeamController {
             TeamDTO teamDTO = teamDAO.update(id, validateEntity(ctx));
             ctx.res().setStatus(200);
             ctx.json(teamDTO, TeamDTO.class);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
-        }catch (ApiException e) {
+        } catch (ApiException e) {
             throw new ApiException(404, "Team not found");
         }
     }
@@ -72,6 +72,35 @@ public class TeamController {
             throw new ApiException(400, "Missing or invalid parameter: id");
         } catch (ApiException e) {
             throw new ApiException(404, "Team not found");
+        }
+    }
+
+    public void invitePlayer(Context ctx) throws ApiException {
+        try {
+            int teamId = Integer.parseInt(ctx.pathParam("id"));
+            int playerAccountId = Integer.parseInt(ctx.pathParam("playerAccountId"));
+
+            TeamDTO updatedTeam = teamDAO.invitePlayer(teamId, playerAccountId);
+
+            ctx.res().setStatus(200);
+            ctx.json(updatedTeam, TeamDTO.class);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Invalid team ID format");
+        }
+    }
+
+    public void removePlayer(Context ctx) throws ApiException {
+        try {
+            int teamId = Integer.parseInt(ctx.pathParam("id"));
+            int playerAccountId = Integer.parseInt(ctx.pathParam("playerAccountId"));
+
+            TeamDTO updatedTeamDTO = teamDAO.removePlayer(teamId, playerAccountId);
+
+            ctx.status(200).json(updatedTeamDTO);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Invalid team ID format.");
+        } catch (Exception e) {
+            throw new ApiException(500, "Unexpected error: " + e.getMessage());
         }
     }
 

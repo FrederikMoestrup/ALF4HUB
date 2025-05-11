@@ -10,7 +10,5 @@ public class Main {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("alf4hub_db");
         ApplicationConfig.startServer(7070);
 
-
-
     }
 }

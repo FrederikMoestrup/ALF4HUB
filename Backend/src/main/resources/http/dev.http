@@ -45,16 +45,28 @@ Authorization: Bearer {{jwt_token}}
 Accept: application/json
 Authorization: Bearer {{jwt_token}}
 
-###
+### Remove player from team
+DELETE http://localhost:7071/api/teams/2/remove-player
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "id": 6
+}
+
+
 
 //Player Account
 
 GET http://localhost:7070/api/player-accounts
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 GET http://localhost:7070/api/player-accounts/1
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 POST http://localhost:7070/api/player-accounts
@@ -91,10 +103,12 @@ Authorization: Bearer {{jwt_token}}
 
 GET http://localhost:7070/api/teams
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 GET http://localhost:7070/api/teams/1
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 POST http://localhost:7070/api/teams
@@ -102,7 +116,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-    "teamName": "ProGamerTeam"
+  "teamName": "ProGamerTeam"
 }
 
 ###
@@ -126,10 +140,12 @@ Authorization: Bearer {{jwt_token}}
 
 GET http://localhost:7070/api/tournament-teams
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 GET http://localhost:7070/api/tournament-teams/1
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 POST http://localhost:7070/api/tournament-teams
@@ -164,10 +180,12 @@ Authorization: Bearer {{jwt_token}}
 
 GET http://localhost:7070/api/tournaments
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 GET http://localhost:7070/api/tournaments/1
 Authorization: Bearer {{jwt_token}}
+
 ###
 
 POST http://localhost:7070/api/tournaments
