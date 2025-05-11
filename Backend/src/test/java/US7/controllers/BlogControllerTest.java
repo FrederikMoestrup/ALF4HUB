@@ -86,4 +86,22 @@ class BlogControllerTest {
         assertEquals("Der mangler nødvendige felter: titel og/eller indhold", exception.getMessage());
     }
 
+    @Test
+    void deleteBlogPost() throws ApiException {
+        BlogPostDTO inputPost = new BlogPostDTO();
+        inputPost.setTitle("Test Title");
+        inputPost.setContent("Test Content");
+
+        when(ctx.pathParam("id")).thenReturn("1");
+        when(ctx.bodyAsClass(BlogPostDTO.class)).thenReturn(inputPost);
+        when(ctx.status(anyInt())).thenReturn(ctx);
+        when(ctx.result(anyString())).thenReturn(ctx);
+
+        blogController.delete(ctx);
+
+        assertEquals(null, ctx.status());
+
+        verify(ctx).status(404);
+    }
+
 }
