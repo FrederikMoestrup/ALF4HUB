@@ -2,14 +2,13 @@ package dat.daos;
 
 import dat.dtos.UserDTO;
 import dat.entities.User;
+import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
-public class UserDAO{
+public class UserDAO implements IDAO<UserDTO, Integer> {
 
     private static UserDAO instance;
     private static EntityManagerFactory emf;
@@ -22,34 +21,64 @@ public class UserDAO{
         return instance;
     }
 
-
-    public User findByUsername(String username) {
+    @Override
+    public UserDTO getById(Integer id) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class);
-            query.setParameter("username", username);
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null; // No user found with the given username
+            User user = em.find(User.class, id);
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+            return new UserDTO(user);
         }
     }
 
-    public User findById(int id) {
+    public UserDTO getByUsername(String username) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.find(User.class, id);
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+            return new UserDTO(user);
         }
     }
 
-    public User update(User user) {
+    public UserDTO addStrike(Integer id) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
-            User updatedUser = em.merge(user);
+            User user = em.find(User.class, id);
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+            user.addStrike();
+            em.merge(user);
             em.getTransaction().commit();
-            return updatedUser;
+            return new UserDTO(user);
         }
     }
 
 
-    //Remember SecurityDAO has methods for creating and verifying users and do we really need to delete users?
-    //So we are not implementing IDAO here. But we can use this DAO for other methods.
+    //Husk SecurityDAO har create. Pas på med delete og update. Måske skal getAll bruges?
+    @Override
+    public List<UserDTO> getAll() {
+        return List.of();
+    }
+
+    @Override
+    public UserDTO create(UserDTO userDTO) {
+        return null;
+    }
+
+    @Override
+    public UserDTO update(Integer integer, UserDTO userDTO) throws ApiException {
+        return null;
+    }
+
+    @Override
+    public UserDTO delete(Integer integer) throws ApiException {
+        return null;
+    }
+
 
 }
