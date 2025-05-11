@@ -4,17 +4,19 @@ import { BrowserRouter, Route, Routes } from "react-router";
 
 import "./index.css";
 
-import LeaveTeam from "./pages/team/LeaveTeam.jsx";
 import Navbar from "./components/Navbar.jsx";
-import Login from "./pages/login-register/Login.jsx";
-import Register from "./pages/login-register/Register.jsx";
 import Logo from "./assets/ALTF4HUB.png";
 
 import BlogPostFrontPage from "./pages/blog/BlogPostFrontPage.jsx";
 import CreateBlogPost from "./pages/blog/CreateBlogPost.jsx";
 import Drafts from "./pages/blog/Drafts.jsx";
+
 import TeamDashBoard from "./pages/team/teamDashboard/TeamDashBoard.jsx";
+import LeaveTeam from "./pages/team/LeaveTeam.jsx";
 import TestPage from "./pages/team/TestPage.jsx";
+
+import Login from "./pages/login-register/Login.jsx";
+import Register from "./pages/login-register/Register.jsx";
 
 const NotFound = () => (
   <div style={{ textAlign: "center", paddingTop: "100px" }}>
