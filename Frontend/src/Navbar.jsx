@@ -8,12 +8,10 @@ const Navbar = () => {
   return (
     <header className="navbar">
 
-      
       <div className="nav-left">
         <Link to="/">
           <FontAwesomeIcon icon={faHome} />
         </Link>
-
       </div>
       <div className="nav-center">
         <a href="#">Turneringer</a>
@@ -21,11 +19,9 @@ const Navbar = () => {
         <a href="#">Forum</a>
       </div>
       <div className="nav-right">
-
         <Link to="/login">
           <FontAwesomeIcon icon={faUser} className="user-icon" />
         </Link>
-
       </div>
     </header>
   );

@@ -13,10 +13,6 @@ function App() {
 
   return (
     <>
-    <Routes>
-       <Route path="/LeaveTeam" element={<LeaveTeam />} />
-    </Routes>
-
       <Navbar />
         <main style={{ backgroundColor: '#0e0f13', height: '100vh', color: 'white', padding: '20px' }}>
           <Routes>
