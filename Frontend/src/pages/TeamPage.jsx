@@ -41,9 +41,31 @@ const TeamPage = () => {
     fetchTeamData();
   }, [teamId]);
 
-  const handleJoinTeam = () => {
+  const handleJoinTeam = async () => {
     // In a real app, this would send a request to join the team
-    alert("Request to join team sent!");
+    const currentUsername = localStorage.getItem("username"); // eksempel------------
+    const isAlreadyMember = team.members.some(member => member.username === currentUsername);
+
+    if (isAlreadyMember) {
+      alert("You are already a member of this team.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+          `http://localhost:7070/team-join-request/create/${userId}/${teamId}/${playerAccountId}`,
+          { method: "POST" }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      alert("Request to join team sent!");
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
   };
 
   const handleLeaveTeam = () => {
