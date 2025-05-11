@@ -88,6 +88,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public User(UserDTO dto) {
+        this.id = dto.getId();
         this.username = dto.getUsername();
         if (dto.getRoles() != null) {
             this.roles = dto.getRoles().stream()
@@ -190,7 +191,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-        if(tournamentTeams != null) {
+        if (tournamentTeams != null) {
             this.tournamentTeams = tournamentTeams;
             for (TournamentTeam tournamentTeam : tournamentTeams) {
                 tournamentTeam.setTournamentTeamCaptain(this);

@@ -1,11 +1,11 @@
 package dat.security.daos;
 
 
-import dat.security.entities.Role;
+import dat.dtos.UserDTO;
 import dat.entities.User;
+import dat.security.entities.Role;
 import dat.security.exceptions.ApiException;
 import dat.security.exceptions.ValidationException;
-import dat.dtos.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -14,7 +14,6 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 /**
  * Purpose: To handle security in the API
  * Author: Thomas Hartmann
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 public class SecurityDAO implements ISecurityDAO {
 
     private static ISecurityDAO instance;
-    private static EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     public SecurityDAO(EntityManagerFactory _emf) {
         this.emf = _emf;
@@ -69,12 +68,12 @@ public class SecurityDAO implements ISecurityDAO {
             em.persist(userEntity);
             em.getTransaction().commit();
 
-            if(username.equals("admin")){
+            if (username.equals("admin")) {
                 addRole(users.get(0).getId(), "admin");
             }
 
             return userEntity;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new ApiException(400, e.getMessage());
         }
@@ -99,4 +98,3 @@ public class SecurityDAO implements ISecurityDAO {
         }
     }
 }
-

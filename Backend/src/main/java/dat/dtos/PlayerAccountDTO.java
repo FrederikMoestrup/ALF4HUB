@@ -2,14 +2,13 @@ package dat.dtos;
 
 import dat.entities.PlayerAccount;
 import dat.enums.Game;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class PlayerAccountDTO {
 
@@ -40,6 +39,5 @@ public class PlayerAccountDTO {
         if (playerAccount.getUser() != null) {
             this.user = new UserDTO(playerAccount.getUser());
         }
-
     }
 }

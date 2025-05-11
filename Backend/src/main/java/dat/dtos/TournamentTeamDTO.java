@@ -24,8 +24,8 @@ public class TournamentTeamDTO {
     private List<PlayerAccountDTO> tournamentTeamAccounts = new ArrayList<>();
 
     public TournamentTeamDTO(String tournamentTeamName, Game game, TournamentStatus tournamentStatus,
-                              UserDTO tournamentTeamCaptain, TeamDTO team, TournamentDTO tournament,
-                              List<PlayerAccountDTO> tournamentTeamAccounts) {
+                             UserDTO tournamentTeamCaptain, TeamDTO team, TournamentDTO tournament,
+                             List<PlayerAccountDTO> tournamentTeamAccounts) {
         this.tournamentTeamName = tournamentTeamName;
         this.game = game;
         this.tournamentStatus = tournamentStatus;

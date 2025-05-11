@@ -33,7 +33,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
     }
 
     @Override
-    public List<PlayerAccountDTO> getAll(){
+    public List<PlayerAccountDTO> getAll() {
         try (EntityManager em = emf.createEntityManager()) {
             List<PlayerAccount> playerAccounts = em.createQuery("SELECT p FROM PlayerAccount p", PlayerAccount.class).getResultList();
             return playerAccounts.stream().map(PlayerAccountDTO::new).toList();
