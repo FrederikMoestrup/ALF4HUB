@@ -46,32 +46,21 @@ const TeamPage = () => {
     fetchTeamData();
   }, [teamId]);
 
-  const handleJoinTeam = () => {
-    // Open the join request modal
-    setShowJoinModal(true);
-  };
+ 
 
   const handleSubmitJoinRequest = async () => {
-    // In a real app, this would send a join request to the backend
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // For demo purposes - simulate the team captain receiving a notification
-      // This would normally be sent to the team captain via WebSockets or through polling
-
-      // Close the modal
-      setShowJoinModal(false);
-      setJoinMessage('');
-
-      // Show success message
-      alert('Join request sent successfully!');
-
-    } catch (error) {
-      console.error('Error sending join request:', error);
-      alert('Failed to send join request. Please try again.');
-    }
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setShowJoinModal(false);
+    setJoinMessage('');
+    alert('Join request sent successfully!');
+  } catch (error) {
+    console.error('Error sending join request:', error);
+    alert('Failed to send join request. Please try again.');
+  }
+};
   const handleJoinTeam = async () => {
+    setShowJoinModal(true);
     // In a real app, this would send a request to join the team
     const currentUsername = localStorage.getItem("username"); // eksempel------------
     const isAlreadyMember = team.members.some(member => member.username === currentUsername);

@@ -14,8 +14,8 @@ public class TeamRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            get("/", teamController::getAll, Role.USER);
-            get("/{id}",teamController::getById, Role.USER);
+            get("/", teamController::getAll, Role.ANYONE);
+            get("/{id}",teamController::getById, Role.ANYONE);
             get("/{id}/players", teamController::getPlayersByTeamId, Role.ANYONE);
             post("/", teamController::create, Role.USER);
             put("/{id}", teamController::update, Role.USER);
