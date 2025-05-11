@@ -66,6 +66,7 @@ public class TournamentTeam {
         this.game = game;
         this.tournamentTeamCaptain = tournamentTeamCaptain;
     }
+
     public TournamentTeam(TournamentTeamDTO tournamentTeamDTO) {
         this.id = tournamentTeamDTO.getId();
         this.tournamentTeamName = tournamentTeamDTO.getTournamentTeamName();
@@ -86,7 +87,7 @@ public class TournamentTeam {
     }
 
     public void setTournamentTeamAccounts(List<PlayerAccount> playerAccounts) {
-        if(playerAccounts != null) {
+        if (playerAccounts != null) {
             this.tournamentTeamAccounts = playerAccounts;
             for (PlayerAccount playerAccount : playerAccounts) {
                 playerAccount.addTournamentTeam(this);

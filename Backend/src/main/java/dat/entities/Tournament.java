@@ -131,7 +131,7 @@ public class Tournament {
     }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-        if(tournamentTeams != null) {
+        if (tournamentTeams != null) {
             this.tournamentTeams = tournamentTeams;
             for (TournamentTeam tournamentTeam : tournamentTeams) {
                 tournamentTeam.setTournament(this);
