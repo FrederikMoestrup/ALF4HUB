@@ -68,9 +68,6 @@ public class UserDTO {
         return Objects.hash(new Object[]{this.username, this.roles});
     }
 
-    public static UserDTOBuilder builder() {
-        return new UserDTOBuilder();
-    }
 
     public String toString() {
         String var10000 = this.getUsername();
@@ -83,38 +80,4 @@ public class UserDTO {
         this.roles = roles;
     }
 
-    public UserDTO() {
-    }
-
-    public static class UserDTOBuilder {
-        private String username;
-        private String password;
-        private Set<String> roles;
-
-        UserDTOBuilder() {
-        }
-
-        public UserDTOBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public UserDTOBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public UserDTOBuilder roles(Set<String> roles) {
-            this.roles = roles;
-            return this;
-        }
-
-        public UserDTO build() {
-            return new UserDTO(this.username, this.password, this.roles);
-        }
-
-        public String toString() {
-            return "UserDTO.UserDTOBuilder(username=" + this.username + ", password=" + this.password + ", roles=" + this.roles + ")";
-        }
-    }
 }
