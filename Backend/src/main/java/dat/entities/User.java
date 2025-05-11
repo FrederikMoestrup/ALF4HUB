@@ -205,10 +205,6 @@ public class User implements Serializable, ISecurityUser {
         this.strikes++;
     }
 
-    public int getStrikes() {
-        return strikes;
-    }
-
     public void removeTeam(Team team) {
         if (team == null || !teams.contains(team)) {
             return;

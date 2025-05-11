@@ -1,7 +1,5 @@
 package dat.routes;
 
-
-import dat.controllers.TournamentTeamController;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static dat.security.routes.SecurityRoutes.getSecuredRoutes;
@@ -24,8 +22,6 @@ public class Routes {
             path("/teams", teamRoute.getRoutes());
             path("/player-accounts", playerAccountRoute.getRoutes());
             path("/tournaments", tournamentRoute.getRoutes());
-            path("/", getSecurityRoutes());
-            path("/", getSecuredRoutes());
             path("/tournament-teams", tournamentTeamRoute.getRoutes());
             path("/blogpost", blogRoute.getRoutes());
         };

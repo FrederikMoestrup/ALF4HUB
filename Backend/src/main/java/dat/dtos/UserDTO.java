@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -39,24 +40,6 @@ public class UserDTO {
         this.email = user.getEmail();
         this.roles = user.getRolesAsStrings();
         this.strikes = user.getStrikes();
-
-        if (user.getPlayerAccounts() != null) {
-            this.playerAccounts = user.getPlayerAccounts().stream()
-                    .map(PlayerAccountDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTournaments() != null) {
-            this.tournaments = user.getTournaments().stream()
-                    .map(TournamentDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTeams() != null) {
-            this.teams = user.getTeams().stream()
-                    .map(TeamDTO::new)
-                    .collect(Collectors.toList());
-        }
     }
 
     public boolean equals(Object o) {
@@ -70,9 +53,10 @@ public class UserDTO {
         }
     }
 
-    public UserDTO(String username, String password) {
+    public UserDTO(String username, String password, String email) {
         this.username = username;
         this.password = password;
+        this.email = email;
     }
 
     public UserDTO(String username, Set<String> roles) {
@@ -84,9 +68,6 @@ public class UserDTO {
         return Objects.hash(new Object[]{this.username, this.roles});
     }
 
-    public static UserDTOBuilder builder() {
-        return new UserDTOBuilder();
-    }
 
     public String toString() {
         String var10000 = this.getUsername();
@@ -99,38 +80,4 @@ public class UserDTO {
         this.roles = roles;
     }
 
-    public UserDTO() {
-    }
-
-    public static class UserDTOBuilder {
-        private String username;
-        private String password;
-        private Set<String> roles;
-
-        UserDTOBuilder() {
-        }
-
-        public UserDTOBuilder username(String username) {
-            this.username = username;
-            return this;
-        }
-
-        public UserDTOBuilder password(String password) {
-            this.password = password;
-            return this;
-        }
-
-        public UserDTOBuilder roles(Set<String> roles) {
-            this.roles = roles;
-            return this;
-        }
-
-        public UserDTO build() {
-            return new UserDTO(this.username, this.password, this.roles);
-        }
-
-        public String toString() {
-            return "UserDTO.UserDTOBuilder(username=" + this.username + ", password=" + this.password + ", roles=" + this.roles + ")";
-        }
-    }
 }
