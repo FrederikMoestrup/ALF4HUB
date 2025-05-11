@@ -7,10 +7,8 @@ import jakarta.persistence.EntityManagerFactory;
 public class Main {
     public static void main(String[] args) {
 
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("data");
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
         ApplicationConfig.startServer(7070);
-
-
 
     }
 }
