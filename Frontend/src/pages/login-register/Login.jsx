@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import "../acces.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../assets/ALTF4HUB.png";
+import "../../styles/acces.css";
+import Logo from "../../assets/ALTF4HUB.png";
 
 const Login = () => {
   const [username, setUsername] = useState("");

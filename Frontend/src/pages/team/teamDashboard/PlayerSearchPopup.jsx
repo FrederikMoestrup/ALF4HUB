@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import playerApi from "../../../util/apiFacade";
-import AddPlayerButton from "../../../components/AddPlayerButton";
+import AddPlayerButton from "./AddPlayerButton";
 
 const Overlay = styled.div`
   position: fixed;

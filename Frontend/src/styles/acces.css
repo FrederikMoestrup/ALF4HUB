@@ -1,3 +1,9 @@
+.login-page, .register-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .login-page h2,
 .register-page h2 {
   font-size: 2rem;
@@ -15,31 +21,30 @@
   display: block;
   font-size: 1.1rem;
   margin-bottom: 8px;
-  color: #fff; 
-  text-align: left;         
+  color: #fff;
+  text-align: left;
 }
 
 .login-page .input-group input,
 .register-page .input-group input {
   padding: 12px;
   font-size: 1rem;
-  color: #333; 
+  color: #333;
   border: 1px solid #ddd;
   border-radius: 6px;
   background-color: #f9f9f9;
   transition: all 0.3s;
 }
 
-
 .login-page .input-group input::placeholder,
 .register-page .input-group input::placeholder {
   text-align: left;
-  transition: opacity 0.2s ease; 
+  transition: opacity 0.2s ease;
 }
 
 .login-page .input-group input:focus::placeholder,
 .register-page .input-group input:focus::placeholder {
-opacity: 0;
+  opacity: 0;
 }
 
 .login-page .input-group input:focus,
@@ -100,17 +105,17 @@ opacity: 0;
 .register-form {
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  gap: 1.2rem; 
+  align-items: center;
+  gap: 1.2rem;
 }
 
 .login-form .input-group,
 .register-form .input-group {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; 
+  align-items: flex-start;
   width: 100%;
-  max-width: 225px; 
+  max-width: 225px;
 }
 
 .logo-img {

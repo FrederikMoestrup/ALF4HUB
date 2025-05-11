@@ -3,7 +3,6 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 
 import "./index.css";
-import "./App.css";
 
 import LeaveTeam from "./pages/team/LeaveTeam.jsx";
 import Navbar from "./components/Navbar.jsx";

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import ShowTeamInfo from "../../../components/ShowTeamInfo.jsx";
+import ShowTeamInfo from "./ShowTeamInfo.jsx";
 import apiFacade from "../../../util/apiFacade.js";
 import PlayerSearchPopup from "./PlayerSearchPopup.jsx";
 
