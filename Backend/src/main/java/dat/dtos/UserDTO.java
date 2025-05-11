@@ -40,24 +40,6 @@ public class UserDTO {
         this.email = user.getEmail();
         this.roles = user.getRolesAsStrings();
         this.strikes = user.getStrikes();
-
-        if (user.getPlayerAccounts() != null) {
-            this.playerAccounts = user.getPlayerAccounts().stream()
-                    .map(PlayerAccountDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTournaments() != null) {
-            this.tournaments = user.getTournaments().stream()
-                    .map(TournamentDTO::new)
-                    .collect(Collectors.toList());
-        }
-
-        if (user.getTeams() != null) {
-            this.teams = user.getTeams().stream()
-                    .map(TeamDTO::new)
-                    .collect(Collectors.toList());
-        }
     }
 
     public boolean equals(Object o) {
