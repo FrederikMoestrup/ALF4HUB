@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import NotificationCenter from './NotificationCenter';
 
 const Navbar = ({ isLoggedIn, userTeam }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn || false);
@@ -25,6 +26,7 @@ const Navbar = ({ isLoggedIn, userTeam }) => {
                 My Team
               </Link>
             )}
+            <NotificationCenter />
             <button className="auth-button" onClick={handleLogout}>
               Logout
             </button>
