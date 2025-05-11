@@ -1,10 +1,25 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import PopUpMessage from "../components/PopUpMessage";
+import PopUpMessage from "../../components/PopUpMessage";
 import {
-  GlobalStyle, Container, Navbar, HomeButton, ProfileButton, NavLinks, Content, FormWrapper,
-  FormTitle, Form, Label, Input, Textarea, ButtonsContent, Button, RequiredText, Footer
-} from "../styles/createBlogPostStyles";
+  GlobalStyle,
+  Container,
+  Navbar,
+  HomeButton,
+  ProfileButton,
+  NavLinks,
+  Content,
+  FormWrapper,
+  FormTitle,
+  Form,
+  Label,
+  Input,
+  Textarea,
+  ButtonsContent,
+  Button,
+  RequiredText,
+  Footer,
+} from "../../styles/createBlogPostStyles";
 
 function CreateBlogPost() {
   const [title, setTitle] = useState("");
@@ -26,14 +41,14 @@ function CreateBlogPost() {
       return;
     }
 
-    const endpoint = submitType === 'draft' ? '/blogpost/draft' : '/blogpost';
+    const endpoint = submitType === "draft" ? "/blogpost/draft" : "/blogpost";
 
     const payload = {
       userId: 1, // hardcoded until login works
       title,
       content,
-      status: submitType.toUpperCase()
-    }
+      status: submitType.toUpperCase(),
+    };
 
     try {
       const response = await fetch("http://localhost:7070/api" + endpoint, {
@@ -120,8 +135,15 @@ function CreateBlogPost() {
               />
 
               <ButtonsContent>
-                <Button type="submit" onClick={() => setSubmitType("draft")}>Save as Draft</Button>
-                <Button type="submit" onClick={() => setSubmitType("published")}>Create Post</Button>
+                <Button type="submit" onClick={() => setSubmitType("draft")}>
+                  Save as Draft
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={() => setSubmitType("published")}
+                >
+                  Create Post
+                </Button>
               </ButtonsContent>
               <RequiredText>
                 *Title and content are required fields and must not be left
@@ -137,7 +159,7 @@ function CreateBlogPost() {
             15 45 04 | Mail: turnering@altf4hub.dk
           </p>
         </Footer>
-      </Container >
+      </Container>
 
       <PopUpMessage
         isOpen={error !== "" || success}

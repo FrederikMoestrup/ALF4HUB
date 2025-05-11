@@ -1,8 +1,7 @@
-import React from "react";
 import styled from "styled-components";
 
 const PlayerCard = styled.div`
-  background:rgb(161, 157, 157);
+  background: rgb(161, 157, 157);
   padding: 15px;
   border-radius: 10px;
   width: 180px;
@@ -33,9 +32,8 @@ const PlayerName = styled.div`
   font-weight: bold;
 `;
 
-
-const RankRectangle  = styled.div`
-margin-top: 10px;
+const RankRectangle = styled.div`
+  margin-top: 10px;
   padding: 6px 12px;
   border: 2px solid black;
   border-radius: 8px;
@@ -47,7 +45,7 @@ margin-top: 10px;
 `;
 
 const RemoveButton = styled.button`
-  background-color:rgb(219, 88, 88);
+  background-color: rgb(219, 88, 88);
   border: none;
   padding: 8px 15px;
   color: white;
@@ -58,19 +56,23 @@ const RemoveButton = styled.button`
 
 const ShowTeamInfo = ({ team, isCaptain, onRemovePlayer }) => {
   const handleRemove = () => {
-    if (window.confirm(`Are you sure you want to remove ${team.playerAccountName}?`)) {
+    if (
+      window.confirm(
+        `Are you sure you want to remove ${team.playerAccountName}?`
+      )
+    ) {
       onRemovePlayer?.(team.id);
     }
   };
-    
-    return (
-        <PlayerCard >
-          {isCaptain && <Crown>👑</Crown>}
-          <PlayerImage src="https://via.placeholder.com/100"/>
-          <PlayerName>{team.playerAccountName}</PlayerName>
-          <RankRectangle>{team.rank}</RankRectangle>
-          {!isCaptain && <RemoveButton onClick={handleRemove}>Remove</RemoveButton>}
-        </PlayerCard>
-      );
+
+  return (
+    <PlayerCard>
+      {isCaptain && <Crown>👑</Crown>}
+      <PlayerImage src="https://via.placeholder.com/100" />
+      <PlayerName>{team.playerAccountName}</PlayerName>
+      <RankRectangle>{team.rank}</RankRectangle>
+      {!isCaptain && <RemoveButton onClick={handleRemove}>Remove</RemoveButton>}
+    </PlayerCard>
+  );
 };
-export default ShowTeamInfo
+export default ShowTeamInfo;
