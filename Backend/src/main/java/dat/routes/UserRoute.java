@@ -13,6 +13,7 @@ public class UserRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
+            put("/{id}/strike", userController::addStrike, Role.USER);
         };
     }
 }

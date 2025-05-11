@@ -15,7 +15,7 @@ public class TournamentTeamController {
     private final TournamentTeamDAO tournamentTeamDAO;
 
     public TournamentTeamController() {
-        if  (HibernateConfig.getTest()) {
+        if (HibernateConfig.getTest()) {
             EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
             this.tournamentTeamDAO = TournamentTeamDAO.getInstance(emf);
         } else {
@@ -37,7 +37,7 @@ public class TournamentTeamController {
         }
     }
 
-    public void getAll(Context ctx){
+    public void getAll(Context ctx) {
         List<TournamentTeamDTO> tournamentTeamDTOs = tournamentTeamDAO.getAll();
         ctx.res().setStatus(200);
         ctx.json(tournamentTeamDTOs, TournamentTeamDTO.class);
@@ -56,9 +56,9 @@ public class TournamentTeamController {
             TournamentTeamDTO tournamentTeamDTO = tournamentTeamDAO.update(id, validateEntity(ctx));
             ctx.res().setStatus(200);
             ctx.json(tournamentTeamDTO, TournamentTeamDTO.class);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
-        }catch (ApiException e) {
+        } catch (ApiException e) {
             throw new ApiException(404, "TournamentTeam not found");
         }
     }
