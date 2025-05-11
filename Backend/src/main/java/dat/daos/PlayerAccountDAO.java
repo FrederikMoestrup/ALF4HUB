@@ -99,7 +99,7 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
                 throw new ApiException(404, "Team not found");
             }
 
-            playerAccount.removeTeam(team);
+
             team.removePlayerAccount(playerAccount);
 
             em.merge(playerAccount);
