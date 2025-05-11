@@ -10,6 +10,18 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Initialize notifications when the provider loads
+  useEffect(() => {
+    fetchTeamJoinRequests();
+    
+    // Set up polling for new notifications (every 30 seconds)
+    const interval = setInterval(() => {
+      fetchTeamJoinRequests();
+    }, 30000);
+    
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     // Count unread notifications
@@ -52,37 +64,61 @@ export const NotificationProvider = ({ children }) => {
   };
 
   // Mock function to fetch team join requests from the API
-  const fetchTeamJoinRequests = async (userId) => {
+  const fetchTeamJoinRequests = () => {
     // This would be an API call in a real application
     // For now, let's simulate some notifications
-    setTimeout(() => {
-      const mockRequests = [
-        {
-          id: 1,
-          type: 'teamJoinRequest',
-          teamId: '123',
-          teamName: 'Alpha Squad',
-          requesterId: '456',
-          requesterName: 'JohnDoe',
-          message: 'I would like to join your team',
-          createdAt: new Date().toISOString(),
-          isRead: false
-        },
-        {
-          id: 2,
-          type: 'teamJoinRequest',
-          teamId: '123',
-          teamName: 'Alpha Squad',
-          requesterId: '789',
-          requesterName: 'JaneSmith',
-          message: 'Looking for a team to play with',
-          createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-          isRead: false
-        }
-      ];
-      
-      setNotifications(mockRequests);
-    }, 1000);
+    const mockRequests = [
+      {
+        id: 1,
+        type: 'teamJoinRequest',
+        teamId: '123',
+        teamName: 'Alpha Squad',
+        requesterId: '456',
+        requesterName: 'JohnDoe',
+        message: 'I would like to join your team',
+        createdAt: new Date().toISOString(),
+        isRead: false
+      },
+      {
+        id: 2,
+        type: 'teamJoinRequest',
+        teamId: '123',
+        teamName: 'Alpha Squad',
+        requesterId: '789',
+        requesterName: 'JaneSmith',
+        message: 'Looking for a team to play with',
+        createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+        isRead: false
+      }
+    ];
+    
+    // Merge with existing notifications
+    setNotifications(prev => {
+      const existingIds = prev.map(n => n.id);
+      const newNotifications = mockRequests.filter(n => !existingIds.includes(n.id));
+      return [...prev, ...newNotifications];
+    });
+  };
+  
+  // Function to simulate sending a join request
+  const sendJoinRequest = (teamData, requesterData, message) => {
+    const newNotification = {
+      id: Date.now(),
+      type: 'teamJoinRequest',
+      teamId: teamData.id,
+      teamName: teamData.name,
+      requesterId: requesterData.id || 'user-' + Math.floor(Math.random() * 1000),
+      requesterName: requesterData.name || 'Current User',
+      message: message,
+      createdAt: new Date().toISOString(),
+      isRead: false
+    };
+    
+    // In a real app, this would send the request to the backend
+    // For demo, just add it to our local notifications
+    addNotification(newNotification);
+    
+    return Promise.resolve(newNotification);
   };
 
   const value = {
@@ -94,7 +130,8 @@ export const NotificationProvider = ({ children }) => {
     markAsRead,
     markAllAsRead,
     removeNotification,
-    fetchTeamJoinRequests
+    fetchTeamJoinRequests,
+    sendJoinRequest
   };
 
   return (

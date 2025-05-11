@@ -11,7 +11,8 @@ const TeamPage = () => {
   const [isInTeam, setIsInTeam] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [joinMessage, setJoinMessage] = useState('');
-  const { addNotification } = useNotifications();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { sendJoinRequest } = useNotifications();
   
   useEffect(() => {
     // Simulate API call to fetch team data
@@ -19,7 +20,7 @@ const TeamPage = () => {
       // Mock data
       const mockTeam = {
         id: teamId,
-        name: 'TeamName',
+        name: 'TeamName' + teamId, // Change team name to include ID for demonstration
         logo: '/path/to/logo.png',
         members: [
           { id: 1, name: 'Player1', gameAccount: 'player1@game' },
@@ -46,13 +47,19 @@ const TeamPage = () => {
   };
 
   const handleSubmitJoinRequest = async () => {
-    // In a real app, this would send a join request to the backend
+    if (!joinMessage.trim()) {
+      alert('Please write a message to the team captain');
+      return;
+    }
+    
+    setIsSubmitting(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes - simulate the team captain receiving a notification
-      // This would normally be sent to the team captain via WebSockets or through polling
+      // Send join request using the context function
+      await sendJoinRequest(
+        team,
+        { name: 'Current User' }, // In a real app, this would be the logged-in user
+        joinMessage
+      );
       
       // Close the modal
       setShowJoinModal(false);
@@ -64,6 +71,8 @@ const TeamPage = () => {
     } catch (error) {
       console.error('Error sending join request:', error);
       alert('Failed to send join request. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -154,12 +163,14 @@ const TeamPage = () => {
               <button 
                 className="button-primary"
                 onClick={handleSubmitJoinRequest}
+                disabled={isSubmitting}
               >
-                Send Request
+                {isSubmitting ? 'Sending...' : 'Send Request'}
               </button>
               <button 
                 className="button-secondary"
                 onClick={() => setShowJoinModal(false)}
+                disabled={isSubmitting}
               >
                 Cancel
               </button>

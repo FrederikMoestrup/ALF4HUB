@@ -1,28 +1,14 @@
-import { useEffect } from 'react';
 import { useNotifications } from '../contexts/NotificationContext';
 import TeamJoinRequest from './TeamJoinRequest';
 import '../styles/NotificationCenter.css';
 
-const NotificationCenter = ({ userId = '123' }) => {
+const NotificationCenter = () => {
   const { 
     notifications, 
     unreadCount, 
     isOpen, 
-    toggleNotifications,
-    fetchTeamJoinRequests
+    toggleNotifications
   } = useNotifications();
-
-  useEffect(() => {
-    // Fetch notifications when component mounts
-    fetchTeamJoinRequests(userId);
-    
-    // Set up polling for new notifications (every 30 seconds)
-    const interval = setInterval(() => {
-      fetchTeamJoinRequests(userId);
-    }, 30000);
-    
-    return () => clearInterval(interval);
-  }, [fetchTeamJoinRequests, userId]);
 
   return (
     <div className="notification-center">
