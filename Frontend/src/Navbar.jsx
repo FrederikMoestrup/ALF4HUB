@@ -8,9 +8,6 @@ const Navbar = () => {
   return (
     <header className="navbar">
 
-      <div className="nav-left">
-        <FontAwesomeIcon icon={faHome} />
-
       
       <div className="nav-left">
         <Link to="/">
@@ -24,8 +21,6 @@ const Navbar = () => {
         <a href="#">Forum</a>
       </div>
       <div className="nav-right">
-
-        <FontAwesomeIcon icon={faUser} />
 
         <Link to="/login">
           <FontAwesomeIcon icon={faUser} className="user-icon" />

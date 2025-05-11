@@ -1,7 +1,6 @@
 
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css'
 import LeaveTeam from './components/LeaveTeam';
 import './acces.css';
@@ -9,9 +8,6 @@ import Navbar from './Navbar';
 import Login from './components/Login'; 
 import Register from './components/Register';
 import Logo from './assets/ALTF4HUB.png';
-
-
-import LeaveTeam from './components/LeaveTeam';
 
 function App() {
 
