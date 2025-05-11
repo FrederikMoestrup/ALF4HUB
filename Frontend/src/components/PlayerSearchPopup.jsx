@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import playerApi from '../util/apiFacade';
-import AddPlayerButton from './AddPlayerButton'; 
+import AddPlayerButton from './AddPlayerButton';
 
-// Styled Components
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -77,15 +76,11 @@ const UserItem = styled.div`
   background-color: #f9f9f9;
   padding: 12px;
   border-radius: 8px;
-  cursor: pointer;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   transition: background-color 0.2s ease;
   color: #000;
-  &:hover {
-    background-color: #e0e0e0;
-  }
 `;
 
 const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
@@ -93,43 +88,51 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
   const [loading, setLoading] = useState(false);
   const [players, setPlayers] = useState([]);
   const [filteredPlayers, setFilteredPlayers] = useState([]);
+  const [teamPlayers, setTeamPlayers] = useState([]); 
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPlayers = async () => {
+    const fetchPlayersAndTeamPlayers = async () => {
       setLoading(true);
       setError(null);
 
       try {
-        const data = await playerApi.searchPlayers();
-        setPlayers(data || []);
-        setFilteredPlayers(data || []);
+        
+        const playerData = await playerApi.searchPlayers();
+        setPlayers(playerData || []);
+        setFilteredPlayers(playerData || []);
+
+        
+        const teamData = await playerApi.getAllTeams();
+        const team = teamData.find(t => t.id === teamId);
+        if (team && team.teamAccounts) {
+          setTeamPlayers(team.teamAccounts);
+        }
+
       } catch (err) {
-        console.error('Error fetching players:', err);
-        setError('Failed to fetch player accounts');
+        console.error('Error fetching players or team:', err);
+        setError('Failed to fetch player accounts or team data');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPlayers();
-  }, []);
+    fetchPlayersAndTeamPlayers();
+  }, [teamId]);
 
   useEffect(() => {
     if (!searchTerm) {
-      setFilteredPlayers(players);
+      setFilteredPlayers(players.filter(player => 
+        !teamPlayers.some(teamPlayer => teamPlayer.id === player.id)
+      ));
     } else {
       const filtered = players.filter(player =>
-        player.playerAccountName.toLowerCase().includes(searchTerm.toLowerCase())
+        player.playerAccountName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !teamPlayers.some(teamPlayer => teamPlayer.id === player.id) 
       );
       setFilteredPlayers(filtered);
     }
-  }, [searchTerm, players]);
-
-  const handleSelect = (player) => {
-    onSelectPlayer(player);
-    onClose();
-  };
+  }, [searchTerm, players, teamPlayers]);
 
   return (
     <Overlay>
@@ -150,9 +153,16 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
           <UserListContainer>
             {filteredPlayers.length > 0 ? (
               filteredPlayers.map((player) => (
-                <UserItem key={player.id} onClick={() => handleSelect(player)}>
-                  {player.playerAccountName} (Rank: {player.rank || 'N/A'})
-                  <AddPlayerButton playerAccount={player} teamId={teamId} />
+                <UserItem key={player.id}>
+                  <div>{player.playerAccountName} (Rank: {player.rank || 'N/A'})</div>
+                  <AddPlayerButton
+                    playerAccount={player}
+                    teamId={teamId}
+                    onSuccess={() => {
+                      onSelectPlayer(player);
+                      onClose(); 
+                    }}
+                  />
                 </UserItem>
               ))
             ) : (

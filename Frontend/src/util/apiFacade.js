@@ -13,7 +13,6 @@ const apiFacade = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-
         },
       });
 
@@ -24,8 +23,6 @@ const apiFacade = {
 
       const data = await response.json();
       console.log('Fetched player accounts:', data);
-
-
       return data.content || data;
     } catch (error) {
       console.error('Error fetching player accounts:', error);
@@ -99,9 +96,6 @@ const apiFacade = {
       throw error;
     }
   },
-
-
-
 };
 
 export default apiFacade;
