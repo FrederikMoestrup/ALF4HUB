@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
+import { NotificationProvider } from './contexts/NotificationContext';
 import HomePage from './pages/HomePage';
 import TeamPage from './pages/TeamPage';
 import TeamsPage from './pages/TeamsPage';
@@ -21,18 +22,20 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <Router>
-        <div className="app-container">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/teams" element={<TeamsPage />} />
-            <Route path="/team/:teamId" element={<TeamPage />} />
-            <Route path="/tournaments" element={<TournamentsPage />} />
-            <Route path="/tournament/:tournamentId" element={<TournamentPage />} />
-            <Route path="/test" element={<TestPage />} />
-          </Routes>
-        </div>
-      </Router>
+      <NotificationProvider>
+        <Router>
+          <div className="app-container">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/teams" element={<TeamsPage />} />
+              <Route path="/team/:teamId" element={<TeamPage />} />
+              <Route path="/tournaments" element={<TournamentsPage />} />
+              <Route path="/tournament/:tournamentId" element={<TournamentPage />} />
+              <Route path="/test" element={<TestPage />} />
+            </Routes>
+          </div>
+        </Router>
+      </NotificationProvider>
     </>
   );
 }

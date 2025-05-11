@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import { useNotifications } from '../contexts/NotificationContext';
 
 const TeamPage = () => {
   const { teamId } = useParams();
@@ -8,6 +9,10 @@ const TeamPage = () => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("visitor"); // 'visitor', 'member', 'captain'
   const [isInTeam, setIsInTeam] = useState(false);
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [joinMessage, setJoinMessage] = useState('');
+  const { addNotification } = useNotifications();
+
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -42,6 +47,30 @@ const TeamPage = () => {
   }, [teamId]);
 
   const handleJoinTeam = () => {
+    // Open the join request modal
+    setShowJoinModal(true);
+  };
+
+  const handleSubmitJoinRequest = async () => {
+    // In a real app, this would send a join request to the backend
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // For demo purposes - simulate the team captain receiving a notification
+      // This would normally be sent to the team captain via WebSockets or through polling
+
+      // Close the modal
+      setShowJoinModal(false);
+      setJoinMessage('');
+
+      // Show success message
+      alert('Join request sent successfully!');
+
+    } catch (error) {
+      console.error('Error sending join request:', error);
+      alert('Failed to send join request. Please try again.');
+    }
     // In a real app, this would send a request to join the team
     alert("Request to join team sent!");
   };
@@ -123,6 +152,37 @@ const TeamPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Join Request Modal */}
+      {showJoinModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Join Request for {team.name}</h3>
+            <p>Write a message to the team captain:</p>
+            <textarea
+              value={joinMessage}
+              onChange={(e) => setJoinMessage(e.target.value)}
+              placeholder="I would like to join your team because..."
+              rows={4}
+              className="join-message-input"
+            />
+            <div className="modal-actions">
+              <button
+                className="button-primary"
+                onClick={handleSubmitJoinRequest}
+              >
+                Send Request
+              </button>
+              <button
+                className="button-secondary"
+                onClick={() => setShowJoinModal(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
