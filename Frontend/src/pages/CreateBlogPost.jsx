@@ -63,7 +63,7 @@ function CreateBlogPost() {
   const getSuccessMessage = () => {
     if (submitType === "draft") {
       return "Blog post saved as draft successfully!";
-    } else if (submitType === "publish") {
+    } else if (submitType === "published") {
       return "Blog post created successfully!";
     }
     return "";
