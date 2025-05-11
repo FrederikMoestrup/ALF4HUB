@@ -1,8 +1,23 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { GlobalStyle, BlogCard, Container, Navbar, HomeButton, ProfileButton, NavLinks, Content, ButtonContainer, 
-  BlogContainer, Section, SectionTitle, BlogSectionLeft, BlogSectionRight, Button, Footer
-} from "../styles/blogPostFrontPageStyles";
+import {
+  GlobalStyle,
+  BlogCard,
+  Container,
+  Navbar,
+  HomeButton,
+  ProfileButton,
+  NavLinks,
+  Content,
+  ButtonContainer,
+  BlogContainer,
+  Section,
+  SectionTitle,
+  BlogSectionLeft,
+  BlogSectionRight,
+  Button,
+  Footer,
+} from "../../styles/blogPostFrontPageStyles";
 
 function BlogPostFrontPage() {
   const [blogPosts, setBlogPosts] = useState([]);

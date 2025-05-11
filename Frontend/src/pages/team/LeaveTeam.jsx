@@ -51,7 +51,6 @@ function LeaveTeam({ playerId: propPlayerId, teamId: propTeamId }) {
         <p>Mangler spiller- eller holdoplysninger...</p>
       </div>
     );
-    
   }
 
   return (

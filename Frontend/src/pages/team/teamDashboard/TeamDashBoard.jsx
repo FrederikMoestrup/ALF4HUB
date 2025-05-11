@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import ShowTeamInfo from "../components/ShowTeamInfo.jsx";
-import apiFacade from "../util/apiFacade.js";
-import PlayerSearchPopup from "../components/PlayerSearchPopup"; 
+import ShowTeamInfo from "../../../components/ShowTeamInfo.jsx";
+import apiFacade from "../../../util/apiFacade.js";
+import PlayerSearchPopup from "./PlayerSearchPopup.jsx";
 
 const HeaderSection = styled.div`
   display: flex;
@@ -59,9 +59,9 @@ const InviteButton = styled.button`
 const GameName = styled.h2`
   font-size: 48px;
   font-weight: 900;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   color: orange;
-  -webkit-text-stroke: 1px black; 
+  -webkit-text-stroke: 1px black;
   text-align: left;
   margin: 0;
 `;
@@ -88,7 +88,7 @@ const GameBox = styled.div`
 
 function TeamDashBoard() {
   const [team, setTeam] = useState(null);
-  const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false); 
+  const [isSearchPopupOpen, setIsSearchPopupOpen] = useState(false);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -97,11 +97,10 @@ function TeamDashBoard() {
 
         if (teamsData.length > 0) {
           const team = teamsData[0];
-          setTeam(team);  
+          setTeam(team);
         }
-
       } catch (error) {
-        console.error('Failed to fetch teams:', error);
+        console.error("Failed to fetch teams:", error);
       }
     };
 
@@ -113,7 +112,7 @@ function TeamDashBoard() {
       await apiFacade.removePlayerFromTeam(team.id, playerId);
       const updatedTeam = {
         ...team,
-        teamAccounts: team.teamAccounts.filter(p => p.id !== playerId)
+        teamAccounts: team.teamAccounts.filter((p) => p.id !== playerId),
       };
       setTeam(updatedTeam);
     } catch (error) {
@@ -123,18 +122,22 @@ function TeamDashBoard() {
   };
 
   const handleSelectPlayer = (player) => {
-    console.log('Selected Player:', player);
+    console.log("Selected Player:", player);
     const updatedTeam = {
       ...team,
-      teamAccounts: [...team.teamAccounts, player],  
+      teamAccounts: [...team.teamAccounts, player],
     };
 
-    setTeam(updatedTeam);  
-    setIsSearchPopupOpen(false);  
+    setTeam(updatedTeam);
+    setIsSearchPopupOpen(false);
   };
 
   if (!team) {
-    return <Container><Title>No teams for the captain.</Title></Container>;
+    return (
+      <Container>
+        <Title>No teams for the captain.</Title>
+      </Container>
+    );
   }
 
   const renderPlayers = () => {
@@ -142,15 +145,15 @@ function TeamDashBoard() {
       return <div>No Players on the team.</div>;
     }
 
-    const playerCards = team.teamAccounts.slice(0, 5).map(account => (
-      <ShowTeamInfo 
-        key={account.id} 
+    const playerCards = team.teamAccounts.slice(0, 5).map((account) => (
+      <ShowTeamInfo
+        key={account.id}
         team={{
           teamCaptain: team.teamCaptain,
           rank: account.rank,
           playerAccountName: account.playerAccountName ?? "Unknown",
           id: account.id,
-          game: account.game
+          game: account.game,
         }}
         isCaptain={account.id === team.teamCaptain?.id}
         onRemovePlayer={handleRemovePlayer}
@@ -161,7 +164,10 @@ function TeamDashBoard() {
       playerCards.push(
         <InviteCard key="invite">
           <InvitePlus>+</InvitePlus>
-          <InviteButton onClick={() => setIsSearchPopupOpen(true)}>Invite</InviteButton> {/* Button to trigger the search popup */}
+          <InviteButton onClick={() => setIsSearchPopupOpen(true)}>
+            Invite
+          </InviteButton>{" "}
+          {/* Button to trigger the search popup */}
         </InviteCard>
       );
     }
@@ -179,16 +185,14 @@ function TeamDashBoard() {
         <TeamName>{team.teamName}</TeamName>
       </HeaderSection>
 
-      <PlayersWrapper>
-        {renderPlayers()}
-      </PlayersWrapper>
+      <PlayersWrapper>{renderPlayers()}</PlayersWrapper>
 
       {/* Conditionally render the PlayerSearchPopup */}
       {isSearchPopupOpen && (
-        <PlayerSearchPopup 
-          onClose={() => setIsSearchPopupOpen(false)} 
-          onSelectPlayer={handleSelectPlayer} 
-          teamId={team.id} 
+        <PlayerSearchPopup
+          onClose={() => setIsSearchPopupOpen(false)}
+          onSelectPlayer={handleSelectPlayer}
+          teamId={team.id}
         />
       )}
     </Container>
