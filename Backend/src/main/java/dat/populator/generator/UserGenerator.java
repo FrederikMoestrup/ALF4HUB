@@ -38,7 +38,7 @@ public class UserGenerator implements TestDataGenerator<User> {
                     username = type.namePrefix + globalIndex;
                 }
 
-                User user = new User(username, password);
+                User user = new User(username, password, "test@test");
                 type.roles.forEach(user::addRole);
                 users.add(user);
                 globalIndex++;
