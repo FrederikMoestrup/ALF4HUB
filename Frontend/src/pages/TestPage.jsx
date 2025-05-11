@@ -27,7 +27,7 @@ const TestPage = () => {
       {selectedPlayer && (
         <div>
           <h3>Selected Player:</h3>
-          <p>Name: {selectedPlayer.playAccountName}</p>
+          <p>Name: {selectedPlayer.playerAccountName}</p>
           <p>Rank: {selectedPlayer.rank}</p>
         </div>
       )}
