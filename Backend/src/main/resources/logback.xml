@@ -1,0 +1,48 @@
+<configuration scan="true">
+
+    <property name="LOG_BASEDIR" value="./logs"/>
+    <property name="LOG_FILE" value="api_logs"/>
+    <property name="LOG_FILE_MAX_SIZE" value="10MB"/>
+    <property name="LOG_FILE_MAX_HISTORY" value="180"/>
+
+    <!-- File Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_BASEDIR}/${LOG_FILE}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_BASEDIR}/archive/${LOG_FILE}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>${LOG_FILE_MAX_SIZE:-10MB}</maxFileSize>
+            <maxHistory>${LOG_FILE_MAX_HISTORY:-0}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Console Appender -->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %green(%msg%n)</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger -->
+    <logger name="dat" level="ERROR">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="dat" level="WARN">
+        <appender-ref ref="FILE"/>
+    </logger>
+
+    <logger name="dat" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>

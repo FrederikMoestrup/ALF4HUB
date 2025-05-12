@@ -6,12 +6,3 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/vcs.xml
-/SysProject.iml
-/inspectionProfiles/Project_Default.xml
-/modules.xml
-/misc.xml
-/jarRepositories.xml
-/encodings.xml
-/dataSources.xml
-/compiler.xml

@@ -33,6 +33,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  display: block;
 }
 
 h1 {
@@ -83,5 +84,28 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+main {
+  background-color: #0e0f13;
+  color: white;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 2em;
+  }
+
+  button {
+    font-size: 0.9em;
+    padding: 0.5em 1em;
   }
 }
