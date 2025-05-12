@@ -26,6 +26,7 @@ export const Title = styled.h2`
 `;
 
 export const FormWrapper = styled.div`
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
   align-items: center;
