@@ -4,14 +4,13 @@ package dat.config;
 import dat.entities.*;
 import dat.enums.TournamentStatus;
 import jakarta.persistence.EntityManagerFactory;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static dat.enums.Game.DOTA_2;
 import static dat.enums.Game.LEAGUE_OF_LEGENDS;
 
-public class Populate {
+public class PopulateTeamB {
 
     public static void populateDatabase(EntityManagerFactory emf) {
 
