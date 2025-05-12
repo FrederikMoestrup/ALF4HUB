@@ -6,7 +6,8 @@ POST http://localhost:7070/api/auth/register/
 
 {
     "username": "user",
-    "password": "test123"
+    "password": "test123",
+    "email": "test@test"
 }
 
 ###
@@ -100,7 +101,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-    "teamName": "ProGamerTeam"
+  "teamName": "ProGamerTeam"
 }
 
 ###
@@ -209,4 +210,40 @@ Authorization: Bearer {{jwt_token}}
 ###
 
 DELETE http://localhost:7070/api/tournaments/1
+Authorization: Bearer {{jwt_token}}
+
+
+###
+
+//TeamJoinRequest
+
+GET http://localhost:7070/api/team-join-requests
+Authorization: Bearer {{jwt_token}}
+###
+
+GET http://localhost:7070/api/team-join-requests/1
+Authorization: Bearer {{jwt_token}}
+###
+
+POST http://localhost:7070/api/team-join-requests/requester/7/team/2/player-account/7
+Authorization: Bearer {{jwt_token}}
+
+###
+
+PATCH http://localhost:7070/api/team-join-requests/responder/2/join-request/1/join-request-status/approved
+Authorization: Bearer {{jwt_token}}
+
+###
+
+GET http://localhost:7070/api/team-join-requests/team/2
+Authorization: Bearer {{jwt_token}}
+
+###
+
+GET http://localhost:7070/api/team-join-requests/team-captain/2
+Authorization: Bearer {{jwt_token}}
+
+###
+
+DELETE http://localhost:7070/api/team-join-requests/1
 Authorization: Bearer {{jwt_token}}
