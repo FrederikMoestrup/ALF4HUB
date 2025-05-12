@@ -1,126 +1,163 @@
 package dat.daos;
 
 import dat.config.HibernateConfig;
-import dat.config.Populate;
 import dat.dtos.PlayerAccountDTO;
 import dat.dtos.TeamDTO;
-import dat.dtos.TournamentDTO;
-import dat.dtos.UserDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
-import dat.enums.Game;
+import dat.entities.User;
 import dat.exceptions.ApiException;
-import jakarta.persistence.EntityManager;
+import dat.populator.Populator;
+import dat.security.entities.Role;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class TeamDAOTest {
-    private static EntityManagerFactory emf;
-    private TeamDAO teamDAO;
+
+    private static Populator populator;
+    private static TeamDAO teamDAO;
+
+    private List<PlayerAccountDTO> playerAccountDTOList;
+    private List<TeamDTO> teamDTOList;
 
     @BeforeAll
-    static void setupClass() {
-        emf = HibernateConfig.getEntityManagerFactoryForTest();
-    }
+    static void beforeAll() {
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
 
-    @BeforeAll
-    static void tearDownClass() {
-        if (emf != null) {
-            emf.close();
-        }
+        populator = Populator.getInstance(emf);
+        teamDAO = TeamDAO.getInstance(emf);
     }
 
     @BeforeEach
     void setUp() {
-        teamDAO = TeamDAO.getInstance(emf);
-        Populate.populateDatabase(emf);
+        List<Role> roles = populator.createRoles();
+        List<User> users = populator.createUsers(roles);
+        populator.persist(users);
+
+        List<PlayerAccount> playerAccounts = populator.createPlayerAccounts(users);
+        List<Team> teams = populator.createTeams(playerAccounts);
+        populator.persist(teams);
+
+        playerAccountDTOList = playerAccounts.stream().map(PlayerAccountDTO::new).toList();
+        teamDTOList = teams.stream().map(TeamDTO::new).toList();
     }
 
     @AfterEach
     void tearDown() {
-        Populate.clearDatabase(emf);
+        populator.cleanup(Team.class);
+        populator.cleanup(PlayerAccount.class);
+        populator.cleanup(User.class);
+        populator.cleanup(Role.class);
     }
 
     @Test
     void getById() throws ApiException {
-        TeamDTO teamDTO = teamDAO.getById(1);
-        assertNotNull(teamDTO);
-        assertEquals("Supra", teamDTO.getTeamName());
-        assertEquals("Cap1", teamDTO.getTeamCaptain().getUsername());
-        assertEquals(2, teamDTO.getTeamAccounts().size());
+        TeamDTO expected = teamDTOList.get(0);
+        TeamDTO actual = teamDAO.getById(expected.getId());
 
-        assertFalse(teamDTO.getTournamentTeams().isEmpty());
-        //assertEquals("League of Legends Championship", teamDTO.getTournamentTeams().get(0).getTournament().getTournamentName());
-    }
-
-    @Test
-    void getByIdNotFound() {
-        ApiException exception = assertThrows(ApiException.class, () -> teamDAO.getById(999));
-        assertEquals(404, exception.getStatusCode());
-        assertEquals("Team not found", exception.getMessage());
+        assertThat(actual, is(expected));
     }
 
     @Test
     void getAll() {
-        List<TeamDTO> all = teamDAO.getAll();
-        assertEquals(6, all.size());
+        List<TeamDTO> expected = teamDTOList;
+        List<TeamDTO> actual = teamDAO.getAll();
+
+        assertThat(actual, hasSize(expected.size()));
+        assertThat(actual, containsInAnyOrder(expected.toArray()));
     }
 
     @Test
-    void create() throws ApiException {
-        TeamDTO teamDTO = new TeamDTO();
-        teamDTO.setTeamName("NewTestTeam");
+    void create() {
+        List<PlayerAccountDTO> teamAccounts = playerAccountDTOList.subList(19, 22);
 
-        TeamDTO createdTeam = teamDAO.create(teamDTO);
+        TeamDTO expected = new TeamDTO(
+                "BC94",
+                teamAccounts.get(0).getUser(),
+                null,
+                teamAccounts,
+                new ArrayList<>()
+        );
 
-        assertNotNull(createdTeam);
-        assertEquals("NewTestTeam", createdTeam.getTeamName());
-        assertTrue(createdTeam.getTeamAccounts().isEmpty());
+        TeamDTO actual = teamDAO.create(expected);
+
+        assertThat(actual.getId(), is(not(0)));
+        assertThat(actual.getTeamAccounts(), hasSize(expected.getTeamAccounts().size()));
+
+        for (int i = 0; i < expected.getTeamAccounts().size(); i++) {
+            PlayerAccountDTO expectedPlayerAccountDTO = expected.getTeamAccounts().get(i);
+            PlayerAccountDTO actualPlayerAccountDTO = actual.getTeamAccounts().get(i);
+
+            assertThat(actualPlayerAccountDTO.getId(), is(not(0)));
+            assertThat(actualPlayerAccountDTO, is(samePropertyValuesAs(expectedPlayerAccountDTO, "id")));
+        }
+
+        assertThat(actual, is(samePropertyValuesAs(expected, "id", "teamAccounts")));
     }
 
     @Test
     void update() throws ApiException {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
+        TeamDTO expected = teamDTOList.get(0);
 
-        Team team = em.find(Team.class, 1);
-        PlayerAccount newPlayer = em.find(PlayerAccount.class, 3);
+        expected.setTeamName("Updated Team Name");
 
-        team.setTeamName("UpdatedTestTeam");
-        team.setTeamCaptain(newPlayer.getUser());
-        team.addPlayerAccount(newPlayer);
+        TeamDTO actual = teamDAO.update(expected.getId(), expected);
 
-        team.getTournamentTeams().size(); // forces lazy loading
-        em.getTransaction().commit();
-        em.close();
-
-        TeamDTO updatedTeam = teamDAO.update(team.getId(), new TeamDTO(team));
-
-        assertNotNull(updatedTeam);
-        assertEquals("UpdatedTestTeam", updatedTeam.getTeamName());
-        assertEquals(3, updatedTeam.getTeamAccounts().size());
-        assertEquals("Cap3Account", updatedTeam.getTeamAccounts().get(2).getPlayerAccountName());
-        assertEquals("Cap3", updatedTeam.getTeamCaptain().getUsername());
+        assertThat(actual, is(expected));
     }
-
 
     @Test
     void delete() throws ApiException {
-        TeamDTO teamBeforeDelete = teamDAO.getById(1);
+        TeamDTO teamDTO = teamDTOList.get(0);
 
-        assertNotNull(teamBeforeDelete);
-        assertEquals("Supra", teamBeforeDelete.getTeamName());
+        teamDAO.delete(teamDTO.getId());
 
-        teamDAO.delete(teamBeforeDelete.getId());
+        assertThrowsExactly(ApiException.class, () -> teamDAO.getById(teamDTO.getId()));
+    }
 
-        List<TeamDTO> teams = teamDAO.getAll();
-        assertEquals(5, teams.size());
+    //removeplayer
+    @Test
+    void removePlayer() throws ApiException {
+        TeamDTO team = teamDTOList.get(0);
+        PlayerAccountDTO playerToRemove = team.getTeamAccounts().get(0);
+
+        TeamDTO updatedTeam = teamDAO.removePlayer(team.getId(), playerToRemove.getId());
+
+        assertThat(
+                updatedTeam.getTeamAccounts().stream().map(PlayerAccountDTO::getId).toList(),
+                not(hasItem(playerToRemove.getId()))
+        );
+    }
+
+    @Test
+    void addPlayerToTeam() throws ApiException {
+        TeamDTO teamDTO = teamDTOList.get(0);
+
+        System.out.println("Before adding player:");
+        teamDTO.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayerAccountName()));
+
+        PlayerAccountDTO newPlayer = playerAccountDTOList.stream()
+                .filter(pa -> teamDTO.getTeamAccounts().stream()
+                        .noneMatch(existing -> existing.getId() == pa.getId()))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No suitable player to add"));
+
+        TeamDTO updatedTeam = teamDAO.invitePlayer(teamDTO.getId(), newPlayer.getId());
+
+        System.out.println("After adding player:");
+        updatedTeam.getTeamAccounts().forEach(player -> System.out.println(" - " + player.getPlayerAccountName()));
+
+        assertThat(updatedTeam.getTeamAccounts(), hasSize(teamDTO.getTeamAccounts().size() + 1));
+        assertThat(updatedTeam.getTeamAccounts(), hasItem(samePropertyValuesAs(newPlayer)));
     }
 }

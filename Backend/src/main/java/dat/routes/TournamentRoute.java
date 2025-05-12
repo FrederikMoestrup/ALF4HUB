@@ -13,8 +13,8 @@ public class TournamentRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            get("/", tournamentController::getAll, Role.USER);
-            get("/{id}", tournamentController::getById, Role.USER);
+            get("/", tournamentController::getAll, Role.ANYONE);
+            get("/{id}", tournamentController::getById, Role.ANYONE);
             post("/", tournamentController::create, Role.USER);
             put("/{id}", tournamentController::update, Role.USER);
             delete("/{id}", tournamentController::delete, Role.ADMIN);
