@@ -63,8 +63,10 @@ function ForumPage() {
           blogPosts.map((post) => (
             <BlogCard key={post.id} onClick={() => handlePostClick(post.id)}>
               <BlogTitle>{post.title}</BlogTitle>
-              <BlogContent>{post.content}</BlogContent>
-              <BlogMeta>
+              <BlogContent style={{ color: "white" }}>
+                {post.content}
+              </BlogContent>
+              <BlogMeta style={{ color: "green" }}>
                 <span>Posted on {post.createdAt}</span>
                 <span>{post.status}</span>
               </BlogMeta>
