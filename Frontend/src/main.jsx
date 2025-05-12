@@ -29,7 +29,7 @@ import Login from "./pages/login-register/Login.jsx";
 import Register from "./pages/login-register/Register.jsx";
 import Profile from "./pages/profile/Profile.jsx";
 
-const NotFound = () => (
+export const NotFound = () => (
   <div style={{ textAlign: "center", paddingTop: "100px" }}>
     <h1>404 - Page Not Found</h1>
     <p>The page you're looking for doesn't exist.</p>
