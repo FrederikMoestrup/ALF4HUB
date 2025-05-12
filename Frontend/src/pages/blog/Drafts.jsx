@@ -8,25 +8,11 @@ import {
   ProfileButton,
   NavLinks,
   Content,
-  FormWrapper,
-  FormTitle,
-  Form,
-  Label,
-  Input,
-  Textarea,
-  ButtonsContent,
-  Button,
-  RequiredText,
   Footer,
-} from "./styles/createBlogPostStyles";
-import {
   BlogCard,
-  ButtonContainer,
   BlogContainer,
-  Section,
   SectionTitle,
   BlogSectionLeft,
-  BlogSectionRight,
 } from "./styles/blogPostFrontPageStyles";
 
 function Drafts() {
