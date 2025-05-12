@@ -110,21 +110,4 @@ public class TournamentController {
                 .get();
     }
 
-    public void checkNameExists(Context ctx) throws ApiException{
-        String name = ctx.queryParam("name");
-        if (name == null || name.isEmpty()) {
-            throw new ApiException(400, "Missing or invalid parameter: name");
-        }
-
-        boolean exists = tournamentDAO.nameExists(name);
-        String message = exists
-                ? "Tournament name is already taken"
-                : "Tournament name is available";
-
-        ctx.json(Map.of(
-                "exists", exists,
-                "message", message
-        ));
-    }
-
 }
