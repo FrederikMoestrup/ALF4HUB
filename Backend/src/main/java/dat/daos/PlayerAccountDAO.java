@@ -88,21 +88,32 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
         }
     }
 
-
-    // This method is commented out because im not sure if it works
-/*
-    public static List<PlayerAccountDTO> getPlayersByTeamId(Integer id) throws ApiException {
+    public void leaveTeam(int playerAccountId, int teamId) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
-            Team team = em.find(Team.class, id);
+            em.getTransaction().begin();
+
+            PlayerAccount playerAccount = em.find(PlayerAccount.class, playerAccountId);
+            if (playerAccount == null) {
+                throw new ApiException(404, "PlayerAccount not found");
+            }
+
+            Team team = em.find(Team.class, teamId);
             if (team == null) {
                 throw new ApiException(404, "Team not found");
             }
-            return team.getTeamAccounts().stream()
-                .map(PlayerAccountDTO::new)
-                .toList();
+
+
+            team.removePlayerAccount(playerAccount);
+
+            em.merge(playerAccount);
+            em.merge(team);
+            em.getTransaction().commit();
         }
     }
-*/
+
+
+
+
 
 //Might work but not sure
     public List<PlayerAccount> getPlayersByTeamId(int teamId) {

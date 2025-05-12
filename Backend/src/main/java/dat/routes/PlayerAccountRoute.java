@@ -13,12 +13,12 @@ public class PlayerAccountRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
-            get("/", playerAccountController::getAll, Role.USER);
-            get("/{id}", playerAccountController::getById, Role.USER);
+            get("/", playerAccountController::getAll, Role.ANYONE);
+            get("/{id}", playerAccountController::getById, Role.ANYONE);
             post("/", playerAccountController::create, Role.USER);
             put("/{id}", playerAccountController::update, Role.USER);
             delete("/{id}", playerAccountController::delete, Role.ADMIN);
-
+            post("/{playerAccountId}/leave-team/{teamId}", playerAccountController::leaveTeam, Role.USER);
         };
     }
 }

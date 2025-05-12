@@ -45,7 +45,7 @@ public class SecurityController implements ISecurityController {
     public static SecurityController getInstance() { // Singleton because we don't want multiple instances of the same class
         if (instance == null) {
             instance = new SecurityController();
-            securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("guidetrip"));
+            securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("ALF4HUB_DB"));
         }
         return instance;
     }
@@ -84,7 +84,7 @@ public class SecurityController implements ISecurityController {
             ObjectNode returnObject = objectMapper.createObjectNode();
             try {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-                User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
+                User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword(), userInput.getEmail());
 
                 String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject

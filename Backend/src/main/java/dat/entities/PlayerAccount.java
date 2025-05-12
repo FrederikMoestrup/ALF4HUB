@@ -95,7 +95,7 @@ public class PlayerAccount {
         }
     }
 
-    public void removeTeam(Team team){
+    public void removeTeam(Team team) {
         if (team == null || !teams.contains(team)) {
             return;
         }
@@ -120,7 +120,7 @@ public class PlayerAccount {
     }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-        if(tournamentTeams != null) {
+        if (tournamentTeams != null) {
             this.tournamentTeams = tournamentTeams;
             for (TournamentTeam tournamentTeam : tournamentTeams) {
                 tournamentTeam.addPlayerAccount(this);

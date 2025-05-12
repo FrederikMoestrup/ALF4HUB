@@ -1,47 +1,29 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import '../styles/Navbar.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faUser } from '@fortawesome/free-solid-svg-icons';
 
-const Navbar = ({ isLoggedIn, userTeam }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn || false);
-  
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    // Additional logout logic would go here
-  };
-
+const Navbar = () => {
   return (
-    <nav className="navbar">
-      <div className="nav-links">
-        <Link to="/">Home</Link>
-        <Link to="/teams">Teams</Link>
-        <Link to="/tournaments">Tournaments</Link>
-        <Link to="/test">Test Features</Link>
+    <header className="navbar">
+
+      <div className="nav-left">
+        <Link to="/">
+          <FontAwesomeIcon icon={faHome} />
+        </Link>
       </div>
-      <div className="auth-links">
-        {isAuthenticated ? (
-          <>
-            {userTeam && (
-              <Link to={`/team/${userTeam.id}`} className="auth-button">
-                My Team
-              </Link>
-            )}
-            <button className="auth-button" onClick={handleLogout}>
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" className="auth-button">
-              Login
-            </Link>
-            <Link to="/register" className="auth-button">
-              Register
-            </Link>
-          </>
-        )}
+      <div className="nav-center">
+        <a href="#">Turneringer</a>
+        <a href="#">Hold</a>
+        <a href="#">Forum</a>
       </div>
-    </nav>
+      <div className="nav-right">
+        <Link to="/login">
+          <FontAwesomeIcon icon={faUser} className="user-icon" />
+        </Link>
+      </div>
+    </header>
   );
 };
 
-export default Navbar; 
+export default Navbar;
