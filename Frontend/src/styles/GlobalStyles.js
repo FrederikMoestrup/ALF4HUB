@@ -29,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     background-color: var(--color-main);
-    color: var(--color-text);
+    color: var(--color-light-accent);
     font-family: 'Kdam Thmor Pro', sans-serif;
     line-height: 1.6;
   }
