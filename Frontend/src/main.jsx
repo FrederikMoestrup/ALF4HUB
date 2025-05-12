@@ -5,18 +5,28 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import "./index.css";
 
 import Navbar from "./components/Navbar.jsx";
-import Logo from "./assets/ALTF4HUB.png";
+import GlobalStyle from "./styles/GlobalStyles.js";
+import Homepage from "./pages/Homepage.jsx";
 
 import BlogPostFrontPage from "./pages/blog/BlogPostFrontPage.jsx";
 import CreateBlogPost from "./pages/blog/CreateBlogPost.jsx";
 import Drafts from "./pages/blog/Drafts.jsx";
+import EditBlogPost from "./pages/blog/EditBlogPost.jsx";
+import ReadBlogPost from "./pages/blog/ReadBlogPost.jsx";
 
-import TeamDashBoard from "./pages/team/teamDashboard/TeamDashBoard.jsx";
+import TeamDashBoard from "./pages/teamDashboard/TeamDashBoard.jsx";
 import LeaveTeam from "./pages/team/LeaveTeam.jsx";
 import TestPage from "./pages/team/TestPage.jsx";
 
+import CreateTournament from "./pages/tournament/CreateTournament.jsx";
+import JoinTournament from "./pages/tournament/JoinTournament.jsx";
+import MyTournaments from "./pages/tournament/MyTournaments.jsx";
+import TournamentOverview from "./pages/tournament/TournamentOverview.jsx";
+import ViewTournamentsByGame from "./pages/tournament/ViewTournamentsByGame.jsx";
+
 import Login from "./pages/login-register/Login.jsx";
 import Register from "./pages/login-register/Register.jsx";
+import Profile from "./pages/profile/Profile.jsx";
 
 const NotFound = () => (
   <div style={{ textAlign: "center", paddingTop: "100px" }}>
@@ -27,6 +37,7 @@ const NotFound = () => (
 
 const RootComponent = () => (
   <>
+    <GlobalStyle />
     <Navbar />
     <main
       style={{
@@ -37,15 +48,13 @@ const RootComponent = () => (
       }}
     >
       <Routes>
-        <Route
-          path="/"
-          element={
-            <div style={{ textAlign: "center" }}>
-              <h1>Welcome to </h1>
-              <img src={Logo} alt="ALTF4Hub Logo" className="logo-img" />
-            </div>
-          }
-        />
+        <Route path="/" element={<Homepage />} />
+
+        <Route path="/tournaments" element={<TournamentOverview />} />
+        <Route path="/tournaments/game/:gameName" element={<ViewTournamentsByGame />} />
+        <Route path="/tournaments/create" element={<CreateTournament />} />
+        <Route path="/tournaments/join" element={<JoinTournament />} />
+        <Route path="/my-tournaments" element={<MyTournaments />} />
 
         <Route path="/leave-team" element={<LeaveTeam />} />
         <Route path="/team-dashboard" element={<TeamDashBoard />} />
@@ -57,6 +66,10 @@ const RootComponent = () => (
         <Route path="/blog/posts" element={<BlogPostFrontPage />} />
         <Route path="/blog/create" element={<CreateBlogPost />} />
         <Route path="/blog/drafts" element={<Drafts />} />
+        <Route path="/blog/:postId" element={<ReadBlogPost />} />
+        <Route path="/blog/:postId/edit" element={<EditBlogPost />} />
+
+        <Route path="/profile" element={<Profile />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

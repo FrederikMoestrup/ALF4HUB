@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import PlayerSearchPopup from "./teamDashboard/PlayerSearchPopup";
+import PlayerSearchPopup from "../teamDashboard/components/PlayerSearchPopup";
 
 const TestPage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
