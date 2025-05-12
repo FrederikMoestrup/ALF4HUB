@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class User implements Serializable, ISecurityUser {
 
     @Serial
@@ -39,6 +40,13 @@ public class User implements Serializable, ISecurityUser {
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+
+    @Column(name = "email", length = 50, nullable = false)
+    private String email;
+
+    @Column(name = "strikes")
+    private int strikes = 0;
+
 
     //Relations
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
@@ -58,6 +66,10 @@ public class User implements Serializable, ISecurityUser {
 
     @OneToMany(mappedBy = "tournamentTeamCaptain", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<TournamentTeam> tournamentTeams = new ArrayList<>();
+
+    //One user can have multiple blogposts, but a blogpost belongs to one user
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<BlogPost> blogPosts = new ArrayList<>();
 
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {
@@ -85,6 +97,12 @@ public class User implements Serializable, ISecurityUser {
     public User(String userName, Set<Role> roleEntityList) {
         this.username = userName;
         this.roles = roleEntityList;
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
     }
 
     public User(UserDTO dto) {
@@ -183,6 +201,10 @@ public class User implements Serializable, ISecurityUser {
         }
     }
 
+    public void addStrike() {
+        this.strikes++;
+    }
+
     public void removeTeam(Team team) {
         if (team == null || !teams.contains(team)) {
             return;
@@ -212,6 +234,24 @@ public class User implements Serializable, ISecurityUser {
         }
         tournamentTeams.remove(tournamentTeam);
     }
+
+    public void setBlogPosts(List<BlogPost> blogPosts) {
+        if(blogPosts != null) {
+            this.blogPosts = blogPosts;
+            for (BlogPost blogPost : blogPosts) {
+                blogPost.setUser(this);
+            }
+        }
+    }
+
+    public void addBlogPost(BlogPost blogPost) {
+        if (blogPost != null && !blogPosts.contains(blogPost)) {
+            this.blogPosts.add(blogPost);
+            blogPost.setUser(this);
+        }
+    }
+
+
 
 }
 

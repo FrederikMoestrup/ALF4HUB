@@ -2,7 +2,6 @@ package dat.controllers;
 
 import dat.config.HibernateConfig;
 import dat.daos.TournamentTeamDAO;
-import dat.dtos.TournamentDTO;
 import dat.dtos.TournamentTeamDTO;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
