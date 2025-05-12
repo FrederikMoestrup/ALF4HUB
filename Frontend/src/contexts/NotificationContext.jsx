@@ -15,7 +15,7 @@ export const NotificationProvider = ({ children }) => {
   useEffect(() => {
     fetchTeamJoinRequests();
     
-    // Set up polling for new notifications (every 30 seconds)
+    // Interval for notifcation for test.
     const interval = setInterval(() => {
       fetchTeamJoinRequests();
     }, 30000);
@@ -66,7 +66,6 @@ export const NotificationProvider = ({ children }) => {
   // Mock function to fetch team join requests from the API
   const fetchTeamJoinRequests = () => {
     // This would be an API call in a real application
-    // For now, let's simulate some notifications
     const mockRequests = [
       {
         id: 1,
