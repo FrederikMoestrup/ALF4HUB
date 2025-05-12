@@ -1,153 +1,90 @@
-import styled, { createGlobalStyle } from "styled-components";
-
-/* Should fill the entire screen, doesn't right now. Needs to be fixed */
-export const GlobalStyle = createGlobalStyle`
-  html, body, #root{
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-  }
-`;
+import styled from "styled-components";
 
 export const Container = styled.div`
+  height: 100%;
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-`;
-
-/* Top navbar */
-export const Navbar = styled.nav`
-  position: relative;
-  background-color: #ebecf8;
-  border-bottom: 1px solid #cccccc;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: center; /* Center NavLinks in the middle */
   align-items: center;
-`;
-
-export const HomeButton = styled.div`
-  position: absolute;
-  left: 2rem;
-
-  a {
-    outline: none;
-    color: black;
-    font-size: 1rem;
-    padding: 8px 10px;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    text-decoration: none;
-
-    &:hover {
-      background-color: white;
-      color: #000;
-    }
-  }
-`;
-
-export const ProfileButton = styled(HomeButton)`
-  right: 2rem; /* Position on the opposite corner */
-  left: unset; /* Make sure left is not applied */
-`;
-
-export const NavLinks = styled.div`
-  display: flex;
-  gap: 2rem;
-
-  a {
-    text-decoration: none;
-    outline: none;
-    color: black;
-    font-size: 1rem;
-    padding: 8px 10px;
-    font-weight: bold;
-    border-radius: 4px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-
-    &:hover {
-      background-color: white;
-      color: #000;
-    }
-  }
-`;
-
-/* Main part of the page */
-export const Content = styled.main`
-  flex: 1;
-  display: flex;
-  justify-content: center; /* Center the form horizontally */
-  align-items: flex-start;
-  padding: 2rem;
-  gap: 2rem;
-  background-color: #ebecf8;
-`;
-
-/*export const BackButton = styled.button`
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: black;
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.7;
-  }
-`;*/
-
-// Styled components for the form
-export const FormWrapper = styled.div`
-  display: flex;
   flex-direction: column;
-  align-items: center;
+
+  @media (min-width: 1024px) {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+`;
+
+export const TitleWrapper = styled.div`
+  display: flex;
+  justify-content: center; 
+  align-items: center;      
+  flex-direction: column;
   width: 100%;
 `;
 
-export const FormTitle = styled.h2`
+export const Title = styled.h2`
+  font-size: 19px;
   text-align: center;
-  margin-bottom: 1rem;
-  color: black;
-  margin-top: -0.3rem;
+`;
+
+export const FormWrapper = styled.div`
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  height: 400px;
+  background-color: #12141b;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  @media (min-width: 480px) {
+    width: 300px;
+    height: 450px;
+  }
+
+  @media (min-width: 768px) {
+    width: 400px;
+    height: 500px;
+  }
+
+  @media (min-width: 1024px) {
+    width: 500px;
+    height: 550px;
+  }
 `;
 
 export const Form = styled.form`
+  flex: 1;
+  width: 80%;
+  margin-top: 40px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  background-color: #ebecf8;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  max-width: 800px;
-  width: 100%;
 `;
 
 export const Label = styled.label`
-  color: black;
   font-weight: bold;
   text-align: left;
-  margin-bottom: -1rem;
 `;
 
 export const Input = styled.input`
-  padding: 0.75rem;
+  padding: 0.5rem;
   font-size: 1rem;
   border-radius: 4px;
-  border: 1px solid rgb(0, 42, 255);
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+
+  @media (min-width: 768px) {
+    margin-bottom: 30px;
+  }
 `;
 
 export const Textarea = styled.textarea`
-  padding: 0.75rem;
+  padding: 0.5rem;
   font-size: 1rem;
   border-radius: 4px;
-  border: 1px solid rgb(0, 42, 255);
-  height: 200px;
+  height: 180px;
+  box-sizing: border-box;
+  resize: none
 `;
 
 export const ButtonsContent = styled.div`
@@ -155,37 +92,48 @@ export const ButtonsContent = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 100px;
+  gap: 20px;
+
+  @media (min-width: 480px) {
+    gap: 30px;
+  }
+
+  @media (min-width: 768px) {
+    gap: 50px;
+  }
 `;
 
 export const Button = styled.button`
-  width: 250px;
-  padding: 0.75rem;
-  font-size: 1rem;
-  background-color: transparent;
-  border: 1px solid rgb(0, 42, 255);
-  color: black;
+  margin-top: 10px;
+  width: 100px;
+  height: 60px;
+  font-size: 0.8em;
+  background-color: #273b40;
+  color: white;
   border-radius: 4px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s, box-shadow 0.3s;
   border-radius: 8px;
-  font-weight: 600;
+  font-weight: bold;
   cursor: pointer;
 
-  &:hover {
-    background-color: rgb(0, 42, 255);
+  @media (min-width: 768px) {
+    margin-top: 50px;
+    width: 150px;
+    height: 60px;
+    font-size: 1em;
   }
 `;
 
 export const RequiredText = styled.p`
-  font-size: 0.875rem;
-  color: black;
-  align-self: flex-start;
-`;
+  margin-top: 17px;
+  font-size: 0.6rem;
 
-export const Footer = styled.footer`
-  background-color: #ebecf8;
-  color: #333;
-  padding: 1rem 2rem;
-  flex-shrink: 0;
+  @media (min-width: 768px) {
+    font-size: 0.7rem;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 0.9rem;
+  }
 `;

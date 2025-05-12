@@ -1,16 +1,10 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import PopUpMessage from "../../components/PopUpMessage";
-import {
-  GlobalStyle,
+import { 
   Container,
-  Navbar,
-  HomeButton,
-  ProfileButton,
-  NavLinks,
-  Content,
+  TitleWrapper,
+  Title,
   FormWrapper,
-  FormTitle,
   Form,
   Label,
   Input,
@@ -18,13 +12,12 @@ import {
   ButtonsContent,
   Button,
   RequiredText,
-  Footer,
-} from "./styles/createBlogPostStyles";
+ } from "./styles/createBlogPostStyles";
+import GlobalStyle from "../../styles/GlobalStyles";
 
 function CreateBlogPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tags, setTags] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [submitType, setSubmitType] = useState("");
@@ -68,7 +61,6 @@ function CreateBlogPost() {
       setSuccess(true);
       setTitle("");
       setContent("");
-      setTags("");
     } catch (err) {
       setError(err.message);
       setSuccess(false);
@@ -86,79 +78,47 @@ function CreateBlogPost() {
 
   return (
     <>
-      <GlobalStyle />
+      <GlobalStyle/>
       <Container>
-        <Navbar>
-          <HomeButton>
-            <a href="/">Home</a>
-          </HomeButton>
+        <TitleWrapper>
+          <Title>Create A New Blog Post</Title>
+        </TitleWrapper>
+        <FormWrapper>
+          <Form onSubmit={handleSubmit}>
+            <Label>Title*</Label>
+            <Input
+              type="text"
+              placeholder="Write your title here"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+            <Label>Content*</Label>
+            <Textarea
+              placeholder="Write your blog post here... Share your thoughts, insights, or experiences in detail but be mindful of one another."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              required
+            />
 
-          <NavLinks>
-            <NavLink to="/teams">Teams</NavLink>
-            <NavLink to="/tournaments">Tournaments</NavLink>
-            <NavLink to="/blogposts">Blog</NavLink>
-          </NavLinks>
-
-          <ProfileButton>
-            <a href="/">Profile</a>
-          </ProfileButton>
-        </Navbar>
-
-        <Content>
-          <FormWrapper>
-            <h2>Create a New Blog Post</h2>
-
-            <Form onSubmit={handleSubmit}>
-              <Label>Title*</Label>
-              <Input
-                type="text"
-                placeholder="Write your title here"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-
-              <Label>Content*</Label>
-              <Textarea
-                placeholder="Write your blog post here... Share your thoughts, insights, or experiences in detail but be mindful of one another."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-              />
-
-              <Label>Tags (optional)</Label>
-              <Input
-                type="text"
-                placeholder="e.g., React, Tournament, Gaming"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-              />
-
-              <ButtonsContent>
-                <Button type="submit" onClick={() => setSubmitType("draft")}>
-                  Save as Draft
-                </Button>
-                <Button
-                  type="submit"
-                  onClick={() => setSubmitType("published")}
-                >
-                  Create Post
-                </Button>
-              </ButtonsContent>
-              <RequiredText>
-                *Title and content are required fields and must not be left
+            <ButtonsContent>
+              <Button
+                type="submit"
+                onClick={() => setSubmitType("draft")}
+              > Save as Draft
+              </Button>
+              <Button
+                type="submit"
+                onClick={() => setSubmitType("published")}
+              > Post
+              </Button>
+            </ButtonsContent>
+          </Form>
+          <RequiredText>
+                * Title and content are required fields and must not be left
                 blank.
               </RequiredText>
-            </Form>
-          </FormWrapper>
-        </Content>
-
-        <Footer>
-          <p>
-            © Altf4hub | Firskovvej 18 2800 Lyngby | CVR-nr. 10101010 | Tlf: 36
-            15 45 04 | Mail: turnering@altf4hub.dk
-          </p>
-        </Footer>
+        </FormWrapper>
       </Container>
 
       <PopUpMessage
