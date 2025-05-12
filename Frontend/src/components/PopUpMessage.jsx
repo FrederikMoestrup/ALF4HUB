@@ -1,5 +1,9 @@
-import React from "react";
-import { ModalOverlay, Modal, Button, Message } from "../styles/popUpMessageStyles";
+import {
+  ModalOverlay,
+  Modal,
+  Button,
+  Message,
+} from "../styles/popUpMessageStyles";
 
 const PopUpMessage = ({ isOpen, message, onClose, type }) => {
   if (!isOpen) return null;
@@ -7,9 +11,7 @@ const PopUpMessage = ({ isOpen, message, onClose, type }) => {
   return (
     <ModalOverlay>
       <Modal>
-        <Message type={type}>
-          {message}
-        </Message>
+        <Message type={type}>{message}</Message>
         <Button onClick={onClose}>Close</Button>
       </Modal>
     </ModalOverlay>

@@ -1,7 +1,6 @@
 package dat.entities;
 
 import dat.dtos.*;
-import dat.enums.Game;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -89,7 +88,7 @@ public class Team {
     }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-        if(tournamentTeams != null) {
+        if (tournamentTeams != null) {
             this.tournamentTeams = tournamentTeams;
             for (TournamentTeam tournamentTeam : tournamentTeams) {
                 tournamentTeam.setTeam(this);

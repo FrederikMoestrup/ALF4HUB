@@ -36,7 +36,7 @@ public class TournamentTeamDAO implements IDAO<TournamentTeamDTO, Integer> {
     }
 
     @Override
-    public List<TournamentTeamDTO> getAll(){
+    public List<TournamentTeamDTO> getAll() {
         try (EntityManager em = emf.createEntityManager()) {
             List<TournamentTeam> tournamentTeams = em.createQuery("SELECT t FROM TournamentTeam t", TournamentTeam.class).getResultList();
             return tournamentTeams.stream().map(TournamentTeamDTO::new).toList();

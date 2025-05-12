@@ -41,6 +41,13 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "email", length = 50, nullable = false)
+    private String email;
+
+    @Column(name = "strikes")
+    private int strikes = 0;
+
+
     //Relations
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -92,7 +99,14 @@ public class User implements Serializable, ISecurityUser {
         this.roles = roleEntityList;
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     public User(UserDTO dto) {
+        this.id = dto.getId();
         this.username = dto.getUsername();
         if (dto.getRoles() != null) {
             this.roles = dto.getRoles().stream()
@@ -187,6 +201,10 @@ public class User implements Serializable, ISecurityUser {
         }
     }
 
+    public void addStrike() {
+        this.strikes++;
+    }
+
     public void removeTeam(Team team) {
         if (team == null || !teams.contains(team)) {
             return;
@@ -195,7 +213,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
-        if(tournamentTeams != null) {
+        if (tournamentTeams != null) {
             this.tournamentTeams = tournamentTeams;
             for (TournamentTeam tournamentTeam : tournamentTeams) {
                 tournamentTeam.setTournamentTeamCaptain(this);
