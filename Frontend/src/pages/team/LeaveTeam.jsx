@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/LeaveTeam.css";
+import "./LeaveTeam.css";
 
 function LeaveTeam({ playerId: propPlayerId, teamId: propTeamId }) {
   const [showPopup, setShowPopup] = useState(false);
