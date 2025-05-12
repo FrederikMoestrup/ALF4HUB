@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { NavLink } from "react-router-dom";
+
 import {
   Container,
   ForumContent,
@@ -44,7 +46,10 @@ function ForumPage() {
         <ForumHeader>
           <ForumTitle>Forum</ForumTitle>
           <ButtonContainer>
-            <Button>Opret opslag</Button>
+            <NavLink to="/blog/create">
+              <Button>Opret opslag</Button>
+            </NavLink>
+
             <Button>Se dine opslag</Button>
           </ButtonContainer>
         </ForumHeader>
