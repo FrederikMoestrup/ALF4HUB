@@ -13,3 +13,8 @@ Michella har lavet:
 Sandra har lavet:  
 
 Ferdinand har lavet: Figma mock-up  til US-6  
+
+## DevTeamK
+Fred har lavet:
+
+Masih har lavet:
