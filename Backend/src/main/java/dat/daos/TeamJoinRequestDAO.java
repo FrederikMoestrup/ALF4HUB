@@ -64,6 +64,10 @@ public class TeamJoinRequestDAO {
                 throw new ApiException(404, "PlayerAccount not found");
             }
 
+            if (playerAccount.getTeams().contains(team)) {
+                throw new ApiException(400, "You are already a member of this team.");
+            }
+
             TeamJoinRequest teamJoinRequest = new TeamJoinRequest(requester, team, playerAccount);
 
             em.persist(teamJoinRequest);
