@@ -18,7 +18,7 @@ import {
   Button,
   RequiredText,
   Footer,
-} from "../../styles/createBlogPostStyles";
+} from "./styles/createBlogPostStyles";
 import {
   BlogCard,
   ButtonContainer,
@@ -27,7 +27,7 @@ import {
   SectionTitle,
   BlogSectionLeft,
   BlogSectionRight,
-} from "../../styles/blogPostFrontPageStyles";
+} from "./styles/blogPostFrontPageStyles";
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);

@@ -19,7 +19,7 @@ import {
   Button,
   RequiredText,
   Footer,
-} from "../../styles/createBlogPostStyles";
+} from "./styles/createBlogPostStyles";
 
 function CreateBlogPost() {
   const [title, setTitle] = useState("");
