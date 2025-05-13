@@ -14,21 +14,12 @@ import {
   BlogMeta,
   NoPostsMessage,
   LoadingSpinner,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  CloseButton,
 } from "./styles/ForumPage";
 
 function ForumPage() {
   const [blogPosts, setBlogPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedPost, setSelectedPost] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [loadingFullPost, setLoadingFullPost] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:7070/api/blogpost/preview")
@@ -48,33 +39,6 @@ function ForumPage() {
         setLoading(false);
       });
   }, []);
-
-  const handlePostClick = (postId) => {
-    setLoadingFullPost(true);
-    setShowModal(true);
-
-    fetch(`http://localhost:7070/api/blogpost/${postId}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch full blog post");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setSelectedPost(data);
-        setLoadingFullPost(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching full post:", err);
-        setError("Failed to load the full post. Please try again.");
-        setLoadingFullPost(false);
-      });
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setSelectedPost(null);
-  };
 
   return (
     <Container>
@@ -102,7 +66,7 @@ function ForumPage() {
           !error &&
           blogPosts.length > 0 &&
           blogPosts.map((post) => (
-            <BlogCard key={post.id} onClick={() => handlePostClick(post.id)}>
+            <BlogCard key={post.id}>
               <BlogTitle>{post.title}</BlogTitle>
               <BlogContent style={{ color: "white" }}>
                 {post.content}
@@ -114,47 +78,6 @@ function ForumPage() {
             </BlogCard>
           ))}
       </ForumContent>
-
-      {showModal && (
-        <ModalOverlay onClick={closeModal}>
-          <ModalContent onClick={(e) => e.stopPropagation()}>
-            <ModalHeader>
-              {loadingFullPost ? "Loading..." : selectedPost?.title}
-              <CloseButton onClick={closeModal}>×</CloseButton>
-            </ModalHeader>
-            <ModalBody>
-              {loadingFullPost ? (
-                <LoadingSpinner>Loading full post...</LoadingSpinner>
-              ) : (
-                <>
-                  <div>{selectedPost?.content}</div>
-                  <BlogMeta>
-                    <span>Posted on {selectedPost?.createdAt}</span>
-                    <span>Status: {selectedPost?.status}</span>
-                  </BlogMeta>
-                  {selectedPost?.comments &&
-                    selectedPost.comments.length > 0 && (
-                      <div className="comments-section">
-                        <h3>Comments</h3>
-                        {selectedPost.comments.map((comment, index) => (
-                          <div key={index} className="comment">
-                            <p>{comment.content}</p>
-                            <small>
-                              By {comment.author} on {comment.createdAt}
-                            </small>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                </>
-              )}
-            </ModalBody>
-            <ModalFooter>
-              <Button onClick={closeModal}>Close</Button>
-            </ModalFooter>
-          </ModalContent>
-        </ModalOverlay>
-      )}
     </Container>
   );
 }
