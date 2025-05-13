@@ -44,7 +44,7 @@ function CreateBlogPost() {
     const endpoint = submitType === "draft" ? "/blogpost/draft" : "/blogpost";
 
     const payload = {
-      userId: 1, // hardcoded until login works
+      userId: localStorage.getItem("userid"),
       title,
       content,
       status: submitType.toUpperCase(),
@@ -55,6 +55,7 @@ function CreateBlogPost() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(payload),
       });
