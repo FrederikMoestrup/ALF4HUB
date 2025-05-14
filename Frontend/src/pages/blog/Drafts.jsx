@@ -13,7 +13,8 @@ import {
   BlogContainer,
   SectionTitle,
   BlogSectionLeft,
-} from "./styles/blogPostFrontPageStyles";
+  AccentButton,
+} from "./styles/draftsPageStyles";
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);
@@ -41,8 +42,10 @@ function Drafts() {
   };
 
   useEffect(() => {
-    fetchDrafts();
+   fetchDrafts();
   }, []);
+
+  
 
   return (
     <>
@@ -75,6 +78,14 @@ function Drafts() {
                     <h3>{draft.title}</h3>
                     <p>{draft.content}</p>
                     <small>Posted on {draft.createdAt}</small>
+                     {/* 🔹  VIEW‑knappen  */}
+                     <AccentButton
+                      as={NavLink}
+                      to={`/draft/${draft.id}`}  // eller din detalje‑route
+                      style={{ alignSelf: "flex-end", marginTop: "0.75rem" }}
+                    >
+                    View
+                    </AccentButton>
                   </BlogCard>
                 ))}
               </ul>
