@@ -66,6 +66,12 @@ public class UserDTO {
         this.roles = roles;
     }
 
+    public UserDTO(int id, String username, Set<String> roles) {
+        this.id = id;
+        this.username = username;
+        this.roles = roles;
+    }
+
     public int hashCode() {
         return Objects.hash(new Object[]{this.username, this.roles});
     }
