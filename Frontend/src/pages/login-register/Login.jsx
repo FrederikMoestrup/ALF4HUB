@@ -24,7 +24,6 @@ const Login = () => {
 
       if (res.ok) {
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userid", data.userid)
         navigate("/");
       } else {
         setErrorMsg(data.msg || "Login fejlede");

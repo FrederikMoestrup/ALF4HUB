@@ -27,8 +27,9 @@ public class TokenSecurity implements ITokenSecurity {
         SignedJWT jwt = SignedJWT.parse(token);
         String roles = jwt.getJWTClaimsSet().getClaim("roles").toString();
         String username = jwt.getJWTClaimsSet().getClaim("username").toString();
+        String userid = jwt.getJWTClaimsSet().getClaim("userid").toString();
         Set<String> rolesSet = (Set)Arrays.stream(roles.split(",")).collect(Collectors.toSet());
-        return new UserDTO(username, rolesSet);
+        return new UserDTO(userid, username, rolesSet);
     }
 
     public boolean tokenIsValid(String token, String secret) throws ParseException, JOSEException {
