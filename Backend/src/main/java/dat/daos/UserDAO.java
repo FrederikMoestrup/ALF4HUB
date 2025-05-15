@@ -44,6 +44,18 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
         }
     }
 
+    public User getUserByUsername(String username) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+            return user;
+        }
+    }
+
     public UserDTO addStrike(Integer id) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();

@@ -71,6 +71,11 @@ public class User implements Serializable, ISecurityUser {
     @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     private List<BlogPost> blogPosts = new ArrayList<>();
 
+    //One user can have multiple notifications, but a notification belongs to one user
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<Notification> notifications = new ArrayList<>();
+
+
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {
             return null;
