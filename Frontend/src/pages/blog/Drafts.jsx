@@ -74,7 +74,7 @@ function Drafts() {
                   <BlogCard key={draft.id} Style="border-left: 5px solid red;">
                     <h3>{draft.title}</h3>
                     <p>{draft.content}</p>
-                    <small>Posted on {draft.createdAt}</small>
+                    <small>Saved on{draft.createdAt}</small>
                   </BlogCard>
                 ))}
               </ul>
