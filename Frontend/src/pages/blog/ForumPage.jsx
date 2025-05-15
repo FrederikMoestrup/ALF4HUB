@@ -51,6 +51,9 @@ function ForumPage() {
             </NavLink>
 
             <Button>Se dine opslag</Button>
+            <NavLink to="/blog/drafts">
+            <Button>Se dine kladder</Button>
+            </NavLink>
           </ButtonContainer>
         </ForumHeader>
 
