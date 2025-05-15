@@ -90,5 +90,79 @@ public class NotificationDAO implements IDAO <NotificationDTO, Integer>
         }
     }
 
+    public long countUnreadForUser(String username) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT COUNT(n) FROM Notification n WHERE n.user.username = :username AND n.isRead = false",
+                            Long.class
+                    )
+                    .setParameter("username", username)
+                    .getSingleResult();
+        }
+    }
+
+    public long getNotificationCountForUser(String username) {
+        try (EntityManager em = emf.createEntityManager()) {
+            return em.createQuery(
+                            "SELECT COUNT(n) FROM Notification n WHERE n.user.username = :username",
+                            Long.class
+                    )
+                    .setParameter("username", username)
+                    .getSingleResult();
+        }
+    }
+
+
+    public List<NotificationDTO> getAllForUser(String username) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Notification> list = em.createQuery(
+                    "SELECT n FROM Notification n WHERE n.user.username = :username ORDER BY n.createdAt DESC",
+                    Notification.class
+            ).setParameter("username", username).getResultList();
+
+            return list.stream().map(NotificationDTO::new).toList();
+        }
+    }
+
+    public NotificationDTO markAsRead(int id, String username) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Notification n = em.find(Notification.class, id);
+
+            if (n == null || !n.getUser().getUsername().equals(username)) {
+                throw new ApiException(404, "Notification not found or access denied");
+            }
+
+            n.setRead(true);
+            em.getTransaction().commit();
+            return new NotificationDTO(n);
+        }
+    }
+
+    public int markAllAsRead(String username) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            List<Notification> notifs = em.createQuery(
+                            "SELECT n FROM Notification n WHERE n.user.username = :username AND n.isRead = false", Notification.class
+                    )
+                    .setParameter("username", username)
+                    .getResultList();
+
+            for (Notification n : notifs) {
+                n.setRead(true);
+            }
+
+            em.getTransaction().commit();
+            return notifs.size();
+        }
+    }
+
+
+
+
+
+
+
 }
 

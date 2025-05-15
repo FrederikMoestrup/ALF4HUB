@@ -247,3 +247,52 @@ Authorization: Bearer {{jwt_token}}
 
 DELETE http://localhost:7070/api/team-join-requests/1
 Authorization: Bearer {{jwt_token}}
+
+###
+
+
+//Notifications
+
+
+
+# Her opretter vi en notifikation for brugeren der er logget ind
+POST http://localhost:7070/api/notifications
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "notificationType": "INVITATION",
+  "notificationTitle": "Du er blevet inviteret til holdet",
+  "read": false,
+  "link": "/teams/1",
+  "teamId": 1,
+  "invitationId": 42,
+  "senderId": 1001
+}
+
+###
+
+# Her henter vi alle notifikationer for brugeren der er logget ind
+GET http://localhost:7070/api/notifications
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+###
+
+# Her markérer vi en notifikation som læst
+PUT http://localhost:7070/api/notifications/1/read
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+###
+
+### Marker alle notifikationer som læst
+PUT http://localhost:7070/api/notifications/markallasread
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+
+
+
+
+
