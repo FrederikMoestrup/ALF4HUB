@@ -13,7 +13,7 @@ import {
   BlogContainer,
   SectionTitle,
   BlogSectionLeft,
-} from "./styles/blogPostFrontPageStyles";
+} from "./styles/draftsPageStyles";
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);
