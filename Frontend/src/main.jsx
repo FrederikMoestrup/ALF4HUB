@@ -13,6 +13,7 @@ import CreateBlogPost from "./pages/blog/CreateBlogPost.jsx";
 import Drafts from "./pages/blog/Drafts.jsx";
 import EditBlogPost from "./pages/blog/EditBlogPost.jsx";
 import ReadBlogPost from "./pages/blog/ReadBlogPost.jsx";
+import ForumPage from "./pages/blog/ForumPage.jsx";
 
 import TeamDashBoard from "./pages/teamDashboard/TeamDashBoard.jsx";
 import LeaveTeam from "./pages/team/LeaveTeam.jsx";
@@ -51,7 +52,10 @@ const RootComponent = () => (
         <Route path="/" element={<Homepage />} />
 
         <Route path="/tournaments" element={<TournamentOverview />} />
-        <Route path="/tournaments/game/:gameName" element={<ViewTournamentsByGame />} />
+        <Route
+          path="/tournaments/game/:gameName"
+          element={<ViewTournamentsByGame />}
+        />
         <Route path="/tournaments/create" element={<CreateTournament />} />
         <Route path="/tournaments/join" element={<JoinTournament />} />
         <Route path="/my-tournaments" element={<MyTournaments />} />
@@ -65,6 +69,7 @@ const RootComponent = () => (
 
         <Route path="/blog/posts" element={<BlogPostFrontPage />} />
         <Route path="/blog/create" element={<CreateBlogPost />} />
+        <Route path="/blog/forum" element={<ForumPage />}></Route>
         <Route path="/blog/drafts" element={<Drafts />} />
         <Route path="/blog/:postId" element={<ReadBlogPost />} />
         <Route path="/blog/:postId/edit" element={<EditBlogPost />} />

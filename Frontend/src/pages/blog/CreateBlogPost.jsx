@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PopUpMessage from "../../components/PopUpMessage";
-import { 
+import {
   Container,
   TitleWrapper,
   Title,
@@ -12,7 +12,7 @@ import {
   ButtonsContent,
   Button,
   RequiredText,
- } from "./styles/createBlogPostStyles";
+} from "./styles/createBlogPostStyles";
 import GlobalStyle from "../../styles/GlobalStyles";
 
 function CreateBlogPost() {
@@ -78,7 +78,7 @@ function CreateBlogPost() {
 
   return (
     <>
-      <GlobalStyle/>
+      <GlobalStyle />
       <Container>
         <TitleWrapper>
           <Title>Create A New Blog Post</Title>
@@ -102,22 +102,19 @@ function CreateBlogPost() {
             />
 
             <ButtonsContent>
-              <Button
-                type="submit"
-                onClick={() => setSubmitType("draft")}
-              > Save as Draft
+              <Button type="submit" onClick={() => setSubmitType("draft")}>
+                {" "}
+                Save as Draft
               </Button>
-              <Button
-                type="submit"
-                onClick={() => setSubmitType("published")}
-              > Post
+              <Button type="submit" onClick={() => setSubmitType("published")}>
+                {" "}
+                Post
               </Button>
             </ButtonsContent>
           </Form>
           <RequiredText>
-                * Title and content are required fields and must not be left
-                blank.
-              </RequiredText>
+            * Title and content are required fields and must not be left blank.
+          </RequiredText>
         </FormWrapper>
       </Container>
 
