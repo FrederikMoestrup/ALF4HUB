@@ -27,8 +27,9 @@ public class TokenSecurity implements ITokenSecurity {
         SignedJWT jwt = SignedJWT.parse(token);
         String roles = jwt.getJWTClaimsSet().getClaim("roles").toString();
         String username = jwt.getJWTClaimsSet().getClaim("username").toString();
+        String userid = jwt.getJWTClaimsSet().getClaim("userid").toString();
         Set<String> rolesSet = (Set)Arrays.stream(roles.split(",")).collect(Collectors.toSet());
-        return new UserDTO(username, rolesSet);
+        return new UserDTO(userid, username, rolesSet);
     }
 
     public boolean tokenIsValid(String token, String secret) throws ParseException, JOSEException {
@@ -47,7 +48,7 @@ public class TokenSecurity implements ITokenSecurity {
 
     public String createToken(UserDTO user, String ISSUER, String TOKEN_EXPIRE_TIME, String SECRET_KEY) throws TokenCreationException {
         try {
-            JWTClaimsSet claimsSet = (new JWTClaimsSet.Builder()).subject(user.getUsername()).issuer(ISSUER).claim("username", user.getUsername()).claim("roles", user.getRoles().stream().reduce((s1, s2) -> {
+            JWTClaimsSet claimsSet = (new JWTClaimsSet.Builder()).subject(user.getUsername()).issuer(ISSUER).claim("userid", user.getId()).claim("username", user.getUsername()).claim("roles", user.getRoles().stream().reduce((s1, s2) -> {
                 return s1 + "," + s2;
             }).get()).expirationTime(new Date((new Date()).getTime() + (long)Integer.parseInt(TOKEN_EXPIRE_TIME))).build();
             Payload payload = new Payload(claimsSet.toJSONObject());

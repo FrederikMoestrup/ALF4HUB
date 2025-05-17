@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import playerApi from '../util/apiFacade';
-import AddPlayerButton from './AddPlayerButton';
+import { useState, useEffect } from "react";
+import styled from "styled-components";
+import playerApi from "../../../util/apiFacade";
+import AddPlayerButton from "./AddPlayerButton";
 
 const Overlay = styled.div`
   position: fixed;
@@ -84,11 +84,11 @@ const UserItem = styled.div`
 `;
 
 const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [players, setPlayers] = useState([]);
   const [filteredPlayers, setFilteredPlayers] = useState([]);
-  const [teamPlayers, setTeamPlayers] = useState([]); 
+  const [teamPlayers, setTeamPlayers] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -97,21 +97,18 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
       setError(null);
 
       try {
-        
         const playerData = await playerApi.searchPlayers();
         setPlayers(playerData || []);
         setFilteredPlayers(playerData || []);
 
-        
         const teamData = await playerApi.getAllTeams();
-        const team = teamData.find(t => t.id === teamId);
+        const team = teamData.find((t) => t.id === teamId);
         if (team && team.teamAccounts) {
           setTeamPlayers(team.teamAccounts);
         }
-
       } catch (err) {
-        console.error('Error fetching players or team:', err);
-        setError('Failed to fetch player accounts or team data');
+        console.error("Error fetching players or team:", err);
+        setError("Failed to fetch player accounts or team data");
       } finally {
         setLoading(false);
       }
@@ -122,13 +119,19 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
 
   useEffect(() => {
     if (!searchTerm) {
-      setFilteredPlayers(players.filter(player => 
-        !teamPlayers.some(teamPlayer => teamPlayer.id === player.id)
-      ));
+      setFilteredPlayers(
+        players.filter(
+          (player) =>
+            !teamPlayers.some((teamPlayer) => teamPlayer.id === player.id)
+        )
+      );
     } else {
-      const filtered = players.filter(player =>
-        player.playerAccountName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        !teamPlayers.some(teamPlayer => teamPlayer.id === player.id) 
+      const filtered = players.filter(
+        (player) =>
+          player.playerAccountName
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) &&
+          !teamPlayers.some((teamPlayer) => teamPlayer.id === player.id)
       );
       setFilteredPlayers(filtered);
     }
@@ -148,19 +151,21 @@ const PlayerSearchPopup = ({ onClose, onSelectPlayer, teamId }) => {
         {loading ? (
           <p>Loading players...</p>
         ) : error ? (
-          <p style={{ color: 'red' }}>{error}</p>
+          <p style={{ color: "red" }}>{error}</p>
         ) : (
           <UserListContainer>
             {filteredPlayers.length > 0 ? (
               filteredPlayers.map((player) => (
                 <UserItem key={player.id}>
-                  <div>{player.playerAccountName} (Rank: {player.rank || 'N/A'})</div>
+                  <div>
+                    {player.playerAccountName} (Rank: {player.rank || "N/A"})
+                  </div>
                   <AddPlayerButton
                     playerAccount={player}
                     teamId={teamId}
                     onSuccess={() => {
                       onSelectPlayer(player);
-                      onClose(); 
+                      onClose();
                     }}
                   />
                 </UserItem>

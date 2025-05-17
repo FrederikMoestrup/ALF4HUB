@@ -41,12 +41,12 @@ public class SecurityDAO implements ISecurityDAO {
             user.getRoles().size(); // force roles to be fetched from db
             if (!user.verifyPassword(password))
                 throw new ValidationException("Wrong password");
-            return new UserDTO(user.getUsername(), user.getRoles().stream().map(r -> r.getRoleName()).collect(Collectors.toSet()));
+            return new UserDTO(user.getId(), user.getUsername(), user.getRoles().stream().map(r -> r.getRoleName()).collect(Collectors.toSet()));
         }
     }
 
     @Override
-    public User createUser(String username, String password) {
+    public User createUser(String username, String password, String email) {
         try (EntityManager em = getEntityManager()) {
             List<User> users = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", username).getResultList();
 
@@ -55,6 +55,7 @@ public class SecurityDAO implements ISecurityDAO {
             }
 
             User userEntity = new User(username, password);
+            userEntity.setEmail(email);
             em.getTransaction().begin();
             Role userRole = em.find(Role.class, "user");
 

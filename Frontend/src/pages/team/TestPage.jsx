@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import PlayerSearchPopup from '../components/PlayerSearchPopup';
+import React, { useState } from "react";
+import PlayerSearchPopup from "../teamDashboard/components/PlayerSearchPopup";
 
 const TestPage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -10,7 +10,7 @@ const TestPage = () => {
 
   const handleSelectPlayer = (player) => {
     setSelectedPlayer(player);
-    console.log('Selected player:', player);
+    console.log("Selected player:", player);
     closePopup();
   };
 
