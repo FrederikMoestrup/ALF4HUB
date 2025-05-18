@@ -2,6 +2,7 @@ package dat.dtos;
 
 import dat.entities.User;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserDTO {
 
     private int id;
@@ -60,6 +62,12 @@ public class UserDTO {
     }
 
     public UserDTO(String username, Set<String> roles) {
+        this.username = username;
+        this.roles = roles;
+    }
+
+    public UserDTO(int id, String username, Set<String> roles) {
+        this.id = id;
         this.username = username;
         this.roles = roles;
     }

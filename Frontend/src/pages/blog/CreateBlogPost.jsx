@@ -19,7 +19,8 @@ import {
   Button,
   RequiredText,
   Footer,
-} from "../../styles/createBlogPostStyles";
+} from "./styles/createBlogPostStyles";
+import apiFacade from "../../util/apiFacade";
 
 function CreateBlogPost() {
   const [title, setTitle] = useState("");
@@ -42,9 +43,10 @@ function CreateBlogPost() {
     }
 
     const endpoint = submitType === "draft" ? "/blogpost/draft" : "/blogpost";
+    const userId = await apiFacade.getUserId();
 
     const payload = {
-      userId: 1, // hardcoded until login works
+      userId,
       title,
       content,
       status: submitType.toUpperCase(),
@@ -55,6 +57,7 @@ function CreateBlogPost() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token")}`
         },
         body: JSON.stringify(payload),
       });

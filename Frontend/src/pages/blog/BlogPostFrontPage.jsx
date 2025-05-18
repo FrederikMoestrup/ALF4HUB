@@ -17,7 +17,7 @@ import {
   BlogSectionRight,
   Button,
   Footer,
-} from "../../styles/blogPostFrontPageStyles";
+} from "./styles/blogPostFrontPageStyles";
 
 function BlogPostFrontPage() {
   const [blogPosts, setBlogPosts] = useState([]);
