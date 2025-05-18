@@ -56,19 +56,7 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
         }
     }
 
-    public UserDTO addStrike(Integer id) throws ApiException {
-        try (EntityManager em = emf.createEntityManager()) {
-            em.getTransaction().begin();
-            User user = em.find(User.class, id);
-            if (user == null) {
-                throw new ApiException(404, "User not found");
-            }
-            user.addStrike();
-            em.merge(user);
-            em.getTransaction().commit();
-            return new UserDTO(user);
-        }
-    }
+
 
 
     //Husk SecurityDAO har create. Pas på med delete og update. Måske skal getAll bruges?
