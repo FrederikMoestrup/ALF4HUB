@@ -133,6 +133,7 @@ const getNotificationCountForUser = async () => {
   }
 };
 
+
 const getUnreadNotificationCount = async () => {  
   try {
     const response = await fetchWithAuth('/notifications/unread-count');    
@@ -142,6 +143,7 @@ const getUnreadNotificationCount = async () => {
     throw error;
   }
 };
+
 
 const getAllNotifications = async () => {  
   try {
@@ -153,6 +155,7 @@ const getAllNotifications = async () => {
   }
 };
 
+
 const markNotificationAsRead = async (id) => {  
   try {
     const response = await fetchWithAuth(`/notifications/${id}/read`, "PUT");    
@@ -163,6 +166,7 @@ const markNotificationAsRead = async (id) => {
   }
 };
 
+
 const markAllNotificationsAsRead = async () => { 
   try {
     const response = await fetchWithAuth('/notifications/markallasread', "PUT");   
@@ -171,7 +175,8 @@ const markAllNotificationsAsRead = async () => {
     console.error("Fejl ved markering af alle notifikationer:", error);
     throw error;
   }
-};
+}; 
+
 
 const apiFacade = {
   setToken,
