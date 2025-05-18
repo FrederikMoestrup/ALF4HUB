@@ -96,6 +96,10 @@ const apiFacade = {
       throw error;
     }
   },
+
+  getCurrentUser: () => {
+    return JSON.parse(localStorage.getItem("user"));
+  }
 };
 
 export default apiFacade;
