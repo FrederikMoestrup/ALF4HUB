@@ -7,7 +7,6 @@ POST http://localhost:7070/api/auth/register/
 {
     "username": "user",
     "password": "test123"
-    "email": "test@test"
 }
 
 ###
@@ -218,7 +217,7 @@ Authorization: Bearer {{jwt_token}}
 
 //Notifications
 
-
+###
 
 # Her opretter vi en notifikation for brugeren der er logget ind
 POST http://localhost:7070/api/notifications
