@@ -7,6 +7,7 @@ POST http://localhost:7070/api/auth/register/
 {
     "username": "user",
     "password": "test123"
+    "email": "test@test"
 }
 
 ###
