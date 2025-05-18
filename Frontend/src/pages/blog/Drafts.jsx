@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
+import apiFacade from "../../util/apiFacade.js"
 import {
   GlobalStyle,
   Container,
@@ -17,7 +18,7 @@ import {
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);
-  const userId = 1; // hardcoded until login works
+  const userId = apiFacade.getCurrentUser()?.id;
 
   const fetchDrafts = async () => {
     try {
@@ -41,8 +42,10 @@ function Drafts() {
   };
 
   useEffect(() => {
+    if(userId) {
     fetchDrafts();
-  }, []);
+    }
+  }, [userId]);
 
   return (
     <>
