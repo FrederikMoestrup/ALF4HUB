@@ -18,7 +18,7 @@ import {
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);
-  const userId = apiFacade.getCurrentUser()?.id;
+  const userId = apiFacade.getUserId();
 
   const fetchDrafts = async () => {
     try {
