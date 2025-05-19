@@ -22,23 +22,35 @@ function ForumPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:7070/api/blogpost/preview")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch blog posts");
-        }
+  fetch("http://localhost:7070/api/blogpost/preview")
+    .then(async (res) => {
+      if (!res.ok) {
+        throw new Error("Failed to fetch blog posts");
+      }
+
+      const contentType = res.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
         return res.json();
-      })
-      .then((data) => {
-        setBlogPosts(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error:", err);
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+      } else {
+        const text = await res.text();
+        if (text === "No blog posts with content preview found") {
+          return [];
+        } else {
+          throw new Error("Unexpected response format");
+        }
+      }
+    })
+    .then((data) => {
+      setBlogPosts(data);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error("Error:", err);
+      setError(err.message);
+      setLoading(false);
+    });
+}, []);
 
   return (
     <Container>
