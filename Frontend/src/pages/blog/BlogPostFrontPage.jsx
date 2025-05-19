@@ -23,7 +23,7 @@ function BlogPostFrontPage() {
   const [blogPosts, setBlogPosts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:7070/api/blogpost/preview")
+    fetch("http://localhost:7071/api/blogpost/preview")
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch blog posts");
@@ -79,9 +79,18 @@ function BlogPostFrontPage() {
               ) : (
                 blogPosts.map((post) => (
                   <BlogCard key={post.id}>
-                    <h3>{post.title}</h3>
-                    <p>{post.content}</p>
-                    <small>Posted on {post.createdAt}</small>
+                    <NavLink
+                      to={`/blog/${post.id}`}
+                      style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                      <h3>{post.title}</h3>
+                      <p>
+                        {post.content.length > 100
+                          ? post.content.substring(0, 100) + "..."
+                          : post.content}
+                      </p>
+                     <small>Posted on {post.createdAt}</small>
+                    </NavLink>
                   </BlogCard>
                 ))
               )}
