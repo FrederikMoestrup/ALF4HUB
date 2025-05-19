@@ -8,7 +8,6 @@ import Navbar from "./components/Navbar.jsx";
 import GlobalStyle from "./styles/GlobalStyles.js";
 import Homepage from "./pages/Homepage.jsx";
 
-import BlogPostFrontPage from "./pages/blog/BlogPostFrontPage.jsx";
 import CreateBlogPost from "./pages/blog/CreateBlogPost.jsx";
 import Drafts from "./pages/blog/Drafts.jsx";
 import EditBlogPost from "./pages/blog/EditBlogPost.jsx";
@@ -67,7 +66,6 @@ const RootComponent = () => (
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
-        <Route path="/blog/posts" element={<BlogPostFrontPage />} />
         <Route path="/blog/create" element={<CreateBlogPost />} />
         <Route path="/blog/forum" element={<ForumPage />}></Route>
         <Route path="/blog/drafts" element={<Drafts />} />
