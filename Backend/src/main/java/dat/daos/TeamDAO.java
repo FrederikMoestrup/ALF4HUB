@@ -3,6 +3,7 @@ package dat.daos;
 import dat.dtos.TeamDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
+import dat.entities.TournamentTeam;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -76,7 +77,15 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
             if (team == null) {
                 throw new ApiException(404, "Team not found");
             }
-            team.detachFromAllTournamentTeams();
+            // Remove all associations with PlayerAccounts
+            for (PlayerAccount playerAccount : team.getTeamAccounts()) {
+                team.removePlayerAccount(playerAccount);
+            }
+            // Remove all associations with TournamentTeams
+            for (TournamentTeam tournamentTeam : team.getTournamentTeams()) {
+                team.removeTournamentTeam(tournamentTeam);
+            }
+            // Remove the team
             em.remove(team);
             em.getTransaction().commit();
             return new TeamDTO(team);
