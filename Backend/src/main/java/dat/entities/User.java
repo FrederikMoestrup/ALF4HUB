@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class User implements Serializable, ISecurityUser {
 
     @Serial
@@ -34,27 +35,41 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "username", length = 25)
+    @Column(name = "username", length = 25, nullable = false, unique = true)
     private String username;
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+
+    @Column(name = "email", length = 50, nullable = false)
+    private String email;
+
+    @Column(name = "strikes")
+    private int strikes = 0;
+
 
     //Relations
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<PlayerAccount> playerAccounts = new ArrayList<>();
 
     //As a host
-    @OneToMany(mappedBy = "host", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Tournament> tournaments = new ArrayList<>();;
+    @OneToMany(mappedBy = "host", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Tournament> tournaments = new ArrayList<>();
 
     //As a team captain
-    @OneToMany(mappedBy = "teamCaptain", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    private List<Team> teams = new ArrayList<>();;
+    @OneToMany(mappedBy = "teamCaptain", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<Team> teams = new ArrayList<>();
+
+    @OneToMany(mappedBy = "tournamentTeamCaptain", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
+
+    //One user can have multiple blogposts, but a blogpost belongs to one user
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+    private List<BlogPost> blogPosts = new ArrayList<>();
 
     public Set<String> getRolesAsStrings() {
         if (roles.isEmpty()) {
@@ -84,7 +99,14 @@ public class User implements Serializable, ISecurityUser {
         this.roles = roleEntityList;
     }
 
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     public User(UserDTO dto) {
+        this.id = dto.getId();
         this.username = dto.getUsername();
         if (dto.getRoles() != null) {
             this.roles = dto.getRoles().stream()
@@ -104,6 +126,11 @@ public class User implements Serializable, ISecurityUser {
         if (dto.getTeams() != null) {
             setTeams(dto.getTeams().stream()
                     .map(Team::new)
+                    .collect(Collectors.toList()));
+        }
+        if (dto.getTournamentTeams() != null) {
+            setTournamentTeams(dto.getTournamentTeams().stream()
+                    .map(TournamentTeam::new)
                     .collect(Collectors.toList()));
         }
     }
@@ -173,6 +200,58 @@ public class User implements Serializable, ISecurityUser {
             team.setTeamCaptain(this);
         }
     }
+
+    public void addStrike() {
+        this.strikes++;
+    }
+
+    public void removeTeam(Team team) {
+        if (team == null || !teams.contains(team)) {
+            return;
+        }
+        teams.remove(team);
+    }
+
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if (tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTournamentTeamCaptain(this);
+            }
+        }
+    }
+
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTournamentTeamCaptain(this);
+        }
+    }
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+    }
+
+    public void setBlogPosts(List<BlogPost> blogPosts) {
+        if(blogPosts != null) {
+            this.blogPosts = blogPosts;
+            for (BlogPost blogPost : blogPosts) {
+                blogPost.setUser(this);
+            }
+        }
+    }
+
+    public void addBlogPost(BlogPost blogPost) {
+        if (blogPost != null && !blogPosts.contains(blogPost)) {
+            this.blogPosts.add(blogPost);
+            blogPost.setUser(this);
+        }
+    }
+
+
 
 }
 

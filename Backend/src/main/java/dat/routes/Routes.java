@@ -10,7 +10,6 @@ public class Routes {
     private final TeamRoute teamRoute = new TeamRoute();
     private final PlayerAccountRoute playerAccountRoute = new PlayerAccountRoute();
     private final TournamentRoute tournamentRoute = new TournamentRoute();
-    private final BlogRoute blogRoute = new BlogRoute();
 
     public EndpointGroup getRoutes() {
         return () -> {
@@ -18,7 +17,6 @@ public class Routes {
             path("/teams", teamRoute.getRoutes());
             path("/player-accounts", playerAccountRoute.getRoutes());
             path("/tournaments", tournamentRoute.getRoutes());
-            path("/blogposts", blogRoute.getRoutes());
         };
     }
 }

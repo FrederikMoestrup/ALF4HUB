@@ -2,6 +2,7 @@ package dat.entities;
 
 import dat.dtos.*;
 import dat.enums.Game;
+import dat.enums.TournamentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -52,8 +53,9 @@ public class Tournament {
     private String entryRequirements;
 
     @Setter
-    @Column(name = "status", nullable = false)
-    private String status;
+    @Column(name = "tournament_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TournamentStatus tournamentStatus;
 
     @Setter
     @Column(name = "start_date", nullable = false)
@@ -71,19 +73,17 @@ public class Tournament {
     @Column(name = "end_time", nullable = false)
     private String endTime;
 
-
-
     //Relations
-    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private List<Team> teams;
+    @OneToMany(mappedBy = "tournament", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
     @Setter
     @ManyToOne
-    @JoinColumn(name = "host_id")
+    @JoinColumn(name = "host_id", nullable = false)
     private User host;
 
     public Tournament(String tournamentName, Game game, int tournamentSize, int teamSize, double prizePool,
-                      String rules, String entryRequirements, String status,
+                      String rules, String entryRequirements, TournamentStatus tournamentStatus,
                       String startDate, String startTime, String endDate, String endTime, User host) {
         this.tournamentName = tournamentName;
         this.game = game;
@@ -92,12 +92,11 @@ public class Tournament {
         this.prizePool = prizePool;
         this.rules = rules;
         this.entryRequirements = entryRequirements;
-        this.status = status;
+        this.tournamentStatus = tournamentStatus;
         this.startDate = startDate;
         this.startTime = startTime;
         this.endDate = endDate;
         this.endTime = endTime;
-        this.teams = new ArrayList<>();
         this.host = host;
     }
 
@@ -112,7 +111,7 @@ public class Tournament {
         this.prizePool = tournamentDTO.getPrizePool();
         this.rules = tournamentDTO.getRules();
         this.entryRequirements = tournamentDTO.getEntryRequirements();
-        this.status = tournamentDTO.getStatus();
+        this.tournamentStatus = tournamentDTO.getTournamentStatus();
         this.startDate = tournamentDTO.getStartDate();
         this.startTime = tournamentDTO.getStartTime();
         this.endDate = tournamentDTO.getEndDate();
@@ -123,28 +122,36 @@ public class Tournament {
             this.host.addTournament(this);
         }
 
-        this.teams = new ArrayList<>();
-        if(tournamentDTO.getTeams() != null){
-            setTeams(tournamentDTO.getTeams().stream()
-                    .map(Team::new)
+        if (tournamentDTO.getTournamentTeams() != null) {
+            setTournamentTeams(tournamentDTO.getTournamentTeams().stream()
+                    .map(TournamentTeam::new)
                     .collect(Collectors.toList()));
         }
+
     }
 
-    public void setTeams(List<Team> teams) {
-        if(teams != null) {
-            this.teams = teams;
-            for (Team team : teams) {
-                team.setTournament(this);
+    public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
+        if (tournamentTeams != null) {
+            this.tournamentTeams = tournamentTeams;
+            for (TournamentTeam tournamentTeam : tournamentTeams) {
+                tournamentTeam.setTournament(this);
             }
         }
     }
 
-    public void addTeam(Team team) {
-        if (team != null && !teams.contains(team)) {
-            this.teams.add(team);
-            team.setTournament(this);
+    public void addTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam != null && !tournamentTeams.contains(tournamentTeam)) {
+            this.tournamentTeams.add(tournamentTeam);
+            tournamentTeam.setTournament(this);
         }
+    }
+
+    public void removeTournamentTeam(TournamentTeam tournamentTeam) {
+        if (tournamentTeam == null || !tournamentTeams.contains(tournamentTeam)) {
+            return;
+        }
+        tournamentTeams.remove(tournamentTeam);
+        tournamentTeam.setTournament(null);
     }
 
 }
