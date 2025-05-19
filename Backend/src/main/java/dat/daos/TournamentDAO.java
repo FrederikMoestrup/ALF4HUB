@@ -95,4 +95,17 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
         }
     }
 
+    public boolean nameExists(String name) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<String> existingNames = em
+                    .createQuery("SELECT t.tournamentName FROM Tournament t", String.class)
+                    .getResultList();
+
+            return existingNames.stream()
+                    .anyMatch(existing -> existing.equalsIgnoreCase(name));
+        }
+    }
+
+
+
 }

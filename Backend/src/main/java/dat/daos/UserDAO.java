@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
-public class UserDAO implements IDAO<UserDTO, Integer> {
+public class UserDAO{
 
     private static UserDAO instance;
     private static EntityManagerFactory emf;
@@ -41,6 +41,18 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
                 throw new ApiException(404, "User not found");
             }
             return new UserDTO(user);
+        }
+    }
+
+    public User getUserByUsername(String username) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+            return user;
         }
     }
 
