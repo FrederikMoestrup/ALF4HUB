@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1f73455e-446d-4a93-be2d-58ee9a2fcb20" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/enums/ProfanityWords.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/main/java/service/ProfanityFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/resources/features/profanity_filter.feature" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/runner/RunCucumberTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/service/ProfanityFilterBlogCucumberTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/test/java/service/ProfanityFilterTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/enums/BlogPostStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/enums/BlogPostStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/controllers/BlogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/controllers/BlogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/daos/BlogPostDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/daos/BlogPostDAO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,12 +36,12 @@
     &quot;assignee&quot;: &quot;afstengaard&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/FrederikMoestrup/ALF4HUB.git",
-    "accountId": "d08c87fa-b52c-4ee1-ac42-de0b00ce6d9f"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/FrederikMoestrup/ALF4HUB.git&quot;,
+    &quot;accountId&quot;: &quot;d08c87fa-b52c-4ee1-ac42-de0b00ce6d9f&quot;
   }
-}]]></component>
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -68,7 +61,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
     "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
-    "git-widget-placeholder": "Team__D__CodeMerge",
+    "git-widget-placeholder": "devTeamD",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -161,7 +154,6 @@
         <item itemvalue="JUnit.ProfanityFilterTest" />
         <item itemvalue="JUnit.BlogPostDAOTest" />
         <item itemvalue="JUnit.RunCucumberTest" />
-        <item itemvalue="JUnit.RunCucumberTest (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -183,6 +175,7 @@
       <updated>1746340579869</updated>
       <workItem from="1746340582735" duration="846000" />
       <workItem from="1746817660182" duration="1767000" />
+      <workItem from="1747641911911" duration="320000" />
     </task>
     <servers />
   </component>

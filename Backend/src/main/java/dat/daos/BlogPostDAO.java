@@ -6,7 +6,6 @@ import dat.entities.User;
 import dat.enums.BlogPostStatus;
 import dat.exceptions.ApiException;
 import jakarta.persistence.*;
-import org.hibernate.ObjectNotFoundException;
 
 import java.util.List;
 
@@ -113,7 +112,6 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         }
     }
 
-
     @Override
     public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
@@ -138,7 +136,6 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             throw new ApiException(500, "Noget gik galt under opdateringen. Prøv igen senere");
         }
     }
-
 
     @Override
     public BlogPostDTO delete(Long id) throws ApiException {
@@ -165,8 +162,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             throw new ApiException(500, "Noget gik galt under sletningen. Prøv igen.");
         }
     }
+
+
+
 }
-
-
-
-
