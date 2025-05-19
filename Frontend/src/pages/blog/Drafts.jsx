@@ -51,22 +51,7 @@ function Drafts() {
     <>
       <GlobalStyle />
       <Container>
-        <Navbar>
-          <HomeButton>
-            <a href="/">Home</a>
-          </HomeButton>
-
-          <NavLinks>
-            <NavLink to="/teams">Teams</NavLink>
-            <NavLink to="/tournaments">Tournaments</NavLink>
-            <NavLink to="/blogposts">Blog</NavLink>
-          </NavLinks>
-
-          <ProfileButton>
-            <a href="/">Profile</a>
-          </ProfileButton>
-        </Navbar>
-
+    
         <Content>
           <BlogContainer>
             <BlogSectionLeft>
