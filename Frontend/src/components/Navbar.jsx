@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import "../styles/Navbar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHome, faUser, faBell } from "@fortawesome/free-solid-svg-icons";
-import apiFacade from "../util/apiFacade";
+import apiFacade from "./notifications_apiFacade.js";
 import styled from "styled-components";
 
 const LogoutButton = styled.button`
