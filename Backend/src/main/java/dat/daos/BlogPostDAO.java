@@ -50,8 +50,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
 
     public List<BlogPostDTO> getDraftByUserId(int userId) {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.getDraftsByUserId", BlogPost.class);
-            query.setParameter("userId", userId);
+            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.getDraftsByUserId", BlogPost.class).setParameter("userId", userId);
             List<BlogPost> blogPosts = query.getResultList();
 
             return blogPosts.stream().map(BlogPostDTO::new).toList();
