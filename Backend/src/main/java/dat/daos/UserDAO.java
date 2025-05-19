@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
 
-public class UserDAO{
+public class UserDAO implements IDAO<UserDTO, Integer>{
 
     private static UserDAO instance;
     private static EntityManagerFactory emf;
