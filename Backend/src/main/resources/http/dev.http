@@ -271,3 +271,6 @@ Authorization: Bearer {{jwt_token}}
   "title": "LOL new patch",
   "content": "Weird new patch h"
 }
+
+###
+GET http://localhost:7070/api/blogpost/draft/1

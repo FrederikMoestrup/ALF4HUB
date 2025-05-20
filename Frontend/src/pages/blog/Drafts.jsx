@@ -18,7 +18,9 @@ import {
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);
-  const userId = apiFacade.getCurrentUser()?.id;
+  // const userId = apiFacade.getCurrentUser()?.id;
+  // hardcoded value for test
+  const userId = 1;
 
   const fetchDrafts = async () => {
     try {
@@ -42,11 +44,12 @@ function Drafts() {
   };
 
   useEffect(() => {
-    if(userId) {
-    fetchDrafts();
-    }
-  }, [userId]);
+    if (userId) {
 
+      fetchDrafts();
+    } 
+  }, [userId]);
+  
   return (
     <>
       <GlobalStyle />
