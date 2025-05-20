@@ -259,3 +259,15 @@ Authorization: Bearer {{jwt_token}}
   "title": "LOL Update Discussion",
   "content": "What do u think of the new update?."
 }
+
+###
+
+POST http://localhost:7070/api/blogpost/draft/
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "userId": 1,
+  "title": "LOL new patch",
+  "content": "Weird new patch h"
+}
