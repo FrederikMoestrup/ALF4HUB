@@ -5,6 +5,7 @@ import dat.daos.BlogPostDAO;
 import dat.dtos.BlogPostDTO;
 import dat.exceptions.ApiException;
 import dat.service.BlogPostService;
+import dat.utils.ProfanityFilter;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
@@ -122,4 +123,27 @@ public class BlogController {
             ctx.status(500).result("Internal server error: " + e.getMessage());
         }
     }
+
+    public void getValidatedDraft(Context ctx) throws ApiException {
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            BlogPostDTO blogPostDTO = blogPostDAO.getById((long) id);
+
+            if (blogPostDTO == null) {
+                throw new ApiException(404, "BlogPost not found");
+            }
+
+            BlogPostDTO validatedDraft = ProfanityFilter.returnCensoredBlogPost(blogPostDTO);
+
+            ctx.res().setStatus(200);
+            ctx.json(validatedDraft, BlogPostDTO.class);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Missing or invalid parameter: id");
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, "BlogPost not found");
+        } catch (Exception e) {
+            throw new ApiException(500, "Internal server error");
+        }
+    }
+
 }
