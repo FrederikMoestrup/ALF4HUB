@@ -126,21 +126,12 @@ public class BlogController {
 
     public void getValidatedDraft(Context ctx) throws ApiException {
         try {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            BlogPostDTO blogPostDTO = blogPostDAO.getById((long) id);
-
-            if (blogPostDTO == null) {
-                throw new ApiException(404, "BlogPost not found");
-            }
+            BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
 
             BlogPostDTO validatedDraft = ProfanityFilter.returnCensoredBlogPost(blogPostDTO);
 
             ctx.res().setStatus(200);
             ctx.json(validatedDraft, BlogPostDTO.class);
-        } catch (NumberFormatException e) {
-            throw new ApiException(400, "Missing or invalid parameter: id");
-        } catch (EntityNotFoundException e) {
-            throw new ApiException(404, "BlogPost not found");
         } catch (Exception e) {
             throw new ApiException(500, "Internal server error");
         }

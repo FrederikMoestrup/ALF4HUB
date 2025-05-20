@@ -43,9 +43,6 @@ function Drafts() {
     fetchDrafts();
   }, [userId]);
 
-  const handleEditAndPublish = async (draftId) => {
-    console.log("Draft ID:", draftId);
-  }
 
   return (
     <>
@@ -63,7 +60,9 @@ function Drafts() {
                     <h3>{draft.title}</h3>
                     <p>{draft.content}</p>
                     <small>Saved on: {draft.createdAt}</small>
-                    <button Style="width: 10%;" onClick={() => handleEditAndPublish(draft.id)}>Edit & Publish</button>
+                    <NavLink to={`/blog/${draft.id}/edit`} state={{ draft }}>
+                    <button Style="width: 10%;">Edit & Publish</button>
+                    </NavLink>
                   </BlogCard>
                   </>
                 ))}
