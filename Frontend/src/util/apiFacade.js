@@ -97,9 +97,15 @@ const apiFacade = {
     }
   },
 
-  getCurrentUser: () => {
-    return JSON.parse(localStorage.getItem("user"));
+  getUserId: async () => {
+    const token = await localStorage.getItem("token");
+    if (!token) return null;
+
+    const payloadBase64 = token.split(".")[1];
+    const claims = JSON.parse(window.atob(payloadBase64));
+    return claims ? claims.userid : "";
   }
+
 };
 
 export default apiFacade;

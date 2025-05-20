@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PopUpMessage from "../../components/PopUpMessage";
+import apiFacade  from "../../util/apiFacade"
 import {
   Container,
   TitleWrapper,
@@ -25,6 +26,14 @@ function CreateBlogPost() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("token");
+    const currentUserId = await apiFacade.getUserId();
+
+    if (!token || !currentUserId) {
+      setError("You must be logged in.");
+      return;
+    }
+
     setError("");
     setSuccess(false);
 
@@ -37,7 +46,7 @@ function CreateBlogPost() {
     const endpoint = submitType === "draft" ? "/blogpost/draft" : "/blogpost";
 
     const payload = {
-      userId: 1, // hardcoded until login works
+      userId: currentUserId,
       title,
       content,
       status: submitType.toUpperCase(),
@@ -48,6 +57,7 @@ function CreateBlogPost() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });

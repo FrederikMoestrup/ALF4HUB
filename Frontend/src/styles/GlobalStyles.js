@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
     --color-popup: rgba(202, 233, 234, 1);
     --color-main: rgba(17, 19, 25, 1);
     --color-accent: rgba(23, 27, 38, 1);
-    --color-text: rgba(87, 210, 255, 1);
+    --color-text-accent: rgba(87, 210, 255, 1);
     --color-warning: rgba(227, 57, 57, 1);
     --color-accept: rgba(65, 206, 91, 1);
     --color-light-accent: rgba(245, 245, 245, 1);
@@ -29,7 +29,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     background-color: var(--color-main);
-    color: var(--color-text);
+    color: var(--color-light-accent);
     font-family: 'Kdam Thmor Pro', sans-serif;
     line-height: 1.6;
   }

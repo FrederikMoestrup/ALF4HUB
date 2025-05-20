@@ -1,6 +1,5 @@
 import styled, { createGlobalStyle } from "styled-components";
 
-
 const palette = {
   background: "#0e0f13", 
   surface: "#14171f",     
@@ -38,89 +37,17 @@ export const GlobalStyle = createGlobalStyle`
   }
 `;
 
-
 export const Container = styled.div`
   min-height: 100%;
   display: flex;
   flex-direction: column;
 `;
 
-export const Navbar = styled.nav`
-  width: 100%;
-  background: ${palette.nav};
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 20;
-`;
-
-
-const baseNavButton = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 1.25rem;
-
-  a {
-    display: flex;
-    align-items: center;
-    color: ${palette.text};
-    transition: opacity 0.2s ease;
-  }
-
-  a:hover {
-    opacity: 0.75;
-  }
-`;
-
-export const HomeButton = styled(baseNavButton)`
-  svg, img {
-    width: 1.6rem;
-    height: 1.6rem;
-  }
-`;
-
-export const ProfileButton = styled(baseNavButton)`
-  svg, img {
-    width: 1.6rem;
-    height: 1.6rem;
-  }
-`;
-
-export const NavLinks = styled.div`
-  display: flex;
-  gap: 2rem;
-
-  a {
-    font-size: 1.35rem;
-    letter-spacing: 0.04em;
-    position: relative;
-  }
-
-  a::after {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    width: 0%;
-    height: 2px;
-    background: ${palette.text};
-    transition: width 0.25s ease;
-  }
-
-  a:hover::after,
-  a.active::after {
-    width: 100%;
-  }
-`;
 export const Content = styled.main`
   width: 90%;
   max-width: auto;   
- padding: 0;        
-  margin: 5.5rem auto 2rem; 
+  padding: 0;        
+  margin: 2rem auto 2rem; 
   flex: 1;
 `;
 
@@ -172,18 +99,7 @@ export const BlogCard = styled.li`
   h3::after {
   content: " ✨";
 }
-
 `;
-
-export const Footer = styled.footer`
-  width: 100%;
-  background: ${palette.nav};
-  color: ${palette.secondaryText};
-  border: 0;
-  text-align: center;
-  font-size: 0.9rem;
-`;
-
 
 export const AccentButton = styled.button`
   background: ${palette.accent};

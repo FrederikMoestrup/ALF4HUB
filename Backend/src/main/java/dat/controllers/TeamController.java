@@ -2,11 +2,15 @@ package dat.controllers;
 
 import dat.config.HibernateConfig;
 import dat.daos.TeamDAO;
+import dat.dtos.PlayerAccountDTO;
+import dat.daos.PlayerAccountDAO;
 import dat.dtos.TeamDTO;
+import dat.entities.PlayerAccount;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamController {
@@ -42,9 +46,16 @@ public class TeamController {
         ctx.json(teamDTOs, TeamDTO.class);
     }
 
-    public void create(Context ctx) {
+    public void create(Context ctx) throws ApiException {
+        int id = Integer.parseInt(ctx.pathParam("id"));
         TeamDTO teamDTO = ctx.bodyAsClass(TeamDTO.class);
-        TeamDTO createdTeamDTO = teamDAO.create(teamDTO);
+
+        // Check for existing team name (case-insensitive)
+        if (teamDAO.teamNameAlreadyExist(teamDTO.getTeamName())) {
+            throw new ApiException(409, "Holdnavnet er allerede i brug");
+        }
+
+        TeamDTO createdTeamDTO = teamDAO.create(teamDTO, id);
         ctx.res().setStatus(201);
         ctx.json(createdTeamDTO, TeamDTO.class);
     }
@@ -109,4 +120,24 @@ public class TeamController {
                 .check(t -> t.getTeamName() != null && !t.getTeamName().isEmpty(), "Team name must be set")
                 .get();
     }
+
+    public void getPlayersByTeamId(Context ctx) throws ApiException {
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            PlayerAccountDAO playerAccountDAO = new PlayerAccountDAO();
+            List<PlayerAccount> playerAccounts = playerAccountDAO.getPlayersByTeamId(id);
+
+            List<PlayerAccountDTO> playerAccountDTOs = new ArrayList<>();
+            for (PlayerAccount player : playerAccounts) {
+                playerAccountDTOs.add(new PlayerAccountDTO(player));
+            }
+
+            ctx.res().setStatus(200);
+            ctx.json(playerAccountDTOs);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Missing or invalid parameter: id");
+        }
+    }
+
+
 }

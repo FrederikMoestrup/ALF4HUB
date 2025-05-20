@@ -55,7 +55,7 @@ export const FormWrapper = styled.div`
 export const Form = styled.form`
   flex: 1;
   width: 80%;
-  margin-top: 40px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
 `;
@@ -106,8 +106,8 @@ export const ButtonsContent = styled.div`
 export const Button = styled.button`
   margin-top: 10px;
   width: 100px;
-  height: 60px;
-  font-size: 0.8em;
+  height: 35px;
+  font-size: 0.7em;
   background-color: #273b40;
   color: white;
   border-radius: 4px;
@@ -118,7 +118,7 @@ export const Button = styled.button`
   cursor: pointer;
 
   @media (min-width: 768px) {
-    margin-top: 50px;
+    margin-top: 35px;
     width: 150px;
     height: 60px;
     font-size: 1em;
@@ -126,14 +126,17 @@ export const Button = styled.button`
 `;
 
 export const RequiredText = styled.p`
-  margin-top: 17px;
-  font-size: 0.6rem;
+  margin-top: 8px;
+  margin-bottom: 5px;
+  font-size: 0.5rem;
 
   @media (min-width: 768px) {
     font-size: 0.7rem;
+    margin-bottom: 10px;
   }
 
   @media (min-width: 1024px) {
     font-size: 0.9rem;
+    margin-bottom: 15px;
   }
 `;
