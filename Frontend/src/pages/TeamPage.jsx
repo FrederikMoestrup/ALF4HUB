@@ -177,8 +177,30 @@ const TeamPage = () => {
     fetchTeamData();
   }, [teamId]);
 
-  const handleJoinTeam = () => {
-    alert("Anmodning om at blive medlem af holdet er sendt!");
+  const handleJoinTeam = async () => {
+    const currentUsername = localStorage.getItem("username"); // eksempel------------
+    const isAlreadyMember = team.members.some(member => member.username === currentUsername);
+
+    if (isAlreadyMember) {
+      alert("You are already a member of this team.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+          `http://localhost:7070/team-join-request/create/${userId}/${teamId}/${playerAccountId}`,
+          { method: "POST" }
+      );
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+
+      alert("Request to join team sent!");
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
   };
 
   const handleLeaveTeam = () => {
@@ -187,11 +209,13 @@ const TeamPage = () => {
   };
 
   const handleInvitePlayer = () => {
-    alert("Inviter spillere her");
+    // In a real app, this would open a modal to invite players
+    alert("Invite modal would open here");
   };
 
   const handleEditTeam = () => {
-    alert("Naviger til redigering af hold");
+    // In a real app, this would navigate to team edit page
+    alert("Navigate to team edit page");
   };
 
   const handleDeleteTeam = () => {
@@ -202,7 +226,7 @@ const TeamPage = () => {
   };
 
   if (loading) {
-    return <LoadingMessage>Indlæser holdinformation...</LoadingMessage>;
+    return <div>Loading...</div>;
   }
 
   const isCaptain = team?.teamCaptain?.id === currentUserId;
@@ -216,8 +240,8 @@ const TeamPage = () => {
           <TeamLogo>LOGO</TeamLogo>
           <TeamInfo>
             <h2>{team.teamName}</h2>
-            <p>Turneringer: {team.tournamentTeams?.length || 0}</p>
-          </TeamInfo>
+            <p>Tournament: </p>
+          </div>
 
           <TeamActions>
             {userRole === "captain" && (

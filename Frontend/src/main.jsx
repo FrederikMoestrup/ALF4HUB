@@ -11,6 +11,7 @@ import TeamPage from "./pages/TeamPage.jsx";
 import TeamsPage from "./pages/TeamsPage.jsx";
 import TournamentPage from "./pages/TournamentPage.jsx";
 import TournamentsPage from "./pages/TournamentsPage.jsx";
+import CreateTeamPage from "./pages/CreateTeamPage.jsx";
 
 import BlogPostFrontPage from "./pages/blog/BlogPostFrontPage.jsx";
 import CreateBlogPost from "./pages/blog/CreateBlogPost.jsx";
@@ -62,6 +63,7 @@ const RootComponent = () => (
 
         <Route path="/teams" element={<TeamsPage />} />
         <Route path="/team/:teamId" element={<TeamPage />} />
+        <Route path="/create-team" element={<CreateTeamPage />} />
         <Route path="/leave-team" element={<LeaveTeam />} />
         <Route path="/team-dashboard" element={<TeamDashBoard />} />
         <Route path="/test" element={<TestPage />} />
