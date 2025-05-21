@@ -1,6 +1,7 @@
 package dat.dtos;
 
 import dat.entities.Notification;
+import dat.enums.NotificationType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +15,7 @@ public class NotificationDTO {
 
     private int id;
     private int userId;
-    private String notificationType;
+    private NotificationType notificationType;
     private String notificationTitle;
     private boolean isRead;
     private LocalDateTime createdAt;
@@ -23,7 +24,7 @@ public class NotificationDTO {
     private Long invitationId;
     private Long senderId;
 
-    public NotificationDTO(int userId, String notificationType, String notificationTitle, boolean isRead, LocalDateTime createdAt, String link, Long teamId, Long invitationId, Long senderId) {
+    public NotificationDTO(int userId, NotificationType notificationType, String notificationTitle, boolean isRead, LocalDateTime createdAt, String link, Long teamId, Long invitationId, Long senderId) {
         this.userId = userId;
         this.notificationType = notificationType;
         this.notificationTitle = notificationTitle;

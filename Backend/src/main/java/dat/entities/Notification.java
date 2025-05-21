@@ -1,6 +1,7 @@
 package dat.entities;
 
 import dat.dtos.NotificationDTO;
+import dat.enums.NotificationType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,8 +25,9 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String NotificationType;
+    private NotificationType notificationType;
 
     @Column(nullable = false)
     private String NotificationTitle;
@@ -45,10 +47,10 @@ public class Notification {
     private Long senderId;
 
 
-    public Notification(User user, String NotificationType, String NotificationTitle, boolean isRead, LocalDateTime createdAt, String link, Long teamId, Long invitationId, Long senderId)
+    public Notification(User user, NotificationType notificationType, String NotificationTitle, boolean isRead, LocalDateTime createdAt, String link, Long teamId, Long invitationId, Long senderId)
     {
         this.user = user;
-        this.NotificationType = NotificationType;
+        this.notificationType = notificationType;
         this.NotificationTitle = NotificationTitle;
         this.isRead = isRead;
         this.createdAt = createdAt;
@@ -62,7 +64,7 @@ public class Notification {
 
         this.id = notificationDTO.getId();
         this.user = user;
-        this.NotificationType = notificationDTO.getNotificationType();
+        this.notificationType = notificationDTO.getNotificationType();
         this.NotificationTitle = notificationDTO.getNotificationTitle();
         this.isRead = notificationDTO.isRead();
         this.createdAt = notificationDTO.getCreatedAt();
@@ -72,6 +74,7 @@ public class Notification {
         this.senderId = notificationDTO.getSenderId();
 
     }
+
 
     // Sæt createdAt automatisk ved første gemning
     @PrePersist
