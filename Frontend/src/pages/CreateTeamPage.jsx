@@ -131,7 +131,7 @@ const CreateTeamPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [teams, setTeams] = useState([]);
 
-  // Available games from the backend
+  // Available games from the backend(i dont know if there is more.)
   const games = [
     { value: 'COUNTER_STRIKE', label: 'Counter-Strike' },
     { value: 'LEAGUE_OF_LEGENDS', label: 'League of Legends' },
@@ -223,7 +223,7 @@ const CreateTeamPage = () => {
     setIsSubmitting(true);
     
     try {
-      // Get current user (this would need to be implemented with your authentication system)
+      // Get current user (Authentication system should be implemented when i find out where it is)
       // For now we're just mocking a user
       const mockUser = {
         id: 1,
