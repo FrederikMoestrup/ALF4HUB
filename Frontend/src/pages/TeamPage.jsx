@@ -94,10 +94,7 @@ const TeamPage = () => {
 
       <div className="team-page">
         <div className="team-header">
-          <div className="team-logo">
-            {/* Team logo would be an actual image */}
-            Team Logo
-          </div>
+
           <div className="team-info">
             <h2>{team.teamName}</h2>
             <p>Tournament: </p>

@@ -189,7 +189,6 @@ const TeamsPage = () => {
         setLoading(true);
         const response = await fetch(url);
         const data = await response.json();
-        console.log("Fetched teams:", data);
         setTeams(data);
       } catch (error) {
         console.error("Error fetching teams:", error);
@@ -236,14 +235,6 @@ const TeamsPage = () => {
               onChange={handleSearch}
             />
           </div>
-          <div>
-            <FilterButton 
-              active={filterActive}
-              onClick={toggleFilter}
-            >
-              {filterActive ? 'Vis alle hold' : 'Vis erfarne hold'}
-            </FilterButton>
-          </div>
         </FiltersContainer>
 
         <TeamsList>
@@ -263,9 +254,7 @@ const TeamsPage = () => {
                     <p>Turneringer: {team.tournamentTeams?.length || 0}</p>
                   </TeamInfo>
                 </TeamCardHeader>
-                <TeamCardBody>
-                  <p>{team.description || 'Ingen beskrivelse tilgængelig.'}</p>
-                </TeamCardBody>
+
                 <TeamCardFooter>
                   <Button to={`/team/${team.id}`}>
                     Se hold
