@@ -190,7 +190,7 @@ const CreateTeamPage = () => {
     
 
   try {
-    const response = await fetch("http://localhost:7070/api/teams", {
+    const response = await fetch("http://localhost:7070/api/teams/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -5,9 +5,11 @@ import dat.daos.TeamDAO;
 import dat.dtos.PlayerAccountDTO;
 import dat.daos.PlayerAccountDAO;
 import dat.dtos.TeamDTO;
+import dat.dtos.UserDTO;
 import dat.entities.PlayerAccount;
 import dat.exceptions.ApiException;
 import io.javalin.http.Context;
+import io.javalin.http.UnauthorizedResponse;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.ArrayList;
@@ -47,11 +49,23 @@ public class TeamController {
     }
 
     public void create(Context ctx) {
-        int id = Integer.parseInt(ctx.pathParam("id"));
+        // This user was put here by the AccessController/SecurityController
+        UserDTO user = ctx.attribute("user");
+
+        if (user == null) {
+            throw new UnauthorizedResponse("User not authenticated");
+        }
+
         TeamDTO teamDTO = ctx.bodyAsClass(TeamDTO.class);
-        TeamDTO createdTeamDTO = teamDAO.create(teamDTO, id);
-        ctx.res().setStatus(201);
-        ctx.json(createdTeamDTO, TeamDTO.class);
+
+        // Set the authenticated user as team captain
+        UserDTO captainDTO = new UserDTO();
+        captainDTO.setId(user.getId());
+        captainDTO.setUsername(user.getUsername());
+        teamDTO.setTeamCaptain(captainDTO);
+
+        TeamDTO createdTeamDTO = teamDAO.create(teamDTO, user.getId());
+        ctx.status(201).json(createdTeamDTO);
     }
 
     public void update(Context ctx) throws ApiException {
