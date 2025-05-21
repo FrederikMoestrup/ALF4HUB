@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
 
@@ -40,7 +40,7 @@ const TeamInfo = styled.div`
 
   h2 {
     color: var(--color-text);
-    font-family: 'Xirod', sans-serif;
+    font-family: "Xirod", sans-serif;
     margin-bottom: 10px;
   }
 
@@ -62,7 +62,7 @@ const Button = styled.button`
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background-color: var(--color-text);
     color: var(--color-main);
@@ -72,7 +72,7 @@ const Button = styled.button`
 const DangerButton = styled(Button)`
   background-color: var(--color-warning);
   color: white;
-  
+
   &:hover {
     background-color: #c82333;
     color: white;
@@ -83,7 +83,7 @@ const TeamContent = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
@@ -95,10 +95,10 @@ const Section = styled.div`
   border-radius: 10px;
   border: 1px solid var(--color-text);
   box-shadow: 0 0 10px rgba(87, 210, 255, 0.2);
-  
+
   h3 {
     color: var(--color-text);
-    font-family: 'Xirod', sans-serif;
+    font-family: "Xirod", sans-serif;
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--color-text);
@@ -111,13 +111,13 @@ const MemberCard = styled.div`
   border-radius: 8px;
   margin-bottom: 10px;
   border: 1px solid var(--color-text);
-  
+
   h2 {
     color: var(--color-text);
     font-size: 18px;
     margin-bottom: 5px;
   }
-  
+
   p {
     color: var(--color-text);
     opacity: 0.8;
@@ -138,6 +138,7 @@ const TeamPage = () => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("visitor"); // 'visitor', 'member', 'captain'
   const [isInTeam, setIsInTeam] = useState(false);
+  const navigate = useNavigate();
 
   const currentUserId = 1; // Midlertidig hardcoded user ID
 
@@ -179,7 +180,9 @@ const TeamPage = () => {
 
   const handleJoinTeam = async () => {
     const currentUsername = localStorage.getItem("username"); // eksempel------------
-    const isAlreadyMember = team.members.some(member => member.username === currentUsername);
+    const isAlreadyMember = team.members.some(
+      (member) => member.username === currentUsername
+    );
 
     if (isAlreadyMember) {
       alert("You are already a member of this team.");
@@ -188,8 +191,8 @@ const TeamPage = () => {
 
     try {
       const response = await fetch(
-          `http://localhost:7070/team-join-request/create/${userId}/${teamId}/${playerAccountId}`,
-          { method: "POST" }
+        `http://localhost:7070/team-join-request/create/${userId}/${teamId}/${playerAccountId}`,
+        { method: "POST" }
       );
 
       if (!response.ok) {
@@ -209,7 +212,6 @@ const TeamPage = () => {
   };
 
   const handleInvitePlayer = () => {
-
     // In a real app, this would open a modal to invite players
     alert("Invite modal would open here");
   };
@@ -219,11 +221,13 @@ const TeamPage = () => {
     alert("Navigate to team edit page");
   };
 
-  const handleDeleteTeam = () => {
+  const handleDeleteTeam = async () => {
     if (window.confirm("Er du sikker på, at du vil slette holdet?")) {
       // send DELETE request her
       alert("Holdet er slettet!");
+      
     }
+    navigate("/teams");
   };
 
   if (loading) {
@@ -238,8 +242,8 @@ const TeamPage = () => {
         <TeamHeader>
           <TeamLogo>LOGO</TeamLogo>
           <TeamInfo>
-  <h2>{team.teamName}</h2>
-</TeamInfo>
+            <h2>{team.teamName}</h2>
+          </TeamInfo>
           <TeamActions>
             {userRole === "captain" && (
               <>
