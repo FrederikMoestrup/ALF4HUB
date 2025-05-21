@@ -219,7 +219,7 @@ const TeamsPage = () => {
 
   return (
     <div>
-      <Navbar />
+    
       <PageContainer>
         <Header>
           <Title>TEAMS</Title>
