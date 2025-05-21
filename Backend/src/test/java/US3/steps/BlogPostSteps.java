@@ -36,9 +36,9 @@ public class BlogPostSteps {
     public void setUp() {
 
         userList = List.of(
-                new User("username1", "test1"),
-                new User("username2", "test2"),
-                new User("username3", "test3")
+                new User("username1", "test1", "test@test"),
+                new User("username2", "test2", "test@test"),
+                new User("username3", "test3", "test@test")
         );
 
         try (EntityManager em = emf.createEntityManager()) {

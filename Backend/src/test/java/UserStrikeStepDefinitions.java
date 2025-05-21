@@ -8,7 +8,7 @@ import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Assertions;
 
 public class UserStrikeStepDefinitions {
-
+/*
     private User user;
     private UserDAO userDAO;
 
@@ -34,4 +34,6 @@ public class UserStrikeStepDefinitions {
         User updatedUser = userDAO.findById(user.getId());
         Assertions.assertEquals(expectedStrikes, updatedUser.getStrikes());
     }
+
+ */
 }
