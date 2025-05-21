@@ -233,12 +233,10 @@ const CreateTeamPage = () => {
       // Create team object according to the API structure
       const newTeam = {
         teamName: teamName,
-        isPrivate: isPrivate,
         teamCaptain: {
           id: mockUser.id,
           username: mockUser.username
         },
-        game: selectedGame,
         teamAccounts: [],
         tournamentTeams: []
       };
