@@ -90,8 +90,6 @@ const TeamPage = () => {
 
   return (
     <div>
-      <Navbar userTeam={team} isLoggedIn={true} />
-
       <div className="team-page">
         <div className="team-header">
 
@@ -131,14 +129,8 @@ const TeamPage = () => {
             {team?.members?.map((member, index) => (
               <div key={index} className="bg-white rounded-lg shadow p-4">
                 <h2 className="text-lg font-semibold">{member.username}</h2>
-                <p className="text-gray-600">Game: {member.game}</p>
               </div>
             ))}
-          </div>
-
-          <div className="about-section">
-            <h3>About</h3>
-            <p>{team.about}</p>
           </div>
         </div>
       </div>
