@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import styled from 'styled-components';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import styled from "styled-components";
 
 const PageContainer = styled.div`
   margin: 0 auto;
@@ -15,7 +15,7 @@ const Header = styled.div`
 
 const Title = styled.h1`
   color: var(--color-text);
-  font-family: 'Xirod', sans-serif;
+  font-family: "Xirod", sans-serif;
 `;
 
 const FormContainer = styled.div`
@@ -44,8 +44,8 @@ const Input = styled.input`
   border: 1px solid var(--color-text);
   border-radius: 5px;
   color: var(--color-text);
-  font-family: 'Kdam Thmor Pro', sans-serif;
-  
+  font-family: "Kdam Thmor Pro", sans-serif;
+
   &:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(87, 210, 255, 0.5);
@@ -59,8 +59,8 @@ const Select = styled.select`
   border: 1px solid var(--color-text);
   border-radius: 5px;
   color: var(--color-text);
-  font-family: 'Kdam Thmor Pro', sans-serif;
-  
+  font-family: "Kdam Thmor Pro", sans-serif;
+
   &:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(87, 210, 255, 0.5);
@@ -92,15 +92,15 @@ const Button = styled.button`
   padding: 10px 20px;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Kdam Thmor Pro', sans-serif;
+  font-family: "Kdam Thmor Pro", sans-serif;
   font-size: 16px;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background-color: var(--color-text);
     color: var(--color-main);
   }
-  
+
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -121,8 +121,8 @@ const ButtonsContainer = styled.div`
 
 const CreateTeamPage = () => {
   const navigate = useNavigate();
-  const [teamName, setTeamName] = useState('');
-  const [error, setError] = useState('');
+  const [teamName, setTeamName] = useState("");
+  const [error, setError] = useState("");
   const [nameExists, setNameExists] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [teams, setTeams] = useState([]);
@@ -131,11 +131,11 @@ const CreateTeamPage = () => {
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await fetch('http://localhost:7070/api/teams');
+        const response = await fetch("http://localhost:7070/api/teams");
         const data = await response.json();
         setTeams(data);
       } catch (error) {
-        console.error('Error fetching teams:', error);
+        console.error("Error fetching teams:", error);
       }
     };
 
@@ -144,75 +144,78 @@ const CreateTeamPage = () => {
 
   // Check if team name already exists
   useEffect(() => {
-    if (teamName.trim() === '') {
+    if (teamName.trim() === "") {
       setNameExists(false);
+      setError(""); // Clear previous name conflict error
       return;
     }
-    
-    const exists = teams.some(team => 
-      team.teamName && team.teamName.toLowerCase() === teamName.toLowerCase()
+
+    const exists = teams.some(
+      (team) =>
+        team.teamName && team.teamName.toLowerCase() === teamName.toLowerCase()
     );
-    
+
     setNameExists(exists);
-  }, [teamName, teams]);
+
+  // Clear error if name becomes available
+  if (!exists) {
+    setError("");
+  }
+}, [teamName, teams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate form
-    if (teamName.trim() === '') {
-      setError('Holdnavn må ikke være tomt');
+    if (teamName.trim() === "") {
+      setError("Holdnavn må ikke være tomt");
       return;
     }
-    
+
     if (nameExists) {
-      setError('Dette holdnavn er allerede i brug');
+      setError("Dette holdnavn er allerede i brug");
       return;
     }
-    
-    setError('');
+
+    setError("");
     setIsSubmitting(true);
+
+    const token = localStorage.getItem("token");
+
+     if (!token) {
+    setError("Du skal være logget ind for at oprette et hold.");
+    setIsSubmitting(false);
+    return;
+  }
     
-    try {
-      // Get current user (for team captain)
-      const mockUser = {
-        id: 1,
-        username: 'currentUser'
-      };
-      
-      // Create team object according to the API structure
-      const newTeam = {
+
+  try {
+    const response = await fetch("http://localhost:7070/api/teams", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
         teamName: teamName,
-        teamCaptain: {
-          id: mockUser.id,
-          username: mockUser.username
-        },
-        teamAccounts: [],
-        tournamentTeams: []
-      };
-      
-      // API call to create team
-      const response = await fetch('http://localhost:7070/api/teams', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newTeam)
-      });
-      
+      }),
+    });
+    
+    console.log("New team object:", teamName)
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Kunne ikke oprette hold');
+        throw new Error(errorData.message || "Kunne ikke oprette hold");
       }
-      
+
       const data = await response.json();
-      console.log('Response status:', response.status);
-      console.log('Full response data:', data);
-      
+      console.log("Response status:", response.status);
+      console.log("Full response data:", data);
+
       // Redirect to the teams page
-      navigate('/teams');
+      navigate("/teams");
     } catch (error) {
-      console.error('Error creating team:', error);
+      console.error("Error creating team:", error);
       setError(`Der opstod en fejl: ${error.message}`);
     } finally {
       setIsSubmitting(false);
@@ -225,7 +228,7 @@ const CreateTeamPage = () => {
         <Header>
           <Title>OPRET HOLD</Title>
         </Header>
-        
+
         <FormContainer>
           <form onSubmit={handleSubmit}>
             <FormGroup>
@@ -241,15 +244,15 @@ const CreateTeamPage = () => {
                 <ErrorMessage>Dette holdnavn er allerede i brug</ErrorMessage>
               )}
             </FormGroup>
-            
+
             {error && <ErrorMessage>{error}</ErrorMessage>}
-            
+
             <ButtonsContainer>
-              <Button type="button" onClick={() => navigate('/teams')}>
+              <Button type="button" onClick={() => navigate("/teams")}>
                 Annuller
               </Button>
               <Button type="submit" disabled={isSubmitting || nameExists}>
-                {isSubmitting ? 'Opretter...' : 'Opret Hold'}
+                {isSubmitting ? "Opretter..." : "Opret Hold"}
               </Button>
             </ButtonsContainer>
           </form>
@@ -259,4 +262,4 @@ const CreateTeamPage = () => {
   );
 };
 
-export default CreateTeamPage; 
+export default CreateTeamPage;
