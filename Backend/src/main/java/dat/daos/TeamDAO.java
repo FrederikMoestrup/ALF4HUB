@@ -4,6 +4,7 @@ import dat.dtos.TeamDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.entities.TournamentTeam;
+import dat.entities.User;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -47,6 +48,17 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Team team = new Team(teamDTO);
+            em.persist(team);
+            em.getTransaction().commit();
+            return new TeamDTO(team);
+        }
+    }
+
+    public TeamDTO create(TeamDTO teamDTO, int id) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Team team = new Team(teamDTO);
+            team.setTeamCaptain(em.find(User.class, id));
             em.persist(team);
             em.getTransaction().commit();
             return new TeamDTO(team);
