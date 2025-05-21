@@ -221,7 +221,6 @@ const CreateTeamPage = () => {
 
   return (
     <div>
-      <Navbar />
       <PageContainer>
         <Header>
           <Title>OPRET HOLD</Title>

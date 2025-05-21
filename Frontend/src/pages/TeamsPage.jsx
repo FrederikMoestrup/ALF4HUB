@@ -72,20 +72,6 @@ const SearchInput = styled.input`
   }
 `;
 
-const FilterButton = styled.button`
-  background-color: ${props => props.active ? 'var(--color-text)' : 'var(--color-button-general)'};
-  color: ${props => props.active ? 'var(--color-main)' : 'var(--color-text)'};
-  border: 1px solid var(--color-text);
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    background-color: var(--color-text);
-    color: var(--color-main);
-  }
-`;
 
 const TeamsList = styled.div`
   display: grid;
@@ -204,20 +190,15 @@ const TeamsPage = () => {
     setSearchTerm(e.target.value);
   };
 
-  const toggleFilter = () => {
-    setFilterActive(!filterActive);
-  };
 
   const filteredTeams = teams.filter(team => {
     const name = team?.teamName ?? '';
     const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = !filterActive || (team?.tournamentTeams?.length > 2);
-    return matchesSearch && matchesFilter;
+    return matchesSearch;
   });
 
   return (
     <div>
-    
       <PageContainer>
         <Header>
           <Title>TEAMS</Title>
@@ -251,7 +232,6 @@ const TeamsPage = () => {
                     <h3>{team.teamName || 'Unavngivet hold'}</h3>
                     <p>Kaptajn: {team.teamCaptain?.username || 'Ukendt'}</p>
                     <p>Medlemmer: {team.teamAccounts?.length || 0}</p>
-                    <p>Turneringer: {team.tournamentTeams?.length || 0}</p>
                   </TeamInfo>
                 </TeamCardHeader>
 

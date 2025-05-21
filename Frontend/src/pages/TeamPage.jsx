@@ -209,6 +209,7 @@ const TeamPage = () => {
   };
 
   const handleInvitePlayer = () => {
+
     // In a real app, this would open a modal to invite players
     alert("Invite modal would open here");
   };
@@ -233,16 +234,12 @@ const TeamPage = () => {
 
   return (
     <div>
-      <Navbar userTeam={team} isLoggedIn={true} />
-
       <PageContainer>
         <TeamHeader>
           <TeamLogo>LOGO</TeamLogo>
           <TeamInfo>
   <h2>{team.teamName}</h2>
-  <p>Tournament: </p>
 </TeamInfo>
-
           <TeamActions>
             {userRole === "captain" && (
               <>
@@ -269,17 +266,11 @@ const TeamPage = () => {
               team.members.map((member, index) => (
                 <MemberCard key={index}>
                   <h2>{member.username}</h2>
-                  <p>Spil: {member.game}</p>
                 </MemberCard>
               ))
             ) : (
               <p>Ingen medlemmer på dette hold.</p>
             )}
-          </Section>
-
-          <Section>
-            <h3>Om holdet</h3>
-            <p>{team.about || 'Ingen beskrivelse tilgængelig.'}</p>
           </Section>
         </TeamContent>
       </PageContainer>
