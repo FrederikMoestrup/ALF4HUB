@@ -23,6 +23,9 @@ import JoinTournament from "./pages/tournament/JoinTournament.jsx";
 import MyTournaments from "./pages/tournament/MyTournaments.jsx";
 import TournamentOverview from "./pages/tournament/TournamentOverview.jsx";
 import ViewTournamentsByGame from "./pages/tournament/ViewTournamentsByGame.jsx";
+import TournamentHistory from "./pages/TournamentHistory.jsx";
+
+
 
 import Login from "./pages/login-register/Login.jsx";
 import Register from "./pages/login-register/Register.jsx";
@@ -70,6 +73,8 @@ const RootComponent = () => (
         <Route path="/blog/:postId/edit" element={<EditBlogPost />} />
 
         <Route path="/profile" element={<Profile />} />
+        <Route path="/tournaments/history" element={<TournamentHistory />} />
+
 
         <Route path="*" element={<NotFound />} />
       </Routes>
