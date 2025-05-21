@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 import styled from 'styled-components';
 
 const PageContainer = styled.div`
@@ -190,7 +189,6 @@ const TeamsPage = () => {
         setLoading(true);
         const response = await fetch(url);
         const data = await response.json();
-        console.log("Fetched teams:", data);
         setTeams(data);
       } catch (error) {
         console.error("Error fetching teams:", error);
@@ -219,7 +217,7 @@ const TeamsPage = () => {
 
   return (
     <div>
-      <Navbar />
+    
       <PageContainer>
         <Header>
           <Title>TEAMS</Title>
@@ -236,14 +234,6 @@ const TeamsPage = () => {
               value={searchTerm}
               onChange={handleSearch}
             />
-          </div>
-          <div>
-            <FilterButton 
-              active={filterActive}
-              onClick={toggleFilter}
-            >
-              {filterActive ? 'Vis alle hold' : 'Vis erfarne hold'}
-            </FilterButton>
           </div>
         </FiltersContainer>
 
@@ -264,9 +254,7 @@ const TeamsPage = () => {
                     <p>Turneringer: {team.tournamentTeams?.length || 0}</p>
                   </TeamInfo>
                 </TeamCardHeader>
-                <TeamCardBody>
-                  <p>{team.description || 'Ingen beskrivelse tilgængelig.'}</p>
-                </TeamCardBody>
+
                 <TeamCardFooter>
                   <Button to={`/team/${team.id}`}>
                     Se hold

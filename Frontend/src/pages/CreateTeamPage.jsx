@@ -122,23 +122,10 @@ const ButtonsContainer = styled.div`
 const CreateTeamPage = () => {
   const navigate = useNavigate();
   const [teamName, setTeamName] = useState('');
-  const [isPrivate, setIsPrivate] = useState(false);
-  const [selectedGame, setSelectedGame] = useState('');
-  const [selectedTournament, setSelectedTournament] = useState('');
-  const [tournaments, setTournaments] = useState([]);
   const [error, setError] = useState('');
   const [nameExists, setNameExists] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [teams, setTeams] = useState([]);
-
-  // Available games from the backend(i dont know if there is more.)
-  const games = [
-    { value: 'COUNTER_STRIKE', label: 'Counter-Strike' },
-    { value: 'LEAGUE_OF_LEGENDS', label: 'League of Legends' },
-    { value: 'DOTA_2', label: 'Dota 2' },
-    { value: 'VALORANT', label: 'Valorant' },
-    { value: 'ROCKET_LEAGUE', label: 'Rocket League' }
-  ];
 
   // Fetch existing teams to check for name availability
   useEffect(() => {
@@ -154,37 +141,6 @@ const CreateTeamPage = () => {
 
     fetchTeams();
   }, []);
-
-  // Fetch tournaments
-  useEffect(() => {
-    const fetchTournaments = async () => {
-      if (selectedGame) {
-        try {
-          const response = await fetch('http://localhost:7070/api/tournaments');
-          const data = await response.json();
-          // Filter tournaments by selected game
-          const filteredTournaments = data.filter(tournament => 
-            tournament.game === selectedGame
-          );
-          setTournaments(filteredTournaments);
-        } catch (error) {
-          console.error('Error fetching tournaments:', error);
-          // Fallback to mock data if API fails
-          setTournaments([
-            { id: 1, tournamentName: 'Summer Championship 2025' },
-            { id: 2, tournamentName: 'Winter League 2025' },
-            { id: 3, tournamentName: 'Rocket Showdown' },
-            { id: 4, tournamentName: 'Spring Arena 2025' },
-            { id: 5, tournamentName: 'Battle Royale Masters' }
-          ]);
-        }
-      } else {
-        setTournaments([]);
-      }
-    };
-
-    fetchTournaments();
-  }, [selectedGame]);
 
   // Check if team name already exists
   useEffect(() => {
@@ -214,17 +170,11 @@ const CreateTeamPage = () => {
       return;
     }
     
-    if (!selectedGame) {
-      setError('Vælg venligst et spil');
-      return;
-    }
-    
     setError('');
     setIsSubmitting(true);
     
     try {
-      // Get current user (Authentication system should be implemented when i find out where it is)
-      // For now we're just mocking a user
+      // Get current user (for team captain)
       const mockUser = {
         id: 1,
         username: 'currentUser'
@@ -233,26 +183,13 @@ const CreateTeamPage = () => {
       // Create team object according to the API structure
       const newTeam = {
         teamName: teamName,
-        isPrivate: isPrivate,
         teamCaptain: {
           id: mockUser.id,
           username: mockUser.username
         },
-        game: selectedGame,
         teamAccounts: [],
         tournamentTeams: []
       };
-      
-      // If a tournament is selected, add it to the team
-      if (selectedTournament) {
-        const selectedTournamentObj = tournaments.find(t => t.id === parseInt(selectedTournament));
-        if (selectedTournamentObj) {
-          newTeam.tournament = {
-            id: selectedTournamentObj.id,
-            tournamentName: selectedTournamentObj.tournamentName
-          };
-        }
-      }
       
       // API call to create team
       const response = await fetch('http://localhost:7070/api/teams', {
@@ -304,63 +241,6 @@ const CreateTeamPage = () => {
               {nameExists && (
                 <ErrorMessage>Dette holdnavn er allerede i brug</ErrorMessage>
               )}
-            </FormGroup>
-            
-            <FormGroup>
-              <Label>Holdtype</Label>
-              <RadioGroup>
-                <RadioLabel>
-                  <RadioInput
-                    type="radio"
-                    name="privacy"
-                    checked={!isPrivate}
-                    onChange={() => setIsPrivate(false)}
-                  />
-                  Offentligt
-                </RadioLabel>
-                <RadioLabel>
-                  <RadioInput
-                    type="radio"
-                    name="privacy"
-                    checked={isPrivate}
-                    onChange={() => setIsPrivate(true)}
-                  />
-                  Privat
-                </RadioLabel>
-              </RadioGroup>
-            </FormGroup>
-            
-            <FormGroup>
-              <Label htmlFor="game">Spil</Label>
-              <Select
-                id="game"
-                value={selectedGame}
-                onChange={(e) => setSelectedGame(e.target.value)}
-              >
-                <option value="">Vælg spil</option>
-                {games.map(game => (
-                  <option key={game.value} value={game.value}>
-                    {game.label}
-                  </option>
-                ))}
-              </Select>
-            </FormGroup>
-            
-            <FormGroup>
-              <Label htmlFor="tournament">Turnering</Label>
-              <Select
-                id="tournament"
-                value={selectedTournament}
-                onChange={(e) => setSelectedTournament(e.target.value)}
-                disabled={!selectedGame}
-              >
-                <option value="">Vælg turnering (valgfrit)</option>
-                {tournaments.map(tournament => (
-                  <option key={tournament.id} value={tournament.id}>
-                    {tournament.tournamentName}
-                  </option>
-                ))}
-              </Select>
             </FormGroup>
             
             {error && <ErrorMessage>{error}</ErrorMessage>}

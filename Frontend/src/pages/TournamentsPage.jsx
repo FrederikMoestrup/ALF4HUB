@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
+
 
 const TournamentsPage = () => {
   const [tournaments, setTournaments] = useState([
@@ -93,7 +93,6 @@ const TournamentsPage = () => {
 
   return (
     <div>
-      <Navbar />
       <div className="tournaments-page-container">
         <div className="tournaments-header">
           <h1>Tournaments</h1>
