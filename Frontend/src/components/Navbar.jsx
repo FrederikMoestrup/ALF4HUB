@@ -13,9 +13,9 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="nav-center">
-        <a href="#">Turneringer</a>
-        <a href="#">Hold</a>
-        <a href="#">Forum</a>
+        <Link to="/tournaments">Turneringer</Link>
+        <Link to="/teams">Hold</Link>
+        <Link to="#">Forum</Link>
       </div>
       <div className="nav-right">
         <Link to="/login">
