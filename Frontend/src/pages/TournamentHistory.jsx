@@ -15,10 +15,12 @@ import {
   ButtonContainer,
   Button,
   Footer,
-} from "../../styles/TournamentHistoryStyles";
+} from "../styles/TournamentHistoryStyles";
 
 function TournamentHistory() {
   const [tournaments, setTournaments] = useState([]);
+
+  /* FOR REAL DATA
   const userId = localStorage.getItem("userid");
 
   useEffect(() => {
@@ -31,6 +33,29 @@ function TournamentHistory() {
       .then((data) => setTournaments(data))
       .catch((err) => console.error("Error:", err));
   }, [userId]);
+  */
+
+  useEffect(() => {
+    // Her mocker vi bare nogle dummy-turneringer direkte
+    const dummyData = [
+      {
+        id: 1,
+        name: "Dummy Tournament A",
+        startDate: "2024-01-15",
+        endDate: "2024-01-20",
+        status: "COMPLETED",
+      },
+      {
+        id: 2,
+        name: "Dummy Tournament B",
+        startDate: "2024-02-10",
+        endDate: "2024-02-15",
+        status: "CANCELLED",
+      },
+    ];
+
+    setTournaments(dummyData);
+  }, []);
 
   return (
     <>
@@ -69,7 +94,16 @@ function TournamentHistory() {
                 <p>No past tournaments found.</p>
               ) : (
                 tournaments.map((tournament) => (
-                  <TournamentCard key={tournament.id}>
+                  <TournamentCard key={tournament.id}
+                  style={{
+                      backgroundColor: "#f9f9f9",
+                      padding: "20px",
+                      borderRadius: "10px",
+                      marginBottom: "20px",
+                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                      color: "#222" // 👈 mørk tekst
+                    }}
+                  >
                     <h3>{tournament.name}</h3>
                     <p>
                       {new Date(tournament.startDate).toLocaleDateString()} -{" "}

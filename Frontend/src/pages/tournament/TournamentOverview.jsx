@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import GlobalStyles from "Frontend/src/styles/GlobalStyles.js";
+import GlobalStyles from "../../styles/GlobalStyles";
 
 const TournamentOverview = () => {
     const [tournaments, setTournaments] = useState([]);
