@@ -3,11 +3,14 @@ GET http://localhost:7070/api/auth/test/
 
 ### Create a new user - this one will only get a USER role by default
 POST http://localhost:7070/api/auth/register/
+Content-Type: application/json
 
 {
-    "username": "user",
-    "password": "test123"
+  "username": "user",
+  "password": "test123",
+  "email": "user123@example.com"
 }
+
 
 ###
 POST http://localhost:7070/api/auth/login/
@@ -177,17 +180,21 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "tournamentName": "ProGamerTournament",
-  "game": "LEAGUE_OF_LEGENDS",
-  "tournamentSize": 2,
-  "teamSize": 2,
-  "rules": "No cheating, no toxicity",
-  "entryRequirements": "Must be a registered player",
-  "status": "ACTIVE",
-  "startDate": "2023-10-01T10:00:00Z",
-  "startTime": "2023-10-01T10:00:00Z",
-  "endDate": "2023-10-31T10:00:00Z",
-  "endTime": "2023-10-31T10:00:00Z"
+  "tournamentName": "rgege",
+  "game": "COUNTER_STRIKE",
+  "tournamentSize": 16,
+  "teamSize": 5,
+  "prizePool": 10000,
+  "rules": "No cheating",
+  "entryRequirements": "Over 18",
+  "tournamentStatus": "NOT_STARTED",
+  "startDate": "2023-10-01",
+  "startTime": "12:00",
+  "endDate": "2023-10-31",
+  "endTime": "18:00",
+  "host": {
+    "id": 1
+  }
 }
 
 ###
