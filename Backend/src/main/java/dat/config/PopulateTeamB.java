@@ -17,19 +17,19 @@ public class PopulateTeamB {
         try (var em = emf.createEntityManager()) {
             em.getTransaction().begin();
 
-            User cap1 = new User("Cap1", "1234");
-            User cap2 = new User("Cap2", "1234");
-            User cap3 = new User("Cap3", "1234");
-            User cap4 = new User("Cap4", "1234");
-            User cap5 = new User("Cap5", "1234");
-            User cap6 = new User("Cap6", "1234");
+            User cap1 = new User("Cap1", "1234","email@cap1");
+            User cap2 = new User("Cap2", "1234","email@cap2");
+            User cap3 = new User("Cap3", "1234","email@cap3");
+            User cap4 = new User("Cap4", "1234","email@cap4");
+            User cap5 = new User("Cap5", "1234","email@cap5");
+            User cap6 = new User("Cap6", "1234","email@cap6");
 
-            User user1 = new User("User1", "1234");
-            User user2 = new User("User2", "1234");
-            User user3 = new User("User3", "1234");
-            User user4 = new User("User4", "1234");
-            User user5 = new User("User5", "1234");
-            User user6 = new User("User6", "1234");
+            User user1 = new User("User1", "1234","email@1");
+            User user2 = new User("User2", "1234","email@2");
+            User user3 = new User("User3", "1234","email@3");
+            User user4 = new User("User4", "1234","email@4");
+            User user5 = new User("User5", "1234","email@5");
+            User user6 = new User("User6", "1234","email@6");
 
             PlayerAccount playerAccountCap1 = new PlayerAccount("Cap1Account", LEAGUE_OF_LEGENDS, "Platinum", cap1);
             PlayerAccount playerAccountCap2 = new PlayerAccount("Cap2Account", LEAGUE_OF_LEGENDS, "Gold", cap2);
