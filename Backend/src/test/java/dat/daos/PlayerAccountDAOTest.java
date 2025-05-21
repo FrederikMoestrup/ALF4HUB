@@ -41,12 +41,12 @@ class PlayerAccountDAOTest {
     void setUp() {
         playerAccountDAO = PlayerAccountDAO.getInstance(emf);
 
-        Populate.populateDatabase(emf);
+        //Populate.populateDatabase(emf);
     }
 
     @AfterEach
     void tearDown() {
-        Populate.clearDatabase(emf);
+       // Populate.clearDatabase(emf);
     }
 
 

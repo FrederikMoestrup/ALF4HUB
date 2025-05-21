@@ -3,6 +3,7 @@ package dat.daos;
 import dat.config.HibernateConfig;
 
 import dat.config.Populate;
+import dat.config.PopulateTeamB;
 import dat.dtos.TournamentDTO;
 import dat.enums.Game;
 import dat.enums.TournamentStatus;
@@ -37,12 +38,12 @@ class TournamentDAOTest {
     void setUp() {
         tournamentDAO = TournamentDAO.getInstance(emf);
 
-        Populate.populateDatabase(emf);
+        PopulateTeamB.populateDatabase(emf);
     }
 
     @AfterEach
     void tearDown() {
-        Populate.clearDatabase(emf);
+        PopulateTeamB.clearDatabase(emf);
     }
 
 

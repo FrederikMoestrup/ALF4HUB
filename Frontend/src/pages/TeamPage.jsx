@@ -139,6 +139,8 @@ const TeamPage = () => {
   const [userRole, setUserRole] = useState("visitor"); // 'visitor', 'member', 'captain'
   const [isInTeam, setIsInTeam] = useState(false);
 
+  const currentUserId = 1; // Midlertidig hardcoded user ID
+
   useEffect(() => {
     const fetchTeamData = async () => {
       try {
@@ -160,6 +162,10 @@ const TeamPage = () => {
           game: player.game,
         }));
 
+        const role =
+          teamData?.teamCaptain?.id === currentUserId ? "captain" : "visitor";
+
+        setUserRole(role);
         setTeam({ ...teamData, members: formattedMembers });
       } catch (error) {
         console.error("Error fetching team data:", error);
@@ -172,29 +178,34 @@ const TeamPage = () => {
   }, [teamId]);
 
   const handleJoinTeam = () => {
-    // In a real app, this would send a request to join the team
     alert("Anmodning om at blive medlem af holdet er sendt!");
   };
 
   const handleLeaveTeam = () => {
-    // In a real app, this would send a request to leave the team
     setIsInTeam(false);
     setUserRole("visitor");
   };
 
   const handleInvitePlayer = () => {
-    // In a real app, this would open a modal to invite players
     alert("Inviter spillere her");
   };
 
   const handleEditTeam = () => {
-    // In a real app, this would navigate to team edit page
     alert("Naviger til redigering af hold");
+  };
+
+  const handleDeleteTeam = () => {
+    if (window.confirm("Er du sikker på, at du vil slette holdet?")) {
+      // send DELETE request her
+      alert("Holdet er slettet!");
+    }
   };
 
   if (loading) {
     return <LoadingMessage>Indlæser holdinformation...</LoadingMessage>;
   }
+
+  const isCaptain = team?.teamCaptain?.id === currentUserId;
 
   return (
     <div>
@@ -202,36 +213,27 @@ const TeamPage = () => {
 
       <PageContainer>
         <TeamHeader>
-          <TeamLogo>
-            {/* Team logo would be an actual image */}
-            LOGO
-          </TeamLogo>
+          <TeamLogo>LOGO</TeamLogo>
           <TeamInfo>
             <h2>{team.teamName}</h2>
             <p>Turneringer: {team.tournamentTeams?.length || 0}</p>
           </TeamInfo>
 
-          {/* Different actions based on user role */}
           <TeamActions>
             {userRole === "captain" && (
               <>
-                <Button onClick={handleEditTeam}>
-                  Rediger
-                </Button>
-                <Button onClick={handleInvitePlayer}>
-                  Inviter
-                </Button>
+                <Button onClick={handleEditTeam}>Rediger</Button>
+                <Button onClick={handleInvitePlayer}>Inviter</Button>
               </>
             )}
             {userRole === "visitor" && !isInTeam && (
-              <Button onClick={handleJoinTeam}>
-                Tilmeld
-              </Button>
+              <Button onClick={handleJoinTeam}>Tilmeld</Button>
             )}
             {userRole === "member" && (
-              <DangerButton onClick={handleLeaveTeam}>
-                Forlad hold
-              </DangerButton>
+              <DangerButton onClick={handleLeaveTeam}>Forlad hold</DangerButton>
+            )}
+            {isCaptain && (
+              <DangerButton onClick={handleDeleteTeam}>Slet hold</DangerButton>
             )}
           </TeamActions>
         </TeamHeader>
