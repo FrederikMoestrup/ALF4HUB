@@ -239,9 +239,9 @@ const TeamPage = () => {
         <TeamHeader>
           <TeamLogo>LOGO</TeamLogo>
           <TeamInfo>
-            <h2>{team.teamName}</h2>
-            <p>Tournament: </p>
-          </div>
+  <h2>{team.teamName}</h2>
+  <p>Tournament: </p>
+</TeamInfo>
 
           <TeamActions>
             {userRole === "captain" && (
