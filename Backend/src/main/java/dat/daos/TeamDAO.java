@@ -9,6 +9,7 @@ import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamDAO implements IDAO<TeamDTO, Integer> {
@@ -90,11 +91,11 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
                 throw new ApiException(404, "Team not found");
             }
             // Remove all associations with PlayerAccounts
-            for (PlayerAccount playerAccount : team.getTeamAccounts()) {
+            for (PlayerAccount playerAccount : new ArrayList<>(team.getTeamAccounts())) {
                 team.removePlayerAccount(playerAccount);
             }
             // Remove all associations with TournamentTeams
-            for (TournamentTeam tournamentTeam : team.getTournamentTeams()) {
+            for (TournamentTeam tournamentTeam : new ArrayList<>(team.getTournamentTeams())) {
                 team.removeTournamentTeam(tournamentTeam);
             }
             // Remove the team
