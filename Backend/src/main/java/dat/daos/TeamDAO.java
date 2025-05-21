@@ -1,6 +1,8 @@
 package dat.daos;
 
+import dat.dtos.PlayerAccountDTO;
 import dat.dtos.TeamDTO;
+import dat.dtos.TournamentTeamDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.entities.TournamentTeam;
@@ -9,6 +11,7 @@ import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamDAO implements IDAO<TeamDTO, Integer> {
@@ -90,11 +93,11 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
                 throw new ApiException(404, "Team not found");
             }
             // Remove all associations with PlayerAccounts
-            for (PlayerAccount playerAccount : team.getTeamAccounts()) {
+            for (PlayerAccount playerAccount : new ArrayList<>(team.getTeamAccounts())) {
                 team.removePlayerAccount(playerAccount);
             }
             // Remove all associations with TournamentTeams
-            for (TournamentTeam tournamentTeam : team.getTournamentTeams()) {
+            for (TournamentTeam tournamentTeam : new ArrayList<>(team.getTournamentTeams())) {
                 team.removeTournamentTeam(tournamentTeam);
             }
             // Remove the team
@@ -149,4 +152,23 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
             return new TeamDTO(team);
         }
     }
+
+    public List<PlayerAccountDTO> getAllPlayerAccountForTeam(int teamId) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<PlayerAccount> playerAccounts = em.createQuery("SELECT p FROM PlayerAccount p JOIN p.teams t WHERE t.id = :teamId", PlayerAccount.class)
+                    .setParameter("teamId", teamId)
+                    .getResultList();
+            return playerAccounts.stream().map(PlayerAccountDTO::new).toList();
+        }
+    }
+
+    public List<TournamentTeamDTO> getAllTournamentTeamsForTeam(int teamId) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<TournamentTeam> tournamentTeams = em.createQuery("SELECT tt FROM TournamentTeam tt JOIN tt.team t WHERE t.id = :teamId", TournamentTeam.class)
+                    .setParameter("teamId", teamId)
+                    .getResultList();
+            return tournamentTeams.stream().map(TournamentTeamDTO::new).toList();
+        }
+    }
+
 }
