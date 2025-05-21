@@ -1,0 +1,116 @@
+.profile-card {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: #0f111a;
+  border-radius: 16px;
+  display: flex;
+  gap: 60px;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* LEFT COLUMN */
+.profile-left {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 16px;
+}
+
+.profile-picture {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.profile-picture img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #4e4e4e;
+  margin-bottom: 8px;
+}
+
+.profile-left input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.profile-left button {
+  width: 100%;
+  padding: 12px;
+  background-color: #2a3f45;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.profile-left button:hover {
+  background-color: #3b5b61;
+}
+
+.logout-button {
+  background-color: #d43f3f;
+}
+
+.logout-button:hover {
+  background-color: #b62d2d;
+}
+
+.profile-right {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 120px; /* Adjust until top aligns with 'Brugeroplysninger' */
+}
+
+
+.profile-right label {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.profile-right input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  background-color: #1a1d2a;
+  color: #fff;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.static-text {
+  font-size: 1rem;
+  padding: 5px 0;
+  color: #d0d0d0;
+}
+
+.profile-actions {
+  margin-top: 20px;
+}
+
+.profile-actions button {
+  margin-top: 10px;
+  padding: 12px;
+  background-color: #2a3f45;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.profile-actions button:hover {
+  background-color: #3b5b61;
+}

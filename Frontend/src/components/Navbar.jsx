@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = () => {
+
+    const isLoggedIn = !!localStorage.getItem('token');
+
   return (
     <header className="navbar">
 
@@ -18,7 +21,7 @@ const Navbar = () => {
         <a href="#">Forum</a>
       </div>
       <div className="nav-right">
-        <Link to="/login">
+        <Link to={isLoggedIn ? "/profile" : "/login"}>
           <FontAwesomeIcon icon={faUser} className="user-icon" />
         </Link>
       </div>
