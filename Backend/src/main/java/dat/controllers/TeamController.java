@@ -47,8 +47,9 @@ public class TeamController {
     }
 
     public void create(Context ctx) {
+        int id = Integer.parseInt(ctx.pathParam("id"));
         TeamDTO teamDTO = ctx.bodyAsClass(TeamDTO.class);
-        TeamDTO createdTeamDTO = teamDAO.create(teamDTO);
+        TeamDTO createdTeamDTO = teamDAO.create(teamDTO, id);
         ctx.res().setStatus(201);
         ctx.json(createdTeamDTO, TeamDTO.class);
     }
