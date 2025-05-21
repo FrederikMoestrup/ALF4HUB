@@ -6,13 +6,14 @@ const Profile = ({ user, loggedInUser, onSave }) => {
     id: 0,
     username: "TestBruger",
     email: "test@example.com",
+    role: "User",
     strikes: 0,
     profileImageUrl: "../src/assets/alf4hubfav.png"
   };
 
   const [currentUser, setCurrentUser] = useState(user || dummyUser);
   const actualLoggedInUser = loggedInUser || dummyUser;
-  const isOwner = actualLoggedInUser && currentUser.id === actualLoggedInUser.id;
+  const isOwner = actualLoggedInUser?.id === currentUser?.id;
 
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({ ...currentUser, password: '' });
@@ -49,9 +50,7 @@ const Profile = ({ user, loggedInUser, onSave }) => {
       profileImageUrl: updatedProfileImageUrl,
     });
 
-    if (onSave) {
-      onSave(formData);
-    }
+    if (onSave) onSave(formData);
 
     setEditing(false);
     setFormData((prev) => ({ ...prev, password: '' }));
@@ -59,7 +58,7 @@ const Profile = ({ user, loggedInUser, onSave }) => {
 
   return (
     <div className="profile-card">
-      {/* LEFT COLUMN */}
+      {/* LEFT */}
       <div className="profile-left">
         <div className="profile-picture">
           <img
@@ -80,40 +79,38 @@ const Profile = ({ user, loggedInUser, onSave }) => {
         <button className="logout-button">Log af</button>
       </div>
 
-      {/* RIGHT COLUMN */}
+      {/* RIGHT */}
       <div className="profile-right">
         <label>Brugernavn</label>
         {editing ? (
-          <input
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
+          <input name="username" value={formData.username} onChange={handleChange} />
         ) : (
           <div className="static-text">{currentUser.username}</div>
         )}
 
         <label>Email</label>
         {editing ? (
-          <input
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
+          <input name="email" value={formData.email} onChange={handleChange} />
         ) : (
           <div className="static-text">{currentUser.email}</div>
         )}
 
-        <label>Adgangskode</label>
-        {editing ? (
-          <input
-            name="password"
-            type="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        ) : (
-          <div className="static-text">••••••••••••••</div>
+        <label>Rolle</label>
+        <div className="static-text">{currentUser.role}</div>
+
+        <label>Strikes</label>
+        <div className="static-text">{currentUser.strikes}</div>
+
+        {editing && (
+          <>
+            <label>Adgangskode</label>
+            <input
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </>
         )}
 
         {isOwner && (
