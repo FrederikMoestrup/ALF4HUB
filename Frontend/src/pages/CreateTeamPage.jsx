@@ -233,10 +233,12 @@ const CreateTeamPage = () => {
       // Create team object according to the API structure
       const newTeam = {
         teamName: teamName,
+        isPrivate: isPrivate,
         teamCaptain: {
           id: mockUser.id,
           username: mockUser.username
         },
+        game: selectedGame,
         teamAccounts: [],
         tournamentTeams: []
       };
@@ -267,7 +269,8 @@ const CreateTeamPage = () => {
       }
       
       const data = await response.json();
-      console.log('Team created successfully:', data);
+      console.log('Response status:', response.status);
+      console.log('Full response data:', data);
       
       // Redirect to the teams page
       navigate('/teams');
