@@ -2,6 +2,8 @@ package US17.steps;
 
 import dat.config.HibernateConfig;
 import dat.daos.TeamDAO;
+import dat.dtos.PlayerAccountDTO;
+import dat.dtos.TournamentTeamDTO;
 import dat.entities.*;
 import dat.enums.Game;
 import dat.exceptions.ApiException;
@@ -12,6 +14,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TransactionRequiredException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,24 +89,23 @@ public class deleteTeamSteps {
     }
 
     @Then("all players should be removed from the team")
-    public void all_players_should_be_removed_from_the_team() {
-        try {
-            teamDAO.getById(teamId);
-            fail("Team should not exist after deletion");
-        } catch (ApiException e) {
-            assertEquals(404, e.getStatusCode(), "Expected 404 not found after deletion");
+    public void all_players_should_be_removed_from_the_team() throws ApiException {
+        try{
+        List<PlayerAccountDTO> players = teamDAO.getAllPlayerAccountForTeam(teamId);
+        assertTrue(players.isEmpty(), "Expected no players associated with team after deletion");}
+        catch (ApiException e) {
+            fail("Failed to retrieve players: " + e.getMessage());
         }
     }
 
     @Then("all associated tournament teams should be removed from the team")
-    public void all_associated_tournament_teams_should_be_removed_from_the_team() {
+    public void all_associated_tournament_teams_should_be_removed_from_the_team() throws ApiException {
         try {
-            teamDAO.getById(teamId);
-            fail("Team should not exist after deletion");
+        List<TournamentTeamDTO> tournaments = teamDAO.getAllTournamentTeamsForTeam(teamId);
+        assertTrue(tournaments.isEmpty(), "Expected no tournament teams associated with team after deletion");
         } catch (ApiException e) {
-            assertEquals(404, e.getStatusCode());
+            fail("Failed to retrieve tournament teams: " + e.getMessage());
         }
-
     }
 
     @Then("the team should be permanently deleted from the system")
