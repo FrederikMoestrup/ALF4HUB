@@ -1,5 +1,6 @@
 package dat.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import dat.entities.Notification;
 import dat.enums.NotificationType;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class NotificationDTO {
     private NotificationType notificationType;
     private String notificationTitle;
     private boolean isRead;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime createdAt;
     private String link;
     private Long teamId;
