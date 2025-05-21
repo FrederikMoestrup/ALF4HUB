@@ -58,7 +58,6 @@ const Profile = ({ user, loggedInUser, onSave }) => {
 
   return (
     <div className="profile-card">
-      {/* LEFT */}
       <div className="profile-left">
         <div className="profile-picture">
           <img
@@ -79,7 +78,6 @@ const Profile = ({ user, loggedInUser, onSave }) => {
         <button className="logout-button">Log af</button>
       </div>
 
-      {/* RIGHT */}
       <div className="profile-right">
         <label>Brugernavn</label>
         {editing ? (
