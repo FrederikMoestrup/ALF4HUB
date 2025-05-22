@@ -49,7 +49,7 @@ public class TournamentController {
     public void create(Context ctx) {
         TournamentDTO tournamentDTO = validateEntity(ctx);
 
-        OffensiveWordsCheck checker = new OffensiveWordsCheck("badwordslist.txt");
+        OffensiveWordsCheck checker = new OffensiveWordsCheck("en_badwords.txt");
         Optional<String> offensiveWord = checker.findFirstOffensiveWord(tournamentDTO.getTournamentName());
         if (offensiveWord.isPresent()) {
             ctx.status(400).result("Tournament name contains offensive word: " + offensiveWord.get());
