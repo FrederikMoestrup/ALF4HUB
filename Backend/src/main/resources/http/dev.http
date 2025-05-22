@@ -260,3 +260,9 @@ Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
 
 
+### Henting notifikationer af en bestemt type - typerne findes i notificationType route
+GET localhost:7070/api/notifications/type/invitation
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+
