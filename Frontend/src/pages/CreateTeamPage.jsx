@@ -122,23 +122,23 @@ const ButtonsContainer = styled.div`
 
 const CreateTeamPage = () => {
   const navigate = useNavigate();
+  const [isLoggedIn, setIsLoggedIn] = useState(true); // assume true until checked
+  const [loading, setLoading] = useState(true);
   const [teamName, setTeamName] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [teams, setTeams] = useState([]);
+
 
   // Fetch existing teams to check for name availability
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const response = await fetch('http://localhost:7070/api/teams');
-        const data = await response.json();
-        setTeams(data);
-      } catch (error) {
-        console.error('Error fetching teams:', error);
+    const checkLogin = async () => {
+      const userId = await apiFacade.getUserId();
+      if (!userId) {
+        setIsLoggedIn(false);
       }
+      setLoading(false);
     };
-    fetchTeams();
+    checkLogin();
   }, []);
 
 
@@ -155,15 +155,6 @@ const handleSubmit = async (e) => {
     return;
   }
 
-  // check if name exists already
-  const exists = teams.some(team => 
-    team.teamName && team.teamName.toLowerCase() === trimmedName.toLowerCase()
-  );
-  if (exists) {
-    setError('Dette holdnavn er allerede i brug');
-    return;
-  }
-
   setError('');
   setIsSubmitting(true);
 
@@ -174,7 +165,7 @@ const handleSubmit = async (e) => {
     const userId = await apiFacade.getUserId();
 
     // API call to create team with the correct endpoint
-    const response = await fetch(`http://localhost:7070/api/team-captain/${userId}`, {
+    const response = await fetch(`http://localhost:7070/api/teams/team-captain/${userId}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json",
@@ -186,19 +177,22 @@ const handleSubmit = async (e) => {
     });
 
     if (!response.ok) {
-      let message = 'Noget gik galt ved oprettelsen af holdet';
-      try {
-        const errorResponse = await response.json();
-        message = errorResponse.message || message;
-      } catch {
-        const errorText = await response.text();
-        message = errorText || message;
-      }
-      throw new Error(message);
+  let message = 'Noget gik galt ved oprettelsen af holdet';
+  try {
+    const errorText = await response.text(); // just read the text once
+    // Try parsing as JSON (if it's valid JSON)
+    try {
+      const errorResponse = JSON.parse(errorText);
+      message = errorResponse.message || message;
+    } catch {
+      message = errorText || message;
     }
+  } catch {
+    // fallback message already set
+  }
+  throw new Error(message);
+}
 
-    const createdTeam = await response.json();
-    console.log("Nyt hold oprettet:", createdTeam);
     setTeamName('');
     navigate('/teams');
   } catch (error) {
@@ -209,8 +203,18 @@ const handleSubmit = async (e) => {
   }
 };
 
+if (loading) return null;
 
-  return (
+  if (!isLoggedIn) {
+    return (
+      <PageContainer>
+        <FormContainer>
+          <ErrorMessage>Du skal være logget ind for at oprette et hold.</ErrorMessage>
+        </FormContainer>
+      </PageContainer>
+    );
+  }
+    return (
     <div>
       <PageContainer>
         <Header>
