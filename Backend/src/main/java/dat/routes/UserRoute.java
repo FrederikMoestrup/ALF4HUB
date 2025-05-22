@@ -14,6 +14,8 @@ public class UserRoute {
 
         return () -> {
             put("/{id}/strike", userController::addStrike, Role.USER);
+            get("/{id}/profile_picture", userController::getProfilePicture, Role.USER);
+            put("/{id}/profile_picture", userController::updateProfilePicture, Role.USER);
         };
     }
 }

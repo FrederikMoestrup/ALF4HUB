@@ -47,6 +47,9 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "strikes")
     private int strikes = 0;
 
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
 
     //Relations
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
