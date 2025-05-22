@@ -107,6 +107,16 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
         }
     }
 
+    public boolean teamNameAlreadyExist(String name) {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT COUNT(t) FROM Team t WHERE LOWER(t.teamName) = LOWER(:name)";
+            Long count = em.createQuery(jpql, Long.class)
+                    .setParameter("name", name.toLowerCase())
+                    .getSingleResult();
+            return count > 0;
+        }
+    }
+
     public TeamDTO invitePlayer(Integer teamId, Integer playerAccountId) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();

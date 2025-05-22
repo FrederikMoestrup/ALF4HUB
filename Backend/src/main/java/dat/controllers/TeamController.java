@@ -46,9 +46,15 @@ public class TeamController {
         ctx.json(teamDTOs, TeamDTO.class);
     }
 
-    public void create(Context ctx) {
+    public void create(Context ctx) throws ApiException {
         int id = Integer.parseInt(ctx.pathParam("id"));
         TeamDTO teamDTO = ctx.bodyAsClass(TeamDTO.class);
+
+        // Check for existing team name (case-insensitive)
+        if (teamDAO.teamNameAlreadyExist(teamDTO.getTeamName())) {
+            throw new ApiException(409, "Holdnavnet er allerede i brug");
+        }
+
         TeamDTO createdTeamDTO = teamDAO.create(teamDTO, id);
         ctx.res().setStatus(201);
         ctx.json(createdTeamDTO, TeamDTO.class);
