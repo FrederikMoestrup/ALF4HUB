@@ -87,7 +87,7 @@ public class SecurityController implements ISecurityController {
                 UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
                 User created = securityDAO.createUser(userInput.getUsername(), userInput.getPassword(), userInput.getEmail());
 
-                String token = createToken(new UserDTO(created.getUsername(), Set.of("USER")));
+                String token = createToken(new UserDTO(created.getId(), created.getUsername(), Set.of("USER")));
                 ctx.status(HttpStatus.CREATED).json(returnObject
                         .put("token", token)
                         .put("username", created.getUsername()));

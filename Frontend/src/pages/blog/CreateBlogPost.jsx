@@ -20,6 +20,7 @@ import {
   RequiredText,
   Footer,
 } from "./styles/createBlogPostStyles";
+import apiFacade from "../../util/apiFacade";
 
 function CreateBlogPost() {
   const [title, setTitle] = useState("");
@@ -42,9 +43,10 @@ function CreateBlogPost() {
     }
 
     const endpoint = submitType === "draft" ? "/blogpost/draft" : "/blogpost";
+    const userId = await apiFacade.getUserId();
 
     const payload = {
-      userId: localStorage.getItem("userid"),
+      userId,
       title,
       content,
       status: submitType.toUpperCase(),
