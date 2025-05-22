@@ -11,7 +11,6 @@ Content-Type: application/json
   "email": "user123@example.com"
 }
 
-
 ###
 POST http://localhost:7070/api/auth/login/
 
@@ -243,24 +242,7 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:7070/api/notifications
-Authorization: Bearer {{jwt_token}}
-Content-Type: application/json
-
-{
-  "notificationType": "APPLICATION_ACCEPTED",
-  "notificationTitle": "Din invitation til holdet er blevet accepteret",
-  "read": false,
-  "link": "/teams/1",
-  "teamId": 1,
-  "senderId": 1,
-  "invitationId": null
-}
-
-
-
-
-### Her henter vi alle notifikationer for brugeren der er logget ind
+# Her henter vi alle notifikationer for brugeren der er logget ind
 GET http://localhost:7070/api/notifications
 Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
@@ -276,6 +258,12 @@ Content-Type: application/json
 
 ### Marker alle notifikationer som læst
 PUT http://localhost:7070/api/notifications/markallasread
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+
+### Henting notifikationer af en bestemt type - typerne findes i notificationType route
+GET localhost:7070/api/notifications/type/invitation
 Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
 

@@ -1,10 +1,9 @@
 package dat.daos;
 
 import dat.dtos.NotificationDTO;
-import dat.dtos.TournamentDTO;
 import dat.entities.Notification;
-import dat.entities.Tournament;
 import dat.entities.User;
+import dat.enums.NotificationType;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import dat.exceptions.ApiException;
@@ -51,7 +50,7 @@ public class NotificationDAO implements IDAO <NotificationDTO, Integer>
         return null;
     }
 
-    public NotificationDTO create(NotificationDTO dto, User user) {
+    public NotificationDTO createNotification(NotificationDTO dto, User user) {
         Notification notification = new Notification(dto, user);
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -157,6 +156,65 @@ public class NotificationDAO implements IDAO <NotificationDTO, Integer>
             return notifs.size();
         }
     }
+
+
+    public List<NotificationDTO> getNotificationTypeInvitation(int userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Notification> notifications = em.createQuery(
+                            "SELECT n FROM Notification n WHERE n.notificationType = :type AND n.user.id = :userId",
+                            Notification.class)
+                    .setParameter("type", NotificationType.INVITATION)
+                    .setParameter("userId", userId)
+                    .getResultList();
+
+            return notifications.stream().map(NotificationDTO::new).toList();
+        }
+    }
+
+    public List<NotificationDTO> getNotificationTypeRequest(int userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Notification> notifications = em.createQuery(
+                            "SELECT n FROM Notification n WHERE n.notificationType = :type AND n.user.id = :userId",
+                            Notification.class)
+                    .setParameter("type", NotificationType.REQUEST)
+                    .setParameter("userId", userId)
+                    .getResultList();
+
+            return notifications.stream().map(NotificationDTO::new).toList();
+        }
+    }
+
+    public List<NotificationDTO> getNotificationTypeInfo(int userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Notification> notifications = em.createQuery(
+                            "SELECT n FROM Notification n WHERE n.notificationType = :type AND n.user.id = :userId",
+                            Notification.class)
+                    .setParameter("type", NotificationType.INFO)
+                    .setParameter("userId", userId)
+                    .getResultList();
+
+            return notifications.stream().map(NotificationDTO::new).toList();
+        }
+    }
+
+    public List<NotificationDTO> getNotificationTypeMessage(int userId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Notification> notifications = em.createQuery(
+                            "SELECT n FROM Notification n WHERE n.notificationType = :type AND n.user.id = :userId",
+                            Notification.class)
+                    .setParameter("type", NotificationType.MESSAGE)
+                    .setParameter("userId", userId)
+                    .getResultList();
+
+            return notifications.stream().map(NotificationDTO::new).toList();
+        }
+    }
+
+
+
+
+
+
 
 
 }

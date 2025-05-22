@@ -44,7 +44,7 @@ public class NotificationController {
         try {
             NotificationDTO dto = ctx.bodyAsClass(NotificationDTO.class);
             User user = userDAO.getUserByUsername(username);
-            NotificationDTO created = notificationDAO.create(dto, user);
+            NotificationDTO created = notificationDAO.createNotification(dto, user);
             ctx.status(201).json(created);
         } catch (Exception e) {
             ctx.status(404).json(Map.of("error", e.getMessage()));
@@ -119,5 +119,50 @@ public class NotificationController {
         int updatedCount = notificationDAO.markAllAsRead(username);
         ctx.json(Map.of("updated", updatedCount));
     }
+
+    public void getNotificationTypeInvitation(Context ctx) {
+        UserDTO userDTO = ctx.attribute("user");
+        if (userDTO == null) {
+            ctx.status(HttpStatus.UNAUTHORIZED).json(Map.of("error", "Ikke logget ind"));
+            return;
+        }
+
+        int userId = userDTO.getId();
+        ctx.json(notificationDAO.getNotificationTypeInvitation(userId));
+    }
+    public void getNotificationTypeRequest(Context ctx) {
+        UserDTO userDTO = ctx.attribute("user");
+        if (userDTO == null) {
+            ctx.status(HttpStatus.UNAUTHORIZED).json(Map.of("error", "Ikke logget ind"));
+            return;
+        }
+
+        int userId = userDTO.getId();
+        ctx.json(notificationDAO.getNotificationTypeRequest(userId));
+    }
+
+    public void getNotificationTypeInfo(Context ctx) {
+        UserDTO userDTO = ctx.attribute("user");
+        if (userDTO == null) {
+            ctx.status(HttpStatus.UNAUTHORIZED).json(Map.of("error", "Ikke logget ind"));
+            return;
+        }
+
+        int userId = userDTO.getId();
+        ctx.json(notificationDAO.getNotificationTypeInfo(userId));
+    }
+
+    public void getNotificationTypeMessage(Context ctx) {
+        UserDTO userDTO = ctx.attribute("user");
+        if (userDTO == null) {
+            ctx.status(HttpStatus.UNAUTHORIZED).json(Map.of("error", "Ikke logget ind"));
+            return;
+        }
+
+        int userId = userDTO.getId();
+        ctx.json(notificationDAO.getNotificationTypeMessage(userId));
+    }
+
+
 }
 

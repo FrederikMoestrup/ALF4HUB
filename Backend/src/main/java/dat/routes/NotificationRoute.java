@@ -18,6 +18,11 @@ public class NotificationRoute {
             post("/", controller::createNotification, Role.USER);
             put("/{id}/read", controller::markAsRead, Role.USER);
             put("/markallasread", controller::markAllAsRead, Role.USER);
+            get("/type/invitation", controller::getNotificationTypeInvitation, Role.USER);
+            get("/type/request", controller::getNotificationTypeRequest, Role.USER);
+            get("/type/info", controller::getNotificationTypeInfo, Role.USER);
+            get("/type/message", controller::getNotificationTypeMessage, Role.USER);
+
         };
     }
 
