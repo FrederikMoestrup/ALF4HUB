@@ -37,7 +37,7 @@ const Button = styled(Link)`
   transition: all 0.3s ease;
   
   &:hover {
-    background-color: var(--color-text);
+    background-color: var(--color-accept);
     color: var(--color-main);
   }
 `;
