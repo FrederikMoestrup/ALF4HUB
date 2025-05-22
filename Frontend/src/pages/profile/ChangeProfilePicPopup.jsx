@@ -24,6 +24,7 @@ const Popup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  color: black;
 `;
 
 const Input = styled.input`

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import ChangeProfilePicPopup from "./ChangeProfilePicPopup";
+import { useNavigate } from "react-router-dom";
 
 const Profile = ({ user, loggedInUser, onSave }) => {
     const dummyUser = {
@@ -12,6 +13,7 @@ const Profile = ({ user, loggedInUser, onSave }) => {
         profileImageUrl: "https://i.imgur.com/xd4qwBX.png",
     };
 
+    const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState(user || dummyUser);
     const actualLoggedInUser = loggedInUser || dummyUser;
     const isOwner = actualLoggedInUser?.id === currentUser?.id;
@@ -20,6 +22,11 @@ const Profile = ({ user, loggedInUser, onSave }) => {
     const [formData, setFormData] = useState({ ...currentUser, password: "" });
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [showPicPopup, setShowPicPopup] = useState(false);
+    const [showProfileInfo, setShowProfileInfo] = useState(false);
+    const handleLogout = () => {
+        localStorage.removeItem("token"); 
+        navigate("/login"); 
+    };
 
     useEffect(() => {
         if (editing && formData.profileImage instanceof File) {
@@ -95,66 +102,70 @@ const Profile = ({ user, loggedInUser, onSave }) => {
                     />
                 )} */}
 
-                <button>Brugeroplysninger</button>
-                <button>Hold</button>
-                <button>Turneringer</button>
-                <button>Blogposts</button>
-                <button className="logout-button">Log af</button>
+                <button onClick={() => setShowProfileInfo(!showProfileInfo)}>
+                    Brugeroplysninger
+                </button>
+                <button onClick={() => navigate("/team-dashboard")}>Hold</button>
+                <button onClick={() => navigate("/my-tournaments")}>Turneringer</button> 
+                <button onClick={() => navigate("/blog/posts")}>Blogposts</button>
+                <button className="logout-button" onClick={handleLogout}>
+                    Log af
+                </button>
             </div>
 
-            <div className="profile-right">
-                <label>Brugernavn</label>
-                {editing ? (
-                    <input
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                    />
-                ) : (
-                    <div className="static-text">{currentUser.username}</div>
-                )}
-
-                <label>Email</label>
-                {editing ? (
-                    <input
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                    />
-                ) : (
-                    <div className="static-text">{currentUser.email}</div>
-                )}
-
-                <label>Rolle</label>
-                <div className="static-text">{currentUser.role}</div>
-
-                <label>Strikes</label>
-                <div className="static-text">{currentUser.strikes}</div>
-
-                {editing && (
-                    <>
-                        <label>Adgangskode</label>
+            {showProfileInfo && (
+                <div className="profile-right">
+                    <label>Brugernavn</label>
+                    {editing ? (
                         <input
-                            name="password"
-                            type="password"
-                            value={formData.password}
+                            name="username"
+                            value={formData.username}
                             onChange={handleChange}
                         />
-                    </>
-                )}
+                    ) : (
+                        <div className="static-text">{currentUser.username}</div>
+                    )}
 
-                {isOwner && (
-                    <div className="profile-actions">
-                        <button
-                            onClick={
-                                editing ? handleSave : () => setEditing(true)
-                            }
-                        >
-                            {editing ? "Gem" : "Redigér"}
-                        </button>
-                    </div>
-                )}
-            </div>
+                    <label>Email</label>
+                    {editing ? (
+                        <input
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                        />
+                    ) : (
+                        <div className="static-text">{currentUser.email}</div>
+                    )}
+
+                    <label>Rolle</label>
+                    <div className="static-text">{currentUser.role}</div>
+
+                    <label>Strikes</label>
+                    <div className="static-text">{currentUser.strikes}</div>
+
+                    {editing && (
+                        <>
+                            <label>Adgangskode</label>
+                            <input
+                                name="password"
+                                type="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                            />
+                        </>
+                    )}
+
+                    {isOwner && (
+                        <div className="profile-actions">
+                            <button
+                                onClick={editing ? handleSave : () => setEditing(true)}
+                            >
+                                {editing ? "Gem" : "Redigér"}
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
             <ChangeProfilePicPopup
                 isOpen={showPicPopup}
                 onClose={() => setShowPicPopup(false)}
