@@ -242,6 +242,25 @@ Content-Type: application/json
 
 ###
 
+# Her opretter vi en notifikation for accepteret holdansøgning
+POST http://localhost:7070/api/notifications
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "notificationType": "INVITATION",
+  "notificationTitle": "Du er blevet accepteret på holdet",
+  "read": false,
+  "link": "/teams/1",
+  "teamId": 1,
+  "invitationId": 42,
+  "senderId": 1001
+}
+
+###
+
+
+
 # Her henter vi alle notifikationer for brugeren der er logget ind
 GET http://localhost:7070/api/notifications
 Authorization: Bearer {{jwt_token}}
