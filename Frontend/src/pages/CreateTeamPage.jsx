@@ -169,37 +169,29 @@ const CreateTeamPage = () => {
       setError('Dette holdnavn er allerede i brug');
       return;
     }
-    
-    setError('');
+
+     setError('');
     setIsSubmitting(true);
+
+    const token = localStorage.getItem("token");
+    
+   
     
     try {
-      // Get current user (for team captain)
-      const mockUser = {
-        id: 1,
-        username: 'currentUser'
-      };
-      
-      // Create team object according to the API structure
-      const newTeam = {
-        teamName: teamName,
-        teamCaptain: {
-          id: mockUser.id,
-          username: mockUser.username
-        },
-        teamAccounts: [],
-        tournamentTeams: []
-      };
-      
       // API call to create team
       const response = await fetch('http://localhost:7070/api/teams', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(newTeam)
+        body: JSON.stringify({
+        teamName: teamName,
+      }),
       });
-      
+      //tester
+      console.log("New team object:", teamName)
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Kunne ikke oprette hold');
