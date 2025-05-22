@@ -122,7 +122,7 @@ export default function ChangeProfilePicPopup({
           {error && <ErrorMsg>{error}</ErrorMsg>}
           <ButtonRow>
             <Button type="button" onClick={onClose} disabled={loading}>
-              Annuler
+              Annuller
             </Button>
             <Button type="submit" primary disabled={loading}>
               {loading ? "Gemmer..." : "Gem"}
