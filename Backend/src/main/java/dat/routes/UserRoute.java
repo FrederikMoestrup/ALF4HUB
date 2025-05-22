@@ -14,6 +14,8 @@ public class UserRoute {
 
         return () -> {
             put("/{id}/strike", userController::addStrike, Role.USER);
+            get("/{id}", userController::getUserById, Role.USER);
         };
     }
 }
+

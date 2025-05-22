@@ -39,6 +39,14 @@ public class UserController {
         }
     }
 
-
-
+    public void getUserById(Context ctx) throws ApiException {
+        try {
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            UserDTO userDTO = userDAO.getById(id);
+            ctx.res().setStatus(200);
+            ctx.json(userDTO, UserDTO.class);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Invalid id");
+        }
+    }
 }
