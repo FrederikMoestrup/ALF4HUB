@@ -71,7 +71,7 @@ public class Team {
             }
         }
     }
-
+    //Tilføjer en spiller til teamAccounts-listen
     public void addPlayerAccount(PlayerAccount playerAccount) {
         if (playerAccount != null && !teamAccounts.contains(playerAccount)) {
             teamAccounts.add(playerAccount);

@@ -3,11 +3,12 @@ GET http://localhost:7070/api/auth/test/
 
 ### Create a new user - this one will only get a USER role by default
 POST http://localhost:7070/api/auth/register/
+Content-Type: application/json
 
 {
-    "username": "user",
-    "email": "heeh",
-    "password": "test123"
+  "username": "user",
+  "password": "test123",
+  "email": "user123@example.com"
 }
 
 ###
@@ -178,7 +179,7 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "tournamentName": "pass",
+  "tournamentName": "rgege",
   "game": "COUNTER_STRIKE",
   "tournamentSize": 16,
   "teamSize": 5,
@@ -196,6 +197,7 @@ Authorization: Bearer {{jwt_token}}
 }
 
 ###
+
 PUT http://localhost:7070/api/tournaments/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
