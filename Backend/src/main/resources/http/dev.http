@@ -215,6 +215,13 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
+PUT http://localhost:7070/api/users/1/profile_picture
+Content-Type: application/x-www-form-urlencoded
+Authorization: Bearer {{jwt_token}}
+
+profile_picture=https://example.com/new_profile_picture.jpg
+
+###
 //TeamJoinRequest
 
 GET http://localhost:7070/api/team-join-requests

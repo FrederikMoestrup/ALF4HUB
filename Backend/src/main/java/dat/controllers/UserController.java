@@ -42,14 +42,13 @@ public class UserController {
     public void updateProfilePicture(Context ctx) throws ApiException {
         try {
             int userId = Integer.parseInt(ctx.pathParam("id"));
-            String profilePicture = ctx.formParam("profile_picture");
+            String profilePicture = ctx.formParam("profilePicture");
             UserDTO userDTO = userDAO.getById(userId);
             if (userDTO == null) {
                 throw new ApiException(404, "User not found");
             }
-            userDTO.setProfilePicture(profilePicture);
-            userDAO.updateProfilePicture(new User(userDTO), profilePicture);
-            ctx.json(userDTO, UserDTO.class);
+            userDAO.updateProfilePicture(userId, profilePicture);
+            ctx.status(200);
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
         }
@@ -67,7 +66,6 @@ public class UserController {
             throw new ApiException(400, "Missing or invalid parameter: id");
         }
     }
-
 
 
 }

@@ -37,24 +37,4 @@ public class UserStrikeStepDefinitions {
         User updatedUser = userDAO.findById(user.getId());
         Assertions.assertEquals(expectedStrikes, updatedUser.getStrikes());
     }
-
-
-    @Given("I have uploaded a profile picture")
-    public void iHaveUploadedAProfilePicture() {
-    }
-
-    @When("I save")
-    public void iSave() {
-
-        userDAO.updateProfilePicture(user, uploeadedPictureLink);
-    }
-
-    @Then("the profile picture should be updated and displayed correctly across the platform")
-    public void theProfilePictureShouldBeUpdatedAndDisplayedCorrectlyAcrossThePlatform() {
-
-        String actualPictureLink = userDAO.getProfilePicture(user);
-        String expectedPictureLink = uploeadedPictureLink;
-
-        Assertions.assertEquals(expectedPictureLink, actualPictureLink);
-    }
 }

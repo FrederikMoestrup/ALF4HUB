@@ -111,6 +111,7 @@ public class User implements Serializable, ISecurityUser {
     public User(UserDTO dto) {
         this.id = dto.getId();
         this.username = dto.getUsername();
+        this.email = dto.getEmail();
         if (dto.getRoles() != null) {
             this.roles = dto.getRoles().stream()
                     .map(roleName -> new Role(roleName))

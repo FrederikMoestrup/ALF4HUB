@@ -81,11 +81,13 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
     }
 
 
-    public void updateProfilePicture(User user, String url) {
+    public void updateProfilePicture(int userId, String url) {
         try (EntityManager em = emf.createEntityManager()) {
+
             em.getTransaction().begin();
+
+            User user = em.find(User.class, userId);
             user.setProfilePicture(url);
-            em.merge(user);
             em.getTransaction().commit();
         }
     }
