@@ -7,25 +7,26 @@ const ReadBlogPost = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetch(`http://localhost:7071/api/blogpost/${postId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch blog post");
-        return res.json();
-      })
-      .then((data) => {
-        setPost(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, [postId]);
+    useEffect(() => {
+        fetch(`http://localhost:7070/api/blogpost/${postId}`)
+            .then((res) => {
+                if (!res.ok) throw new Error("Failed to fetch blog post");
+                return res.json();
+            })
+            .then((data) => {
+                setPost(data);
+            })
+            .catch((err) => {
+                setError(err.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [postId]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!post) return null;
+  if (!post) return  <p>Post not found.</p>;
 
   return (
     <div style={{ padding: "20px" }}>
