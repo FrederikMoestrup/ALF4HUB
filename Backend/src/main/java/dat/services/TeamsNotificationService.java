@@ -15,6 +15,7 @@ package dat.services;
 import dat.dtos.NotificationDTO;
 import dat.entities.User;
 import dat.daos.NotificationDAO;
+import dat.enums.NotificationType;
 
 public class TeamsNotificationService {
 
@@ -27,25 +28,25 @@ public class TeamsNotificationService {
     public void createAcceptedApplicationNotification(User playerUser, long teamId, User captain) {
         NotificationDTO notification = new NotificationDTO();
         notification.setNotificationTitle("Din ansøgning til holdet er blevet accepteret");
-        notification.setNotificationType("APPLICATION_ACCEPTED");
+        notification.setNotificationType(NotificationType.INVITATION);
         notification.setRead(false);
         notification.setLink("/teams/" + teamId);
         notification.setTeamId(teamId);
         notification.setSenderId((long) captain.getId());
 
-        notificationDAO.create(notification, playerUser);
+        notificationDAO.createNotification(notification, playerUser);
     }
 
         public void createRejectedApplicationNotification(User playerUser, long teamId, User captain) {
             NotificationDTO notification = new NotificationDTO();
             notification.setNotificationTitle("Din ansøgning til holdet er blevet afvist");
-            notification.setNotificationType("APPLICATION_REJECTED");
+            notification.setNotificationType(NotificationType.INVITATION);
             notification.setRead(false);
             notification.setLink("/teams/" + teamId);
             notification.setTeamId(teamId);
             notification.setSenderId((long) captain.getId());
 
-            notificationDAO.create(notification, playerUser);
+            notificationDAO.createNotification(notification, playerUser);
         }
 
 }
