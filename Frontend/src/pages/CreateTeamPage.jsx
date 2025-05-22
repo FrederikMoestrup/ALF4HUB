@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import styled from 'styled-components';
+import apiFacade from '../util/apiFacade';
 
 const PageContainer = styled.div`
   margin: 0 auto;
@@ -123,7 +124,6 @@ const CreateTeamPage = () => {
   const navigate = useNavigate();
   const [teamName, setTeamName] = useState('');
   const [error, setError] = useState('');
-  const [nameExists, setNameExists] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [teams, setTeams] = useState([]);
 
@@ -138,78 +138,77 @@ const CreateTeamPage = () => {
         console.error('Error fetching teams:', error);
       }
     };
-
     fetchTeams();
   }, []);
 
-  // Check if team name already exists
-  useEffect(() => {
-    if (teamName.trim() === '') {
-      setNameExists(false);
-      return;
-    }
-    
-    const exists = teams.some(team => 
-      team.teamName && team.teamName.toLowerCase() === teamName.toLowerCase()
-    );
-    
-    setNameExists(exists);
-  }, [teamName, teams]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validate form
-    if (teamName.trim() === '') {
-      setError('Holdnavn må ikke være tomt');
-      return;
-    }
-    
-    if (nameExists) {
-      setError('Dette holdnavn er allerede i brug');
-      return;
-    }
 
-     setError('');
-    setIsSubmitting(true);
 
-    const token = localStorage.getItem("token");
-    
-   
-    
-    try {
-      // API call to create team
-      const response = await fetch('http://localhost:7070/api/teams', {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const trimmedName = teamName.trim();
+
+  // check not empty
+     if (trimmedName.trim() === '') {
+    setError('Holdnavn må ikke være tomt');
+    return;
+  }
+
+  // check if name exists already
+  const exists = teams.some(team => 
+    team.teamName && team.teamName.toLowerCase() === trimmedName.toLowerCase()
+  );
+  if (exists) {
+    setError('Dette holdnavn er allerede i brug');
+    return;
+  }
+
+  setError('');
+  setIsSubmitting(true);
+
+  const token = localStorage.getItem("token");
+
+  try {
+    // Get the user ID from the token
+    const userId = await apiFacade.getUserId();
+
+    // API call to create team with the correct endpoint
+    const response = await fetch(`http://localhost:7070/api/team-captain/${userId}`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-        teamName: teamName,
+      },
+      body: JSON.stringify({
+        teamName: trimmedName,
       }),
-      });
-      //tester
-      console.log("New team object:", teamName)
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Kunne ikke oprette hold');
+    if (!response.ok) {
+      let message = 'Noget gik galt ved oprettelsen af holdet';
+      try {
+        const errorResponse = await response.json();
+        message = errorResponse.message || message;
+      } catch {
+        const errorText = await response.text();
+        message = errorText || message;
       }
-      
-      const data = await response.json();
-      console.log('Response status:', response.status);
-      console.log('Full response data:', data);
-      
-      // Redirect to the teams page
-      navigate('/teams');
-    } catch (error) {
-      console.error('Error creating team:', error);
-      setError(`Der opstod en fejl: ${error.message}`);
-    } finally {
-      setIsSubmitting(false);
+      throw new Error(message);
     }
-  };
+
+    const createdTeam = await response.json();
+    console.log("Nyt hold oprettet:", createdTeam);
+    setTeamName('');
+    navigate('/teams');
+  } catch (error) {
+    console.error("Fejl:", error.message);
+    setError(error.message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div>
@@ -229,18 +228,15 @@ const CreateTeamPage = () => {
                 onChange={(e) => setTeamName(e.target.value)}
                 placeholder="Indtast holdnavn"
               />
-              {nameExists && (
-                <ErrorMessage>Dette holdnavn er allerede i brug</ErrorMessage>
-              )}
             </FormGroup>
-            
+        
             {error && <ErrorMessage>{error}</ErrorMessage>}
             
             <ButtonsContainer>
               <Button type="button" onClick={() => navigate('/teams')}>
                 Annuller
               </Button>
-              <Button type="submit" disabled={isSubmitting || nameExists}>
+              <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Opretter...' : 'Opret Hold'}
               </Button>
             </ButtonsContainer>
