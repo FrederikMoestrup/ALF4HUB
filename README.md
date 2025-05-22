@@ -3,18 +3,18 @@
 ## DevTeamB
 Frederik har lavet:
 - Sprint 1:
-- Opsætning af github repo (sammen med Tobias) samt start kode til backend.
-- Sæt basic metoder for dao, controller og routes op. (Startkoden var ikke perfekt, så der gik nogle timer med det her.)
-- Fikset PlayerAccount entity+dto og Team entity+dto med relation mellem dem.
+  Opsætning af github repo (sammen med Tobias) samt start kode til backend. 
+  Sæt basic metoder for dao, controller og routes op. (Startkoden var ikke perfekt, så der gik nogle timer med det her.) 
+  Fikset PlayerAccount entity+dto og Team entity+dto med relation mellem dem.
 - Sprint 2:
-- Stor glossary opdatering.
-- TournamentTeam tilføjet. Entities, relations, dtos, daos, controller, routes opdatetet.
-- Review af pull requests (backend), samt skrive frem og tilbage omkring feedback.
-- Merge ændringer og sørger for at det virker på dev.
+  Stor glossary opdatering. 
+  TournamentTeam tilføjet. Entities, relations, dtos, daos, controller, routes opdatetet. 
+  Review af pull requests (backend), samt skrive frem og tilbage omkring feedback. 
+  Merge ændringer og sørger for at det virker på dev.
 - Sprint 3:
-- Prøve at fikse fejl med login og jwttoken.
-- Review af pull requests (backend), samt skrive frem og tilbage omkring feedback.
-- Merge ændringer og sørger for at det virker på dev.
+  Prøve at fikse fejl med login og jwttoken. 
+  Review af pull requests (backend), samt skrive frem og tilbage omkring feedback. 
+  Merge ændringer og sørger for at det virker på dev.
 
 ## DevTeamK
 Peter har lavet:
