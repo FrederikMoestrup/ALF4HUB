@@ -212,4 +212,18 @@ public class NotificationsSteps {
     public void the_first_notification_title_should_be(String expectedTitle) {
         assertThat(notifications.get(0).getNotificationTitle(), is(expectedTitle));
     }
+
+    @When("I get all {word} notifications for user {string}")
+    public void i_get_all_notifications_by_type(String type, String username) {
+        NotificationType t = NotificationType.valueOf(type.toUpperCase());
+        switch (t) {
+            case INVITATION -> notifications = notificationDAO.getNotificationTypeInvitation(testUser.getId());
+            case REQUEST    -> notifications = notificationDAO.getNotificationTypeRequest(testUser.getId());
+            case INFO       -> notifications = notificationDAO.getNotificationTypeInfo(testUser.getId());
+            case MESSAGE    -> notifications = notificationDAO.getNotificationTypeMessage(testUser.getId());
+            default         -> throw new IllegalArgumentException("Ukendt type: " + type);
+        }
+    }
+
+
 }

@@ -64,3 +64,52 @@ Feature: Notification management
     And I get all notifications for user "lars"
     Then the notification list size should be 2
     And the first notification title should be "Note 2"
+
+  Scenario: Invitation-notifikationer returneres korrekt
+    Given a user "lars" with password "test123" and email "lars@example.com" exists
+    And all notifications are deleted
+    And notifications:
+      | type       | title                 | read  |
+      | INVITATION | Du er inviteret til X | false |
+      | INFO       | Systembesked          | false |
+    When notifications are created for user "lars"
+    And I get all INVITATION notifications for user "lars"
+    Then the notification list size should be 1
+    And the first notification title should be "Du er inviteret til X"
+
+  Scenario: Request-notifikationer returneres korrekt
+    Given a user "lars" with password "test123" and email "lars@example.com" exists
+    And all notifications are deleted
+    And notifications:
+      | type   | title              | read  |
+      | REQUEST | Du har ansøgt     | false |
+      | INFO    | Andet info        | false |
+    When notifications are created for user "lars"
+    And I get all REQUEST notifications for user "lars"
+    Then the notification list size should be 1
+    And the first notification title should be "Du har ansøgt"
+
+  Scenario: Info-notifikationer returneres korrekt
+    Given a user "lars" with password "test123" and email "lars@example.com" exists
+    And all notifications are deleted
+    And notifications:
+      | type | title            | read  |
+      | INFO | System opdateret | false |
+      | MESSAGE | Besked        | false |
+    When notifications are created for user "lars"
+    And I get all INFO notifications for user "lars"
+    Then the notification list size should be 1
+    And the first notification title should be "System opdateret"
+
+  Scenario: Message-notifikationer returneres korrekt
+    Given a user "lars" with password "test123" and email "lars@example.com" exists
+    And all notifications are deleted
+    And notifications:
+      | type    | title          | read  |
+      | MESSAGE | Du har en besked | false |
+      | INFO    | Generel info     | false |
+    When notifications are created for user "lars"
+    And I get all MESSAGE notifications for user "lars"
+    Then the notification list size should be 1
+    And the first notification title should be "Du har en besked"
+
