@@ -1,9 +1,12 @@
 package dat.daos;
 
+import dat.config.HibernateConfig;
 import dat.dtos.PlayerAccountDTO;
 import dat.entities.PlayerAccount;
 import dat.entities.Team;
 import dat.exceptions.ApiException;
+import dat.services.TeamsNotificationService;
+import io.javalin.http.Context;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -107,5 +110,16 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             em.getTransaction().commit();
         }
     }
+
+    // Henter Player entity via id. fx. bliver brugt i TeamController metoden acceptPlayerApplication().
+    public PlayerAccount getPlayerAccountEntity(int id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            PlayerAccount player = em.find(PlayerAccount.class, id);
+            if (player == null) throw new ApiException(404, "PlayerAccount not found");
+            return player;
+        }
+    }
+
+
 
 }

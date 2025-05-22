@@ -1,9 +1,12 @@
 package dat.controllers;
 
 import dat.config.HibernateConfig;
+import dat.daos.NotificationDAO;
+import dat.daos.PlayerAccountDAO;
 import dat.daos.TeamDAO;
 import dat.dtos.TeamDTO;
 import dat.exceptions.ApiException;
+import dat.services.TeamsNotificationService;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -109,4 +112,78 @@ public class TeamController {
                 .check(t -> t.getTeamName() != null && !t.getTeamName().isEmpty(), "Team name must be set")
                 .get();
     }
+
+    // Metoden accepter en spilleransøgning/invitation til et hold
+    public void acceptPlayerApplication(Context ctx) throws ApiException {
+        try {
+            //Hent teamId og playerAccountId fra URL-path-parametre
+            int teamId = Integer.parseInt(ctx.pathParam("teamId"));
+            int playerAccountId = Integer.parseInt(ctx.pathParam("playerAccountId"));
+
+            // DAO og service opsætning
+            var emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
+            var playerAccountDAO = PlayerAccountDAO.getInstance(emf);
+            var teamDAO = TeamDAO.getInstance(emf);
+            var notificationDAO = NotificationDAO.getInstance(emf);
+            var notificationService = new TeamsNotificationService(notificationDAO);
+
+            // Henter entity
+            var team = teamDAO.getEntityById(teamId); // Giver dig et Team
+            var player = playerAccountDAO.getPlayerAccountEntity(playerAccountId); // Giver dig PlayerAccount
+
+            // Tilføj spiller til hold
+            team.addPlayerAccount(player);
+
+            // Gem ændringer i databasen
+            try (var em = emf.createEntityManager()) {
+                em.getTransaction().begin();
+                em.merge(team);
+                em.getTransaction().commit();
+            }
+
+            // Opret notifikation
+            notificationService.createAcceptedApplicationNotification(player.getUser(), team.getId(), team.getTeamCaptain());
+
+            ctx.status(200).result("Ansøgning accepteret og notifikation oprettet");
+        } catch (Exception e) {
+            throw new ApiException(500, "Fejl ved accept af ansøgning: " + e.getMessage());
+        }
+    }
+
+
+    // Metoden afviser en spilleransøgning/invitation til et hold
+    public void rejectPlayerApplication(Context ctx) throws ApiException {
+        try {
+            // Hent teamId og playerAccountId fra URL-path-parametre
+            int teamId = Integer.parseInt(ctx.pathParam("teamId"));
+            int playerAccountId = Integer.parseInt(ctx.pathParam("playerAccountId"));
+
+            // DAO og service opsætning
+            var emf = HibernateConfig.getEntityManagerFactory("ALF4HUB_DB");
+            var playerAccountDAO = PlayerAccountDAO.getInstance(emf);
+            var teamDAO = TeamDAO.getInstance(emf);
+            var notificationDAO = NotificationDAO.getInstance(emf);
+            var notificationService = new TeamsNotificationService(notificationDAO);
+
+            // Henter entity-objekter
+            var team = teamDAO.getEntityById(teamId); // Hent Team-entiteten
+            var player = playerAccountDAO.getPlayerAccountEntity(playerAccountId); // Hent PlayerAccount-entiteten
+
+            // ❌ Spilleren tilføjes ikke til holdet – ansøgningen afvises
+
+            // Opret notifikation om afvisning
+            notificationService.createRejectedApplicationNotification(
+                    player.getUser(),        // modtageren
+                    team.getId(),            // hvilket hold det handler om
+                    team.getTeamCaptain()    // afsenderen (kaptajnen)
+            );
+
+            // Svar til klient
+            ctx.status(200).result("Ansøgning afvist og notifikation oprettet");
+        } catch (Exception e) {
+            throw new ApiException(500, "Fejl ved afvisning af ansøgning: " + e.getMessage());
+        }
+    }
+
+
 }
