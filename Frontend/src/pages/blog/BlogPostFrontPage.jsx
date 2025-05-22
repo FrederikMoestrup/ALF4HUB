@@ -17,6 +17,7 @@ import {
   BlogSectionRight,
   Button,
   Footer,
+  BlogCardLink,
 } from "./styles/blogPostFrontPageStyles";
 
 function BlogPostFrontPage() {
@@ -78,11 +79,13 @@ function BlogPostFrontPage() {
                 <p>No blogposts yet.</p>
               ) : (
                 blogPosts.map((post) => (
-                  <BlogCard key={post.id}>
-                    <h3>{post.title}</h3>
-                    <p>{post.content}</p>
-                    <small>Posted on {post.createdAt}</small>
-                  </BlogCard>
+                  <BlogCardLink to={`/blog/${post.id}`} key={post.id}>
+                    <BlogCard>
+                      <h3>{post.title}</h3>
+                      <p>{post.content}</p>
+                      <small>Posted on {post.createdAt}</small>
+                    </BlogCard>
+                  </BlogCardLink>
                 ))
               )}
             </BlogSectionRight>

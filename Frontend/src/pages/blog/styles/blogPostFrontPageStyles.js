@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
@@ -9,6 +10,16 @@ export const GlobalStyle = createGlobalStyle`
     font-family: 'Segoe UI', sans-serif;
   }
 `;
+
+export const BlogCardLink = styled(Link)`
+  color: inherit;
+
+  &:visited,
+  &:hover,
+  &:active {
+    color: inherit;
+  }
+`
 
 export const BlogCard = styled.div`
   background-color: #f8f8f8;
