@@ -5,6 +5,7 @@ import dat.entities.User;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 
@@ -83,22 +84,30 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
 
     public void updateProfilePicture(int userId, String url) {
         try (EntityManager em = emf.createEntityManager()) {
-
             em.getTransaction().begin();
-
             User user = em.find(User.class, userId);
+
+            if (user == null) {
+                throw new EntityNotFoundException("User with ID " + userId + " not found");
+            }
+
             user.setProfilePicture(url);
+            em.merge(user); // Use merge to ensure entity is updated
             em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating profile picture: " + e.getMessage(), e);
         }
     }
 
-    public String getProfilePicture(User user) {
+
+    public String getProfilePictureById(int userId) {
         try (EntityManager em = emf.createEntityManager()) {
-            User foundUser = em.find(User.class, user.getId());
-            if (foundUser != null) {
-                return foundUser.getProfilePicture();
+            User foundUser = em.find(User.class, userId);
+            if (foundUser == null) {
+                throw new EntityNotFoundException("User with ID " + userId + " not found");
             }
+            return foundUser.getProfilePicture();
         }
-        return null;
     }
+
 }

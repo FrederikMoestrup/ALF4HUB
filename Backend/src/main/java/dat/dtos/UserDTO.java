@@ -43,6 +43,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.roles = user.getRolesAsStrings();
         this.strikes = user.getStrikes();
+        this.profilePicture = user.getProfilePicture();
     }
 
     public boolean equals(Object o) {
