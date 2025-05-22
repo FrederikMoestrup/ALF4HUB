@@ -82,8 +82,8 @@ export default function ChangeProfilePicPopup({
     }
   
     try {
-      const res = await fetch("http://localhost:7070/api/profile/picture", {
-        method: "POST",
+      const res = await fetch("http://localhost:7070/api/profile_picture", {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, imageUrl: url }),
       });
