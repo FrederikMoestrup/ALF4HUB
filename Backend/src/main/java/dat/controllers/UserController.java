@@ -49,8 +49,4 @@ public class UserController {
             throw new ApiException(400, "Invalid id");
         }
     }
-
-
-
-
 }
