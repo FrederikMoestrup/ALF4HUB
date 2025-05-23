@@ -14,6 +14,7 @@ import {
   BlogMeta,
   NoPostsMessage,
   LoadingSpinner,
+  BlogCardLink,
 } from "./styles/ForumPage";
 
 function ForumPage() {
@@ -22,35 +23,35 @@ function ForumPage() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-  fetch("http://localhost:7070/api/blogpost/preview")
-    .then(async (res) => {
-      if (!res.ok) {
-        throw new Error("Failed to fetch blog posts");
-      }
-
-      const contentType = res.headers.get("content-type");
-
-      if (contentType && contentType.includes("application/json")) {
-        return res.json();
-      } else {
-        const text = await res.text();
-        if (text === "No blog posts with content preview found") {
-          return [];
-        } else {
-          throw new Error("Unexpected response format");
+    fetch("http://localhost:7070/api/blogpost/preview")
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch blog posts");
         }
-      }
-    })
-    .then((data) => {
-      setBlogPosts(data);
-      setLoading(false);
-    })
-    .catch((err) => {
-      console.error("Error:", err);
-      setError(err.message);
-      setLoading(false);
-    });
-}, []);
+
+        const contentType = res.headers.get("content-type");
+
+        if (contentType && contentType.includes("application/json")) {
+          return res.json();
+        } else {
+          const text = await res.text();
+          if (text === "No blog posts with content preview found") {
+            return [];
+          } else {
+            throw new Error("Unexpected response format");
+          }
+        }
+      })
+      .then((data) => {
+        setBlogPosts(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+        setError(err.message);
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Container>
@@ -64,7 +65,7 @@ function ForumPage() {
 
             <Button>Se dine opslag</Button>
             <NavLink to="/blog/drafts">
-            <Button>Se dine kladder</Button>
+              <Button>Se dine kladder</Button>
             </NavLink>
           </ButtonContainer>
         </ForumHeader>
@@ -81,16 +82,18 @@ function ForumPage() {
           !error &&
           blogPosts.length > 0 &&
           blogPosts.map((post) => (
-            <BlogCard key={post.id}>
-              <BlogTitle>{post.title}</BlogTitle>
-              <BlogContent style={{ color: "white" }}>
-                {post.content}
-              </BlogContent>
-              <BlogMeta style={{ color: "green" }}>
-                <span>Posted on {post.createdAt}</span>
-                <span>{post.status}</span>
-              </BlogMeta>
-            </BlogCard>
+            <BlogCardLink to={`/blog/${post.id}`} key={post.id}>
+              <BlogCard>
+                <BlogTitle>{post.title}</BlogTitle>
+                <BlogContent style={{ color: "white" }}>
+                  {post.content}
+                </BlogContent>
+                <BlogMeta style={{ color: "green" }}>
+                  <span>Posted on {post.createdAt}</span>
+                  <span>{post.status}</span>
+                </BlogMeta>
+              </BlogCard>
+            </BlogCardLink>
           ))}
       </ForumContent>
     </Container>
