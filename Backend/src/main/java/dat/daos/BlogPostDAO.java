@@ -4,8 +4,10 @@ import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
 import dat.entities.User;
 import dat.enums.BlogPostStatus;
+import dat.utils.BlogPostCleanupScheduler;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
@@ -16,6 +18,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         if (instance == null) {
             emf = _emf;
             instance = new BlogPostDAO();
+            BlogPostCleanupScheduler.initialize(emf);
         }
         return instance;
     }
@@ -47,8 +50,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
 
     public List<BlogPostDTO> getDraftByUserId(int userId) {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.getDraftsByUserId", BlogPost.class);
-            query.setParameter("userId", userId);
+            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.getDraftsByUserId", BlogPost.class).setParameter("userId", userId);
             List<BlogPost> blogPosts = query.getResultList();
 
             return blogPosts.stream().map(BlogPostDTO::new).toList();
@@ -120,5 +122,14 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
     @Override
     public BlogPostDTO delete(Long id) {
         return null;
+    }
+
+    public static void deleteOldDrafts() {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            LocalDateTime threshold = LocalDateTime.now().minusDays(3);
+            em.createNamedQuery("BlogPost.deleteAllOldDrafts", BlogPost.class).setParameter("thresholdDate", threshold).executeUpdate();
+            em.getTransaction().commit();
+        }
     }
 }

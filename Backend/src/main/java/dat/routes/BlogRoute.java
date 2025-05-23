@@ -18,6 +18,7 @@ public class BlogRoute {
             get("/draft/{id}", blogController::getDraftByUserId, Role.ANYONE);
             post("/", blogController::create, Role.USER);
             post("/draft", blogController::createDraft, Role.USER);
+            post("/draft/validate", blogController::getValidatedDraft, Role.USER);
         };
     }
 }
