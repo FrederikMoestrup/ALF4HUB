@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 export const Container = styled.div`
   display: flex;
@@ -18,6 +19,19 @@ export const ForumHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+`;
+
+export const BlogCardLink = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  display: block;
+
+  &:visited,
+  &:hover,
+  &:active {
+    color: inherit;
+    text-decoration: none;
+  }
 `;
 
 export const ForumTitle = styled.h1`
