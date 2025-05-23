@@ -123,9 +123,18 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
             team.removePlayerAccount(existingPlayer);
             em.getTransaction().commit();
 
-            //email notifikation system/metode
-
             return new TeamDTO(team);
+        }
+    }
+
+    // Henter Team entity via id. fx. bliver i TeamController metoden acceptPlayerApplication().
+    public Team getEntityById(int id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            Team team = em.find(Team.class, id);
+            if (team == null) {
+                throw new ApiException(404, "Team not found");
+            }
+            return team;
         }
     }
 }

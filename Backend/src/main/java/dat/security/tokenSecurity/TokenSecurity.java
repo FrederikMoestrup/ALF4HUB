@@ -27,7 +27,7 @@ public class TokenSecurity implements ITokenSecurity {
         SignedJWT jwt = SignedJWT.parse(token);
         String roles = jwt.getJWTClaimsSet().getClaim("roles").toString();
         String username = jwt.getJWTClaimsSet().getClaim("username").toString();
-        String userid = jwt.getJWTClaimsSet().getClaim("userid").toString();
+        int userid = Integer.parseInt(jwt.getJWTClaimsSet().getClaim("userid").toString());
         Set<String> rolesSet = (Set)Arrays.stream(roles.split(",")).collect(Collectors.toSet());
         return new UserDTO(userid, username, rolesSet);
     }

@@ -21,6 +21,13 @@ public class TeamRoute {
             delete("/{id}", teamController::delete, Role.ADMIN);
             post("/{id}/invite-player/{playerAccountId}", teamController::invitePlayer, Role.USER);//maybe change role to TeamCaptain at some point?
             delete("/{id}/remove-player/{playerAccountId}", teamController::removePlayer, Role.USER); //yes should prob be TEAM_CAPTAIN
+
+
+            post("/{teamId}/applications/{playerAccountId}/accept", teamController::acceptPlayerApplication, Role.USER);
+
+
+            post("/{teamId}/applications/{playerAccountId}/reject", teamController::rejectPlayerApplication, Role.USER);
+
         };
     }
 }

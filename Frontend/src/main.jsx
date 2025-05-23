@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -28,6 +28,9 @@ import Login from "./pages/login-register/Login.jsx";
 import Register from "./pages/login-register/Register.jsx";
 import Profile from "./pages/profile/Profile.jsx";
 
+import NotificationsPage from "./pages/Notifications/NotificationsPage.jsx";
+
+
 const NotFound = () => (
   <div style={{ textAlign: "center", paddingTop: "100px" }}>
     <h1>404 - Page Not Found</h1>
@@ -35,47 +38,55 @@ const NotFound = () => (
   </div>
 );
 
-const RootComponent = () => (
-  <>
-    <GlobalStyle />
-    <Navbar />
-    <main
-      style={{
-        backgroundColor: "#0e0f13",
-        height: "100vh",
-        color: "white",
-        padding: "20px",
-      }}
-    >
-      <Routes>
-        <Route path="/" element={<Homepage />} />
+const RootComponent = () => {
+  const [notifications, setNotifications] = useState([]);
+  
+  return (
+    <>
+      <GlobalStyle />
+      <Navbar
+        setNotifications={setNotifications}        
+      />
+      <main
+        style={{
+          backgroundColor: "#0e0f13",
+          height: "100vh",
+          color: "white",
+          padding: "20px",
+        }}
+      >
+        <Routes>
+          <Route path="/" element={<Homepage />} />
 
-        <Route path="/tournaments" element={<TournamentOverview />} />
-        <Route path="/tournaments/game/:gameName" element={<ViewTournamentsByGame />} />
-        <Route path="/tournaments/create" element={<CreateTournament />} />
-        <Route path="/tournaments/join" element={<JoinTournament />} />
-        <Route path="/my-tournaments" element={<MyTournaments />} />
+          <Route path="/tournaments" element={<TournamentOverview />} />
+          <Route path="/tournaments/game/:gameName" element={<ViewTournamentsByGame />} />
+          <Route path="/tournaments/create" element={<CreateTournament />} />
+          <Route path="/tournaments/join" element={<JoinTournament />} />
+          <Route path="/my-tournaments" element={<MyTournaments />} />
 
-        <Route path="/leave-team" element={<LeaveTeam />} />
-        <Route path="/team-dashboard" element={<TeamDashBoard />} />
-        <Route path="test" element={<TestPage />} />
+          <Route path="/leave-team" element={<LeaveTeam />} />
+          <Route path="/team-dashboard" element={<TeamDashBoard />} />
+          <Route path="test" element={<TestPage />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        <Route path="/blog/posts" element={<BlogPostFrontPage />} />
-        <Route path="/blog/create" element={<CreateBlogPost />} />
-        <Route path="/blog/drafts" element={<Drafts />} />
-        <Route path="/blog/:postId" element={<ReadBlogPost />} />
-        <Route path="/blog/:postId/edit" element={<EditBlogPost />} />
+          <Route path="/notifications" element={<NotificationsPage setNotifications={setNotifications} notifications={notifications} />} />
 
-        <Route path="/profile" element={<Profile />} />
+          <Route path="/blog/posts" element={<BlogPostFrontPage />} />
+          <Route path="/blog/create" element={<CreateBlogPost />} />
+          <Route path="/blog/drafts" element={<Drafts />} />
+          <Route path="/blog/:postId" element={<ReadBlogPost />} />
+          <Route path="/blog/:postId/edit" element={<EditBlogPost />} />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </main>
-  </>
-);
+          <Route path="/profile" element={<Profile />} />
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+    </>
+  );
+};
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -84,3 +95,4 @@ createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </StrictMode>
 );
+export { RootComponent };

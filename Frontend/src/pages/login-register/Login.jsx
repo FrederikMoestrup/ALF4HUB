@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./acces.css";
 import Logo from "../../assets/ALTF4HUB.png";
+import apiFacade from "../../util/apiFacade";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,23 +14,11 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:7070/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        navigate("/");
-      } else {
-        setErrorMsg(data.msg || "Login fejlede");
-      }
+      await apiFacade.login(username, password);
+      navigate("/"); 
     } catch (err) {
       console.error("Fejl ved login:", err);
-      setErrorMsg("Noget gik galt. Prøv igen.");
+      setErrorMsg(err.message || "Noget gik galt. Prøv igen.");
     }
   };
 

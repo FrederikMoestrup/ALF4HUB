@@ -42,7 +42,7 @@ public class SecurityController implements ISecurityController {
 
     private SecurityController() { }
 
-    public static SecurityController getInstance() { // Singleton because we don't want multiple instances of the same class
+    public static SecurityController getInstance() {
         if (instance == null) {
             instance = new SecurityController();
             securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("ALF4HUB_DB"));

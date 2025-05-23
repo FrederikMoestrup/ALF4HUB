@@ -1,11 +1,12 @@
 package dat.routes;
 
+
+import dat.controllers.TournamentTeamController;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static dat.security.routes.SecurityRoutes.getSecuredRoutes;
 import static dat.security.routes.SecurityRoutes.getSecurityRoutes;
 import static io.javalin.apibuilder.ApiBuilder.*;
-
 
 public class Routes {
 
@@ -14,7 +15,7 @@ public class Routes {
     private final TournamentRoute tournamentRoute = new TournamentRoute();
     private final TournamentTeamRoute tournamentTeamRoute = new TournamentTeamRoute();
     private final BlogRoute blogRoute = new BlogRoute();
-
+    private final NotificationRoute notificationRoute = new NotificationRoute();
 
     public EndpointGroup getRoutes() {
         return () -> {
@@ -24,6 +25,8 @@ public class Routes {
             path("/tournaments", tournamentRoute.getRoutes());
             path("/tournament-teams", tournamentTeamRoute.getRoutes());
             path("/blogpost", blogRoute.getRoutes());
+            path("/notifications", notificationRoute.getRoutes());
+
         };
     }
 }

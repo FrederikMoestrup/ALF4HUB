@@ -1,0 +1,47 @@
+### A simple get request to the test endpoint. No need for login
+
+POST http://localhost:7070/api/tournaments
+Content-Type: application/json
+
+{
+  "tournamentName": "pass",
+  "game": "COUNTER_STRIKE",
+  "tournamentSize": 16,
+  "teamSize": 5,
+  "prizePool": 10000,
+  "rules": "No cheating",
+  "entryRequirements": "Over 18",
+  "status": "OPEN",
+  "startDate": "2023-10-01",
+  "startTime": "12:00",
+  "endDate": "2023-10-31",
+  "endTime": "18:00"
+}
+
+###
+GET http://localhost:7070/api/tournaments
+
+###
+GET localhost:7070/api/tournaments/1
+
+###
+PUT http://localhost:7070/api/tournaments/1
+Content-Type: application/json
+
+{
+  "tournamentName": "UPDATE",
+  "game": "COUNTER_STRIKE",
+  "tournamentSize": 16,
+  "teamSize": 5,
+  "prizePool": 10000,
+  "rules": "No cheating",
+  "entryRequirements": "Over 18",
+  "status": "OPEN",
+  "startDate": "2023-10-01",
+  "startTime": "12:00",
+  "endDate": "2023-10-31",
+  "endTime": "18:00"
+}
+
+###
+DELETE http://localhost:7070/api/tournaments/1

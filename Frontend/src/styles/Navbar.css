@@ -65,3 +65,32 @@
     margin-right: 6px;
   }
 }
+
+.notification-wrapper {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.bell-icon {
+  font-size: 1.2rem;
+  color: white;
+}
+
+.notification-icon {
+  position: relative;
+  margin-right: 1rem;
+  color: white;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
