@@ -130,7 +130,7 @@ export const ButtonContainer = styled.div`
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
 `;
 
 export const Button = styled.button`
