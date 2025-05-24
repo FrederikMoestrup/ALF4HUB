@@ -19,6 +19,8 @@ public class BlogRoute {
             post("/", blogController::create, Role.USER);
             post("/draft", blogController::createDraft, Role.USER);
             post("/draft/validate", blogController::getValidatedDraft, Role.USER);
+            put("/draft/publish/{id}", blogController::publishDraft, Role.USER);
+            put("/draft/update/{id}", blogController::updateDraft, Role.USER);
         };
     }
 }

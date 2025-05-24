@@ -132,4 +132,27 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
             em.getTransaction().commit();
         }
     }
+
+    public BlogPostDTO publishDraft(BlogPostDTO blogPostDTO, long draftId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            BlogPost blogpost = em.find(BlogPost.class, draftId);
+            blogpost.setStatus(BlogPostStatus.PUBLISHED);
+            blogpost.setTitle(blogPostDTO.getTitle());
+            blogpost.setContent(blogPostDTO.getContent());
+            em.getTransaction().commit();
+            return new BlogPostDTO(blogpost);
+        }
+    }
+
+    public BlogPostDTO updateDraft(BlogPostDTO blogPostDTO, long draftId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            BlogPost blogpost = em.find(BlogPost.class, draftId);
+            blogpost.setTitle(blogPostDTO.getTitle());
+            blogpost.setContent(blogPostDTO.getContent());
+            em.getTransaction().commit();
+            return new BlogPostDTO(blogpost);
+        }
+    }
 }

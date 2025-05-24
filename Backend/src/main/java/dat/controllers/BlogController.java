@@ -137,4 +137,38 @@ public class BlogController {
         }
     }
 
+    public void publishDraft(Context ctx) throws ApiException {
+        try {
+            BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
+            long draftId = Integer.parseInt(ctx.pathParam("id"));
+
+            BlogPostDTO createdBlogPostDTO = blogPostService.publishDraft(blogPostDTO, draftId);
+
+            ctx.status(201).json(createdBlogPostDTO, BlogPostDTO.class);
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(400, e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(500, "Internal server error: " + e.getMessage());
+        }
+    }
+
+    public void updateDraft(Context ctx) throws ApiException {
+        try {
+            BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
+            long draftId = Integer.parseInt(ctx.pathParam("id"));
+
+            BlogPostDTO createdBlogPostDTO = blogPostService.updateDraft(blogPostDTO, draftId);
+
+            ctx.status(201).json(createdBlogPostDTO, BlogPostDTO.class);
+        } catch (EntityNotFoundException e) {
+            throw new ApiException(404, e.getMessage());
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(400, e.getMessage());
+        } catch (Exception e) {
+            throw new ApiException(500, "Internal server error: " + e.getMessage());
+        }
+    }
+
 }

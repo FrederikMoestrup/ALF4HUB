@@ -23,7 +23,6 @@ const EditBlogPost = () => {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
     const [submitType, setSubmitType] = useState("");
-    const [refresh, setRefresh] = useState(false);
     const [censoredDraft, setCensoredDraft] = useState(null);
     const location = useLocation();
     const draft = location.state?.draft;
@@ -34,9 +33,6 @@ const EditBlogPost = () => {
         setContent(draft.content);
       }
     }, [draft]);
-
-    useEffect(() => {
-    }, [refresh]);
 
   if (!draft) { return <p>No draft found.</p>; }
 
@@ -75,7 +71,6 @@ const EditBlogPost = () => {
             setCensoredDraft(data);
           }
           setError("Blog post contains inappropriate content. Please edit it. All inappropriate content will be replaced with '#'.");
-          setRefresh(!refresh);
           return;
         }
 
@@ -104,7 +99,7 @@ const EditBlogPost = () => {
         return;
       }
   
-      const endpoint = submitType === "draft" ? "/blogpost/draft" : "/blogpost";
+      const endpoint = submitType === "draft" ? "http://localhost:7070/api/blogpost/draft/update/" + draft.id : "http://localhost:7070/api/blogpost/draft/publish/" + draft.id;
   
       const payload = {
         userId: currentUserId,
@@ -122,8 +117,8 @@ const EditBlogPost = () => {
       }
 
       try {
-        const response = await fetch("http://localhost:7070/api" + endpoint, {
-          method: "POST",
+        const response = await fetch(endpoint, {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`,
