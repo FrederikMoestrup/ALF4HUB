@@ -172,7 +172,7 @@ const TeamPage = () => {
         }));
 
         const role =
-          teamData?.teamCaptain?.id === currentUserId ? "captain" : "visitor";
+          teamData?.teamCaptain?.id === id ? "captain" : "visitor";
 
         setUserRole(role);
         setTeam({ ...teamData, members: formattedMembers });
@@ -187,7 +187,7 @@ const TeamPage = () => {
   }, [teamId]);
 
   const handleJoinTeam = async () => {
-    //const currentUsername = localStorage.getItem("username"); // eksempel------------
+    const currentUsername = localStorage.getItem("username"); // eksempel------------
     const isAlreadyMember = team.members.some(
       (member) => member.username === currentUsername
     );
@@ -235,7 +235,7 @@ const TeamPage = () => {
 
   try {
     const response = await fetch(
-      `http://localhost:7070/api/teams/${teamId}`, // use teamId, not currentUserId
+      `http://localhost:7070/api/teams/${teamId}`,
       {
         method: "DELETE",
         headers: {
