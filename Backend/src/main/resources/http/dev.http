@@ -96,7 +96,7 @@ GET http://localhost:7070/api/teams/1
 Authorization: Bearer {{jwt_token}}
 ###
 
-POST http://localhost:7070/api/teams
+POST http://localhost:7070/api/teams/team-captain/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 

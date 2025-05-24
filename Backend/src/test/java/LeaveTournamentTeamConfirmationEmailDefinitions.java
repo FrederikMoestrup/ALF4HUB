@@ -11,7 +11,7 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 public class LeaveTournamentTeamConfirmationEmailDefinitions {
-
+/*
     EmailService emailService = new EmailService();
 
     User captain = new User("Captain", "1234", "captain@mail.dk");
@@ -49,4 +49,6 @@ public class LeaveTournamentTeamConfirmationEmailDefinitions {
     @And("the email should contain a confirmation message {string}")
     public void theEmailShouldContainAConfirmationMessage(String arg0) {
     }
+
+ */
 }

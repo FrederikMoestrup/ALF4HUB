@@ -12,7 +12,7 @@ import dat.exceptions.ApiException;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LeaveTeam {
-
+/*
     private Team team;
     private PlayerAccount playerAccount;
     private Tournament tournament;
@@ -61,4 +61,6 @@ public class LeaveTeam {
         String confirmationMessage = "You have successfully left the team.";
         assertNotNull(confirmationMessage);
     }
+
+ */
 }

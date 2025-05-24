@@ -17,6 +17,10 @@ public class TeamDTO {
     private List<PlayerAccountDTO> teamAccounts = new ArrayList<>();
     private List<TournamentTeamDTO> tournamentTeams = new ArrayList<>();
 
+    public TeamDTO() {
+        // Empty constructor needed for Jackson deserialization
+    }
+
     public TeamDTO(String teamName, UserDTO teamCaptain,
                    TournamentDTO tournament, List<PlayerAccountDTO> teamAccounts, List<TournamentTeamDTO> tournamentTeams) {
         this.teamName = teamName;

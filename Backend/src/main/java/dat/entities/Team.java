@@ -111,4 +111,13 @@ public class Team {
         tournamentTeam.setTeam(null);
     }
 
+    public void detachFromAllTournamentTeams() {
+        if (tournamentTeams != null) {
+            for (TournamentTeam tt : new ArrayList<>(tournamentTeams)) {
+                tt.setTeam(null);
+            }
+            tournamentTeams.clear();
+        }
+    }
+
 }
