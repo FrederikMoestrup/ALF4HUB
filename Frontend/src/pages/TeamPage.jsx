@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, Link, Navigate, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import styled from "styled-components";
+import apiFacade from "../util/apiFacade";
 
 const PageContainer = styled.div`
   margin: 0 auto;
@@ -138,12 +139,16 @@ const TeamPage = () => {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("visitor"); // 'visitor', 'member', 'captain'
   const [isInTeam, setIsInTeam] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
   const navigate = useNavigate();
 
-  const currentUserId = 1; // Midlertidig hardcoded user ID
+  const token = localStorage.getItem("token");
+  
 
   useEffect(() => {
     const fetchTeamData = async () => {
+
+      
       try {
         const teamResponse = await fetch(
           `http://localhost:7070/api/teams/${teamId}`
@@ -151,6 +156,9 @@ const TeamPage = () => {
         const playersResponse = await fetch(
           `http://localhost:7070/api/teams/${teamId}/players`
         );
+
+        const id = await apiFacade.getUserId();
+        setCurrentUserId(id)
 
         if (!teamResponse.ok || !playersResponse.ok)
           throw new Error("Failed to fetch");
@@ -179,7 +187,7 @@ const TeamPage = () => {
   }, [teamId]);
 
   const handleJoinTeam = async () => {
-    const currentUsername = localStorage.getItem("username"); // eksempel------------
+    //const currentUsername = localStorage.getItem("username"); // eksempel------------
     const isAlreadyMember = team.members.some(
       (member) => member.username === currentUsername
     );
@@ -191,7 +199,7 @@ const TeamPage = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:7070/team-join-request/create/${userId}/${teamId}/${playerAccountId}`,
+        `http://localhost:7070/team-join-request/create/${currentUserId}/${teamId}/${playerAccountId}`,
         { method: "POST" }
       );
 
@@ -222,13 +230,34 @@ const TeamPage = () => {
   };
 
   const handleDeleteTeam = async () => {
-    if (window.confirm("Er du sikker på, at du vil slette holdet?")) {
-      // send DELETE request her
-      alert("Holdet er slettet!");
-      
+  const confirmed = window.confirm("Er du sikker på, at du vil slette holdet?");
+  if (!confirmed) return;
+
+  try {
+    const response = await fetch(
+      `http://localhost:7070/api/teams/${teamId}`, // use teamId, not currentUserId
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Fejl ved sletning: ${errorText}`);
     }
+
+    alert("Holdet er slettet!");
     navigate("/teams");
-  };
+  } catch (error) {
+    console.error("Delete failed:", error);
+    alert("Noget gik galt under sletningen af holdet.");
+  }
+};
+
 
   if (loading) {
     return <div>Loading...</div>;
