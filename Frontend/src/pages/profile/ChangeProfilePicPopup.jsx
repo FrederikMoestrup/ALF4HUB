@@ -76,21 +76,27 @@ export default function ChangeProfilePicPopup({
     setLoading(true);
   
     // Basic URL validation
-    if (!/^https?:\/\/.+\.(jpg|jpeg|png)$/i.test(url)) {
-      setError("Indtast et gyldig billede URL.");
+    if (!/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/i.test(url)) {
+      setError("Indtast et gyldigt billede URL (jpg, jpeg, png eller gif).");
       setLoading(false);
       return;
     }
   
     try {
-      const res = await fetch("http://localhost:7070/api/profile_picture", {
+      const token = localStorage.getItem("token");
+      
+      const res = await fetch(`http://localhost:7070/api/users/${userId}/profile_picture`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, imageUrl: url }),
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ profilePicture: url }),
       });
   
       if (!res.ok) {
-        throw new Error("Fejl ved opdatering af profilbillede.");
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Fejl ved opdatering af profilbillede.");
       }
   
       setLoading(false);
@@ -103,7 +109,6 @@ export default function ChangeProfilePicPopup({
     }
   };
   
-
   return (
     <Overlay>
       <Popup>
@@ -115,7 +120,7 @@ export default function ChangeProfilePicPopup({
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://i.imgur.com/xd4qwBX.png"
+              placeholder="https://example.com/image.jpg"
               required
               disabled={loading}
             />

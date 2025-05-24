@@ -52,26 +52,52 @@ public class UserController {
             throw new ApiException(400, "Invalid id");
         }
     }
+
+    public void updateUser(Context ctx) throws ApiException {
+        try {
+            int userId = Integer.parseInt(ctx.pathParam("id"));
+            UserDTO userDTO = ctx.bodyAsClass(UserDTO.class);
+
+            // Verify user exists
+            UserDTO existingUser = userDAO.getById(userId);
+            if (existingUser == null) {
+                throw new ApiException(404, "User not found");
+            }
+
+            // Update user
+            UserDTO updatedUser = userDAO.update(userId, userDTO);
+            ctx.json(updatedUser, UserDTO.class);
+            ctx.status(200);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Missing or invalid parameter: id");
+        }
+    }
+
+
     public void updateProfilePicture(Context ctx) throws ApiException {
         try {
             int userId = Integer.parseInt(ctx.pathParam("id"));
 
+            // Try to get profile picture from JSON body first
+            ProfilePictureDTO dto = null;
+            try {
+                dto = ctx.bodyAsClass(ProfilePictureDTO.class);
+            } catch (Exception e) {
+                // If parsing as ProfilePictureDTO fails, try getting from form param
+            }
 
-            String profilePicture = ctx.formParam("profilePicture");
-
-            if (profilePicture == null) {
-                try {
-                    ProfilePictureDTO dto = ctx.bodyAsClass(ProfilePictureDTO.class);
-                    profilePicture = dto.getProfilePicture();
-                } catch (Exception e) {
-
-                }
+            String profilePicture = null;
+            if (dto != null && dto.getProfilePicture() != null) {
+                profilePicture = dto.getProfilePicture();
+            } else {
+                profilePicture = ctx.formParam("profilePicture");
             }
 
             if (profilePicture == null || profilePicture.isEmpty()) {
                 throw new ApiException(400, "Missing profile picture URL");
             }
 
+            // Verify user exists
             UserDTO userDTO = userDAO.getById(userId);
             if (userDTO == null) {
                 throw new ApiException(404, "User not found");
@@ -79,13 +105,17 @@ public class UserController {
 
             userDAO.updateProfilePicture(userId, profilePicture);
 
+            // Return updated user
             UserDTO updated = userDAO.getById(userId);
-            ctx.json(updated);
+            ctx.json(updated, UserDTO.class);
             ctx.status(200);
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
+        } catch (ApiException e) {
+            throw e;
         }
     }
+
 
     public void getProfilePicture(Context ctx) throws ApiException {
         try {

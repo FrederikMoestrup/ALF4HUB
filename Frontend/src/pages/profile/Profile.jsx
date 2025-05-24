@@ -2,30 +2,73 @@ import React, { useState, useEffect } from "react";
 import "./Profile.css";
 import ChangeProfilePicPopup from "./ChangeProfilePicPopup";
 import { useNavigate } from "react-router-dom";
+import apiFacade from "../../util/apiFacade.js";
 
-const Profile = ({ user, loggedInUser, onSave }) => {
-    const dummyUser = {
-        id: 0,
-        username: "TestBruger",
-        email: "test@example.com",
-        role: "User",
-        strikes: 0,
-        profileImageUrl: "https://i.imgur.com/xd4qwBX.png",
-    };
-
+const Profile = () => {
     const navigate = useNavigate();
-    const [currentUser, setCurrentUser] = useState(user || dummyUser);
-    const actualLoggedInUser = loggedInUser || dummyUser;
-    const isOwner = actualLoggedInUser?.id === currentUser?.id;
-
+    const [currentUser, setCurrentUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [editing, setEditing] = useState(false);
-    const [formData, setFormData] = useState({ ...currentUser, password: "" });
+    const [formData, setFormData] = useState({ password: "" });
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
     const [showPicPopup, setShowPicPopup] = useState(false);
-    const [showProfileInfo, setShowProfileInfo] = useState(false);
+    const [showProfileInfo, setShowProfileInfo] = useState(true);
+    const [debugInfo, setDebugInfo] = useState("");
+
+    // Fetch user data on component mount
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    navigate("/login");
+                    return;
+                }
+
+                // Use the getUserId function from apiFacade
+                const userId = await apiFacade.getUserId();
+                
+                if (!userId) {
+                    setDebugInfo("No user ID found in token");
+                    throw new Error("No user ID found in token");
+                }
+
+                setDebugInfo(`Using user ID: ${userId}`);
+
+                // Fetch user data
+                const response = await fetch(`http://localhost:7070/api/users/${userId}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    setDebugInfo(`API error: ${response.status} - ${errorText}`);
+                    throw new Error(`Failed to fetch user data: ${response.status}`);
+                }
+
+                const userData = await response.json();
+                setCurrentUser(userData);
+                setFormData({
+                    ...userData,
+                    password: ""
+                });
+            } catch (err) {
+                setError(err.message || "Error fetching user data");
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserData();
+    }, [navigate]);
+
     const handleLogout = () => {
-        localStorage.removeItem("token"); 
-        navigate("/login"); 
+        localStorage.removeItem("token");
+        navigate("/login");
     };
 
     useEffect(() => {
@@ -46,24 +89,54 @@ const Profile = ({ user, loggedInUser, onSave }) => {
         }));
     };
 
-    const handleSave = () => {
-        const updatedProfileImageUrl =
-            formData.profileImage instanceof File
-                ? URL.createObjectURL(formData.profileImage)
-                : currentUser.profileImageUrl;
+    const handleSave = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                alert("Indtast venligst en gyldig email adresse");
+                return;
+            }
+            
+            // Update user information
+            const response = await fetch(`http://localhost:7070/api/users/${currentUser.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    username: formData.username,
+                    email: formData.email,
+                    password: formData.password || undefined
+                })
+            });
 
-        setCurrentUser({
-            ...currentUser,
-            username: formData.username,
-            email: formData.email,
-            profileImageUrl: updatedProfileImageUrl,
-        });
+            if (!response.ok) {
+                throw new Error("Failed to update user information");
+            }
 
-        if (onSave) onSave(formData);
-
-        setEditing(false);
-        setFormData((prev) => ({ ...prev, password: "" }));
+            const updatedUser = await response.json();
+            setCurrentUser(updatedUser);
+            setEditing(false);
+            setFormData((prev) => ({ ...prev, password: "" }));
+        } catch (err) {
+            alert(err.message || "Error updating profile");
+            console.error(err);
+        }
     };
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return (
+        <div>
+            <div>Error: {error}</div>
+            <div>Debug Info: {debugInfo}</div>
+            <button onClick={handleLogout}>Return to Login</button>
+        </div>
+    );
+    if (!currentUser) return <div>No user data available</div>;
 
     return (
         <div className="profile-card">
@@ -72,17 +145,17 @@ const Profile = ({ user, loggedInUser, onSave }) => {
                     <img
                         src={
                             imagePreviewUrl ||
-                            currentUser.profileImageUrl ||
-                            "https://i.imgur.com/xd4qwBX.png"
+                            currentUser.profilePicture ||
+                            "https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg"
                         }
                         alt="Profilbillede"
                         onError={(e) => {
                             e.target.onerror = null; // Prevent infinite loop
-                            e.target.src = "https://i.imgur.com/xd4qwBX.png";
+                            e.target.src = "https://img.freepik.com/free-psd/contact-icon-illustration-isolated_23-2151903337.jpg";
                         }}
                     />
                 </div>
-                {isOwner && editing && (
+                {editing && (
                     <button
                         type="button"
                         className="change-pic-btn"
@@ -92,15 +165,6 @@ const Profile = ({ user, loggedInUser, onSave }) => {
                         Skift profilbillede
                     </button>
                 )}
-
-                {/* {editing && (
-                    <input
-                        type="file"
-                        name="profileImage"
-                        accept="image/*"
-                        onChange={handleChange}
-                    />
-                )} */}
 
                 <button onClick={() => setShowProfileInfo(!showProfileInfo)}>
                     Brugeroplysninger
@@ -138,14 +202,16 @@ const Profile = ({ user, loggedInUser, onSave }) => {
                     )}
 
                     <label>Rolle</label>
-                    <div className="static-text">{currentUser.role}</div>
+                    <div className="static-text">
+                        {currentUser.roles ? currentUser.roles.join(", ") : "User"}
+                    </div>
 
                     <label>Strikes</label>
-                    <div className="static-text">{currentUser.strikes}</div>
+                    <div className="static-text">{currentUser.strikes || 0}</div>
 
                     {editing && (
                         <>
-                            <label>Adgangskode</label>
+                            <label>Adgangskode (lad være tom for at beholde nuværende)</label>
                             <input
                                 name="password"
                                 type="password"
@@ -155,15 +221,18 @@ const Profile = ({ user, loggedInUser, onSave }) => {
                         </>
                     )}
 
-                    {isOwner && (
-                        <div className="profile-actions">
-                            <button
-                                onClick={editing ? handleSave : () => setEditing(true)}
-                            >
-                                {editing ? "Gem" : "Redigér"}
+                    <div className="profile-actions">
+                        <button
+                            onClick={editing ? handleSave : () => setEditing(true)}
+                        >
+                            {editing ? "Gem" : "Redigér"}
+                        </button>
+                        {editing && (
+                            <button onClick={() => setEditing(false)}>
+                                Annuller
                             </button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             )}
             <ChangeProfilePicPopup
@@ -172,7 +241,7 @@ const Profile = ({ user, loggedInUser, onSave }) => {
                 onSuccess={(newUrl) => {
                     setCurrentUser((prev) => ({
                         ...prev,
-                        profileImageUrl: newUrl,
+                        profilePicture: newUrl,
                     }));
                 }}
                 userId={currentUser.id}

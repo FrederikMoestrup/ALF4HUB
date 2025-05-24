@@ -6,6 +6,7 @@ import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 
@@ -72,9 +73,38 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
     }
 
     @Override
-    public UserDTO update(Integer integer, UserDTO userDTO) throws ApiException {
-        return null;
+    public UserDTO update(Integer id, UserDTO userDTO) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            User user = em.find(User.class, id);
+
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+
+            // Update fields if provided
+            if (userDTO.getUsername() != null && !userDTO.getUsername().isEmpty()) {
+                user.setUsername(userDTO.getUsername());
+            }
+
+            if (userDTO.getEmail() != null && !userDTO.getEmail().isEmpty()) {
+                user.setEmail(userDTO.getEmail());
+            }
+
+            if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+                // Hash the new password
+                user.setPassword(BCrypt.hashpw(userDTO.getPassword(), BCrypt.gensalt()));
+            }
+
+            em.merge(user);
+            em.getTransaction().commit();
+
+            return new UserDTO(user);
+        } catch (Exception e) {
+            throw new ApiException(500, "Error updating user: " + e.getMessage());
+        }
     }
+
 
     @Override
     public UserDTO delete(Integer integer) throws ApiException {
