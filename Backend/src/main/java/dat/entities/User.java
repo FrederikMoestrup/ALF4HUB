@@ -47,6 +47,9 @@ public class User implements Serializable, ISecurityUser {
     @Column(name = "strikes")
     private int strikes = 0;
 
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
 
     //Relations
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_name", referencedColumnName = "name")})
@@ -108,6 +111,7 @@ public class User implements Serializable, ISecurityUser {
     public User(UserDTO dto) {
         this.id = dto.getId();
         this.username = dto.getUsername();
+        this.email = dto.getEmail();
         if (dto.getRoles() != null) {
             this.roles = dto.getRoles().stream()
                     .map(roleName -> new Role(roleName))

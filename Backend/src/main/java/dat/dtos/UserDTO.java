@@ -23,6 +23,7 @@ public class UserDTO {
     private List<TeamDTO> teams = new ArrayList<>();
     private List<TournamentTeamDTO> tournamentTeams = new ArrayList<>();
     private int strikes;
+    private String profilePicture;
 
     public UserDTO(String username, Set<String> roles,
                    List<PlayerAccountDTO> playerAccounts,
@@ -42,6 +43,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.roles = user.getRolesAsStrings();
         this.strikes = user.getStrikes();
+        this.profilePicture = user.getProfilePicture();
     }
 
     public boolean equals(Object o) {
