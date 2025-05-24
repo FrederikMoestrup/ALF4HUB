@@ -1,12 +1,11 @@
-import { Link } from 'react-router-dom';
-import '../styles/Navbar.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faUser } from '@fortawesome/free-solid-svg-icons';
+import { Link } from "react-router-dom";
+import "../styles/Navbar.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Navbar = () => {
   return (
     <header className="navbar">
-
       <div className="nav-left">
         <Link to="/">
           <FontAwesomeIcon icon={faHome} />
@@ -15,7 +14,7 @@ const Navbar = () => {
       <div className="nav-center">
         <a href="#">Turneringer</a>
         <a href="#">Hold</a>
-        <a href="#">Forum</a>
+        <a href="/blog/forum">Forum</a>
       </div>
       <div className="nav-right">
         <Link to="/login">

@@ -1,16 +1,11 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 import PopUpMessage from "../../components/PopUpMessage";
+import apiFacade  from "../../util/apiFacade"
 import {
-  GlobalStyle,
   Container,
-  Navbar,
-  HomeButton,
-  ProfileButton,
-  NavLinks,
-  Content,
+  TitleWrapper,
+  Title,
   FormWrapper,
-  FormTitle,
   Form,
   Label,
   Input,
@@ -18,20 +13,26 @@ import {
   ButtonsContent,
   Button,
   RequiredText,
-  Footer,
 } from "./styles/createBlogPostStyles";
-import apiFacade from "../../util/apiFacade";
+import GlobalStyle from "../../styles/GlobalStyles";
 
 function CreateBlogPost() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [tags, setTags] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [submitType, setSubmitType] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const token = localStorage.getItem("token");
+    const currentUserId = await apiFacade.getUserId();
+
+    if (!token || !currentUserId) {
+      setError("You must be logged in.");
+      return;
+    }
 
     setError("");
     setSuccess(false);
@@ -43,10 +44,9 @@ function CreateBlogPost() {
     }
 
     const endpoint = submitType === "draft" ? "/blogpost/draft" : "/blogpost";
-    const userId = await apiFacade.getUserId();
 
     const payload = {
-      userId,
+      userId: currentUserId,
       title,
       content,
       status: submitType.toUpperCase(),
@@ -57,7 +57,7 @@ function CreateBlogPost() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -71,7 +71,6 @@ function CreateBlogPost() {
       setSuccess(true);
       setTitle("");
       setContent("");
-      setTags("");
     } catch (err) {
       setError(err.message);
       setSuccess(false);
@@ -91,77 +90,42 @@ function CreateBlogPost() {
     <>
       <GlobalStyle />
       <Container>
-        <Navbar>
-          <HomeButton>
-            <a href="/">Home</a>
-          </HomeButton>
+        <TitleWrapper>
+          <Title>Create A New Blog Post</Title>
+        </TitleWrapper>
+        <FormWrapper>
+          <Form onSubmit={handleSubmit}>
+            <Label>Title*</Label>
+            <Input
+              type="text"
+              placeholder="Write your title here"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+            <Label>Content*</Label>
+            <Textarea
+              placeholder="Write your blog post here... Share your thoughts, insights, or experiences in detail but be mindful of one another."
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              required
+            />
 
-          <NavLinks>
-            <NavLink to="/teams">Teams</NavLink>
-            <NavLink to="/tournaments">Tournaments</NavLink>
-            <NavLink to="/blogposts">Blog</NavLink>
-          </NavLinks>
-
-          <ProfileButton>
-            <a href="/">Profile</a>
-          </ProfileButton>
-        </Navbar>
-
-        <Content>
-          <FormWrapper>
-            <h2>Create a New Blog Post</h2>
-
-            <Form onSubmit={handleSubmit}>
-              <Label>Title*</Label>
-              <Input
-                type="text"
-                placeholder="Write your title here"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                required
-              />
-
-              <Label>Content*</Label>
-              <Textarea
-                placeholder="Write your blog post here... Share your thoughts, insights, or experiences in detail but be mindful of one another."
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                required
-              />
-
-              <Label>Tags (optional)</Label>
-              <Input
-                type="text"
-                placeholder="e.g., React, Tournament, Gaming"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-              />
-
-              <ButtonsContent>
-                <Button type="submit" onClick={() => setSubmitType("draft")}>
-                  Save as Draft
-                </Button>
-                <Button
-                  type="submit"
-                  onClick={() => setSubmitType("published")}
-                >
-                  Create Post
-                </Button>
-              </ButtonsContent>
-              <RequiredText>
-                *Title and content are required fields and must not be left
-                blank.
-              </RequiredText>
-            </Form>
-          </FormWrapper>
-        </Content>
-
-        <Footer>
-          <p>
-            © Altf4hub | Firskovvej 18 2800 Lyngby | CVR-nr. 10101010 | Tlf: 36
-            15 45 04 | Mail: turnering@altf4hub.dk
-          </p>
-        </Footer>
+            <ButtonsContent>
+              <Button type="submit" onClick={() => setSubmitType("draft")}>
+                {" "}
+                Save as Draft
+              </Button>
+              <Button type="submit" onClick={() => setSubmitType("published")}>
+                {" "}
+                Post
+              </Button>
+            </ButtonsContent>
+          </Form>
+          <RequiredText>
+            * Title and content are required fields and must not be left blank.
+          </RequiredText>
+        </FormWrapper>
       </Container>
 
       <PopUpMessage
