@@ -67,7 +67,7 @@ const RootComponent = () => (
         <Route path="/register" element={<Register />} />
 
         <Route path="/blog/create" element={<CreateBlogPost />} />
-        <Route path="/blog/forum" element={<ForumPage />}></Route>
+        <Route path="/blog/forum" element={<ForumPage />} />
         <Route path="/blog/drafts" element={<Drafts />} />
         <Route path="/blog/:postId" element={<ReadBlogPost />} />
         <Route path="/blog/:postId/edit" element={<EditBlogPost />} />
