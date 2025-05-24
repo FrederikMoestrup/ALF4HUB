@@ -12,7 +12,12 @@ public class BlogRoute {
     protected EndpointGroup getRoutes() {
 
         return () -> {
+            get("/", blogController::getAll, Role.ANYONE);
+            get("/preview", blogController::getAllPreview, Role.ANYONE);
+            get("/{id}",blogController::getById, Role.ANYONE);
+            get("/draft/{id}", blogController::getDraftByUserId, Role.ANYONE);
             post("/", blogController::create, Role.USER);
+            post("/draft", blogController::createDraft, Role.USER);
         };
     }
 }

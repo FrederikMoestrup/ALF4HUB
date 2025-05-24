@@ -25,7 +25,7 @@ function TournamentHistory() {
 
   useEffect(() => {
     if (!userId) return;
-    fetch(`http://localhost:7070/api/tournaments/history/${userId}`)
+    fetch(`http://localhost:7070/api/tournaments/user/${userId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch tournaments");
         return res.json();
@@ -61,22 +61,6 @@ function TournamentHistory() {
     <>
       <GlobalStyle />
       <Container>
-        <Navbar>
-          <HomeButton>
-            <a href="/">Home</a>
-          </HomeButton>
-
-          <NavLinks>
-            <NavLink to="/teams">Teams</NavLink>
-            <NavLink to="/tournaments">Tournaments</NavLink>
-            <NavLink to="/blogposts">Blog</NavLink>
-          </NavLinks>
-
-          <ProfileButton>
-            <a href="/profile">Profile</a>
-          </ProfileButton>
-        </Navbar>
-
         <Content>
           <ButtonContainer>
             <NavLink to="/tournaments">
@@ -86,7 +70,6 @@ function TournamentHistory() {
               <Button>Create new</Button>
             </NavLink>
           </ButtonContainer>
-
           <Section>
             <SectionTitle>My Tournament History</SectionTitle>
             <TournamentList>
