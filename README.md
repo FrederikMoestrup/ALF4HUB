@@ -69,3 +69,15 @@ Ingen test BDD til frontend
 ### DevTeamH
 # Sprint 3
 Scrum master: Marwa
+
+Tobias har lavet:
+- Sprint 1:
+  Opsætning af github repo (sammen med Frederik) samt haft dialog med frederik og PO om kode opsætning. 
+  Lavet fælles figma sammen med Peter (Team H). Gruppekoordinator rolle sammen med Peter.
+  Lavede dagsorden for ugentlige gruppe møder
+  Lave klassediagram sammen med Peter.
+- Sprint 2 og 3:
+  Kontinuerligt hold gruppe figma up-to-date sammen med Peter
+  Lavet dagsorden for ugentlige gruppe møder
+  Lavet frontend setup i sprint 2.
+  Code Reviews samt merget- og fixet kode
