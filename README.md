@@ -28,5 +28,10 @@ Oliver har lavet:
 Michella har lavet:  
 
 Sandra har lavet:  
+ 
+Ferdinand har lavet: Figma mock-up  til US-6
 
-Ferdinand har lavet: Figma mock-up  til US-6  
+
+## DevTeamD
+
+

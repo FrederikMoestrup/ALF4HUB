@@ -4,6 +4,7 @@ import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
 import dat.entities.User;
 import dat.enums.BlogPostStatus;
+import dat.exceptions.ApiException;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -111,14 +112,57 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         }
     }
 
-
     @Override
-    public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) {
-        return null;
+    public BlogPostDTO update(Long id, BlogPostDTO blogPostDTO) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            BlogPost blogPost = em.find(BlogPost.class, id);
+            if (blogPost == null) {
+                throw new ApiException(404, "Blogpost med ID " + id + " blev ikke fundet.");
+            }
+
+            blogPost.setTitle(blogPostDTO.getTitle());
+            blogPost.setContent(blogPostDTO.getContent());
+
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(blogPost);
+
+        } catch (ApiException e) {
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ApiException(500, "Noget gik galt under opdateringen. Prøv igen senere");
+        }
     }
 
     @Override
-    public BlogPostDTO delete(Long id) {
-        return null;
+    public BlogPostDTO delete(Long id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+
+            BlogPost blogPost = em.find(BlogPost.class, id);
+            if (blogPost == null) {
+                throw new ApiException(404, "Blogpost med ID " + id + " blev ikke fundet.");
+
+            }
+
+            em.remove(blogPost);
+            em.getTransaction().commit();
+
+            return new BlogPostDTO(blogPost);
+        }
+        catch (ApiException e) {
+            throw e;
+        }
+        catch (Exception e) {
+
+            e.printStackTrace();
+            throw new ApiException(500, "Noget gik galt under sletningen. Prøv igen.");
+        }
     }
+
+
+
 }
