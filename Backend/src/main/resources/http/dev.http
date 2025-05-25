@@ -234,6 +234,8 @@ Authorization: Bearer {{jwt_token}}
 GET http://localhost:7070/api/users/1/profile_picture
 Authorization: Bearer {{jwt_token}}
 
+###
+
 # Her opretter vi en notifikation for brugeren der er logget ind
 POST http://localhost:7070/api/notifications
 Authorization: Bearer {{jwt_token}}

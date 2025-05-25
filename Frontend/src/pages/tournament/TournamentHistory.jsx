@@ -15,7 +15,7 @@ import {
   ButtonContainer,
   Button,
   Footer,
-} from "../styles/TournamentHistoryStyles";
+} from "../../styles/TournamentHistoryStyles";
 
 function TournamentHistory() {
   const [tournaments, setTournaments] = useState([]);
@@ -77,14 +77,15 @@ function TournamentHistory() {
                 <p>No past tournaments found.</p>
               ) : (
                 tournaments.map((tournament) => (
-                  <TournamentCard key={tournament.id}
-                  style={{
+                  <TournamentCard
+                    key={tournament.id}
+                    style={{
                       backgroundColor: "#f9f9f9",
                       padding: "20px",
                       borderRadius: "10px",
                       marginBottom: "20px",
                       boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-                      color: "#222" // 👈 mørk tekst
+                      color: "#222", // 👈 mørk tekst
                     }}
                   >
                     <h3>{tournament.name}</h3>

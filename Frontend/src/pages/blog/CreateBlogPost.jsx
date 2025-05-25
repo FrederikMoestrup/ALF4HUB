@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PopUpMessage from "../../components/PopUpMessage";
-import apiFacade  from "../../util/apiFacade"
+import apiFacade from "../../util/apiFacade";
 import {
   Container,
   TitleWrapper,
@@ -57,7 +57,7 @@ function CreateBlogPost() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });

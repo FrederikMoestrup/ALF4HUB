@@ -6,7 +6,9 @@ function AcceptPlayerApplicationButton({ playerAccount, teamId, onSuccess }) {
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleAccept = async () => {
-    const confirm = window.confirm(`Acceptér ansøgning fra ${playerAccount.playerAccountName}?`);
+    const confirm = window.confirm(
+      `Acceptér ansøgning fra ${playerAccount.playerAccountName}?`
+    );
     if (!confirm) return;
 
     try {
@@ -18,7 +20,8 @@ function AcceptPlayerApplicationButton({ playerAccount, teamId, onSuccess }) {
     }
   };
 
-  if (accepted) return <div style={{ color: "green" }}>✅ Ansøgning accepteret</div>;
+  if (accepted)
+    return <div style={{ color: "green" }}>✅ Ansøgning accepteret</div>;
 
   return (
     <div>

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, Link, Navigate, useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import styled from "styled-components";
-import apiFacade from "../util/apiFacade";
+import apiFacade from "../../util/apiFacade";
 
 const PageContainer = styled.div`
   margin: 0 auto;
@@ -143,12 +143,9 @@ const TeamPage = () => {
   const navigate = useNavigate();
 
   const token = localStorage.getItem("token");
-  
 
   useEffect(() => {
     const fetchTeamData = async () => {
-
-      
       try {
         const teamResponse = await fetch(
           `http://localhost:7070/api/teams/${teamId}`
@@ -158,7 +155,7 @@ const TeamPage = () => {
         );
 
         const id = await apiFacade.getUserId();
-        setCurrentUserId(id)
+        setCurrentUserId(id);
 
         if (!teamResponse.ok || !playersResponse.ok)
           throw new Error("Failed to fetch");
@@ -171,8 +168,7 @@ const TeamPage = () => {
           game: player.game,
         }));
 
-        const role =
-          teamData?.teamCaptain?.id === id ? "captain" : "visitor";
+        const role = teamData?.teamCaptain?.id === id ? "captain" : "visitor";
 
         setUserRole(role);
         setTeam({ ...teamData, members: formattedMembers });
@@ -230,34 +226,35 @@ const TeamPage = () => {
   };
 
   const handleDeleteTeam = async () => {
-  const confirmed = window.confirm("Er du sikker på, at du vil slette holdet?");
-  if (!confirmed) return;
-
-  try {
-    const response = await fetch(
-      `http://localhost:7070/api/teams/${teamId}`,
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
+    const confirmed = window.confirm(
+      "Er du sikker på, at du vil slette holdet?"
     );
+    if (!confirmed) return;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Fejl ved sletning: ${errorText}`);
+    try {
+      const response = await fetch(
+        `http://localhost:7070/api/teams/${teamId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Fejl ved sletning: ${errorText}`);
+      }
+
+      alert("Holdet er slettet!");
+      navigate("/teams");
+    } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Noget gik galt under sletningen af holdet.");
     }
-
-    alert("Holdet er slettet!");
-    navigate("/teams");
-  } catch (error) {
-    console.error("Delete failed:", error);
-    alert("Noget gik galt under sletningen af holdet.");
-  }
-};
-
+  };
 
   if (loading) {
     return <div>Loading...</div>;

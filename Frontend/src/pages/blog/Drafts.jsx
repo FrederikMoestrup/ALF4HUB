@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
-import apiFacade from "../../util/apiFacade"
+import apiFacade from "../../util/apiFacade";
 import {
   GlobalStyle,
   Container,
@@ -18,7 +18,7 @@ function Drafts() {
   const fetchDrafts = async () => {
     try {
       const currentUserId = await apiFacade.getUserId();
-      setUserId(currentUserId)
+      setUserId(currentUserId);
 
       const response = await fetch(
         "http://localhost:7070/api/blogpost/draft/" + currentUserId,
@@ -43,7 +43,6 @@ function Drafts() {
     fetchDrafts();
   }, [userId]);
 
-
   return (
     <>
       <GlobalStyle />
@@ -56,14 +55,17 @@ function Drafts() {
               <ul Style="list-style-type: none; padding: 0;">
                 {drafts.map((draft) => (
                   <>
-                  <BlogCard key={draft.id} Style="border-left: 5px solid red;">
-                    <h3>{draft.title}</h3>
-                    <p>{draft.content}</p>
-                    <small>Saved on: {draft.createdAt}</small>
-                    <NavLink to={`/blog/${draft.id}/edit`} state={{ draft }}>
-                    <button Style="width: 10%;">Edit & Publish</button>
-                    </NavLink>
-                  </BlogCard>
+                    <BlogCard
+                      key={draft.id}
+                      Style="border-left: 5px solid red;"
+                    >
+                      <h3>{draft.title}</h3>
+                      <p>{draft.content}</p>
+                      <small>Saved on: {draft.createdAt}</small>
+                      <NavLink to={`/blog/${draft.id}/edit`} state={{ draft }}>
+                        <button Style="width: 10%;">Edit & Publish</button>
+                      </NavLink>
+                    </BlogCard>
                   </>
                 ))}
               </ul>

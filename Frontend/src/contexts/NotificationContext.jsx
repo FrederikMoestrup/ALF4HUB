@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useEffect } from 'react';
+import { createContext, useState, useContext, useEffect } from "react";
 
 const NotificationContext = createContext();
 
@@ -10,34 +10,37 @@ export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  
+
   // Initialize notifications when the provider loads
   useEffect(() => {
     fetchTeamJoinRequests();
-    
+
     // Interval for notifcation for test.
     const interval = setInterval(() => {
       fetchTeamJoinRequests();
     }, 30000);
-    
+
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     // Count unread notifications
-    const count = notifications.filter(notif => !notif.isRead).length;
+    const count = notifications.filter((notif) => !notif.isRead).length;
     setUnreadCount(count);
   }, [notifications]);
 
   // Function to add a new notification
   const addNotification = (notification) => {
-    setNotifications(prev => [...prev, { ...notification, isRead: false, id: Date.now() }]);
+    setNotifications((prev) => [
+      ...prev,
+      { ...notification, isRead: false, id: Date.now() },
+    ]);
   };
 
   // Function to mark a notification as read
   const markAsRead = (notificationId) => {
-    setNotifications(prev =>
-      prev.map(notif =>
+    setNotifications((prev) =>
+      prev.map((notif) =>
         notif.id === notificationId ? { ...notif, isRead: true } : notif
       )
     );
@@ -45,19 +48,21 @@ export const NotificationProvider = ({ children }) => {
 
   // Function to mark all notifications as read
   const markAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(notif => ({ ...notif, isRead: true }))
+    setNotifications((prev) =>
+      prev.map((notif) => ({ ...notif, isRead: true }))
     );
   };
 
   // Function to remove a notification
   const removeNotification = (notificationId) => {
-    setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
+    setNotifications((prev) =>
+      prev.filter((notif) => notif.id !== notificationId)
+    );
   };
 
   // Function to toggle the notification panel
   const toggleNotifications = () => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
     if (!isOpen) {
       markAllAsRead();
     }
@@ -69,54 +74,57 @@ export const NotificationProvider = ({ children }) => {
     const mockRequests = [
       {
         id: 1,
-        type: 'teamJoinRequest',
-        teamId: '123',
-        teamName: 'Alpha Squad',
-        requesterId: '456',
-        requesterName: 'JohnDoe',
-        message: 'I would like to join your team',
+        type: "teamJoinRequest",
+        teamId: "123",
+        teamName: "Alpha Squad",
+        requesterId: "456",
+        requesterName: "JohnDoe",
+        message: "I would like to join your team",
         createdAt: new Date().toISOString(),
-        isRead: false
+        isRead: false,
       },
       {
         id: 2,
-        type: 'teamJoinRequest',
-        teamId: '123',
-        teamName: 'Alpha Squad',
-        requesterId: '789',
-        requesterName: 'JaneSmith',
-        message: 'Looking for a team to play with',
+        type: "teamJoinRequest",
+        teamId: "123",
+        teamName: "Alpha Squad",
+        requesterId: "789",
+        requesterName: "JaneSmith",
+        message: "Looking for a team to play with",
         createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-        isRead: false
-      }
+        isRead: false,
+      },
     ];
-    
+
     // Merge with existing notifications
-    setNotifications(prev => {
-      const existingIds = prev.map(n => n.id);
-      const newNotifications = mockRequests.filter(n => !existingIds.includes(n.id));
+    setNotifications((prev) => {
+      const existingIds = prev.map((n) => n.id);
+      const newNotifications = mockRequests.filter(
+        (n) => !existingIds.includes(n.id)
+      );
       return [...prev, ...newNotifications];
     });
   };
-  
+
   // Function to simulate sending a join request
   const sendJoinRequest = (teamData, requesterData, message) => {
     const newNotification = {
       id: Date.now(),
-      type: 'teamJoinRequest',
+      type: "teamJoinRequest",
       teamId: teamData.id,
       teamName: teamData.name,
-      requesterId: requesterData.id || 'user-' + Math.floor(Math.random() * 1000),
-      requesterName: requesterData.name || 'Current User',
+      requesterId:
+        requesterData.id || "user-" + Math.floor(Math.random() * 1000),
+      requesterName: requesterData.name || "Current User",
       message: message,
       createdAt: new Date().toISOString(),
-      isRead: false
+      isRead: false,
     };
-    
+
     // In a real app, this would send the request to the backend
     // For demo, just add it to our local notifications
     addNotification(newNotification);
-    
+
     return Promise.resolve(newNotification);
   };
 
@@ -130,7 +138,7 @@ export const NotificationProvider = ({ children }) => {
     markAllAsRead,
     removeNotification,
     fetchTeamJoinRequests,
-    sendJoinRequest
+    sendJoinRequest,
   };
 
   return (
@@ -138,4 +146,4 @@ export const NotificationProvider = ({ children }) => {
       {children}
     </NotificationContext.Provider>
   );
-}; 
+};
