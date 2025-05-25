@@ -5,14 +5,14 @@ import "@testing-library/jest-dom";
 import CreateTournament from "../pages/tournament/CreateTournament";
 import { MemoryRouter } from "react-router-dom";
 
-// ✅ Mock
+
 vi.mock("../pages/tournament/createTournament_apiFacade", () => ({
   default: {
     createTournament: vi.fn().mockResolvedValue({ success: true }),
   },
 }));
 
-// ✅ Wrapper-funktion der fjerner act-advarsler
+
 const renderWithRouter = async (ui) => {
   await act(async () => {
     render(<MemoryRouter>{ui}</MemoryRouter>);
