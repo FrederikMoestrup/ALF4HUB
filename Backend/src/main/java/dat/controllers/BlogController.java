@@ -124,6 +124,48 @@ public class BlogController {
         }
     }
 
+    public void update(Context ctx) throws ApiException {
+        try {
+            long id = Long.parseLong(ctx.pathParam("id"));
+
+            BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);
+
+            if (blogPostDTO == null ||
+                    blogPostDTO.getTitle() == null || blogPostDTO.getTitle().trim().isEmpty() ||
+                    blogPostDTO.getContent() == null || blogPostDTO.getContent().trim().isEmpty()) {
+                throw new ApiException(400, "Der mangler nødvendige felter: titel og/eller indhold");
+            }
+
+            BlogPostDTO updatedBlogPost = blogPostDAO.update(id, blogPostDTO);
+
+            ctx.status(200).json(updatedBlogPost, BlogPostDTO.class);
+
+        } catch (ApiException e) {
+            throw e;
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Ugyldigt ID-format");
+        } catch (Exception e) {
+            throw new ApiException(500, "Intern serverfejl: " + e.getMessage());
+        }
+
+    }
+
+    public void delete(Context ctx) throws ApiException {
+        try {
+            long id = Long.parseLong(ctx.pathParam("id"));
+            BlogPostDTO deletedBlogPost = blogPostDAO.delete(id);
+            if (deletedBlogPost == null) {
+                throw new ApiException(404, "BlogPost not found");
+            }
+            ctx.status(200).json(deletedBlogPost, BlogPostDTO.class);
+        } catch (ApiException e) {
+            ctx.status(e.getStatusCode()).result(e.getMessage());
+        } catch (NumberFormatException e) {
+            ctx.status(400).result("Invalid ID format");
+        }
+    }
+
+
     public void getValidatedDraft(Context ctx) throws ApiException {
         try {
             BlogPostDTO blogPostDTO = ctx.bodyAsClass(BlogPostDTO.class);

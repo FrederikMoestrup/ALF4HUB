@@ -6,7 +6,12 @@ import "./index.css";
 
 import Navbar from "./components/Navbar.jsx";
 import GlobalStyle from "./styles/GlobalStyles.js";
-import Homepage from "./pages/Homepage.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import TeamPage from "./pages/TeamPage.jsx";
+import TeamsPage from "./pages/TeamsPage.jsx";
+import TournamentPage from "./pages/TournamentPage.jsx";
+import TournamentsPage from "./pages/TournamentsPage.jsx";
+import CreateTeamPage from "./pages/CreateTeamPage.jsx";
 
 import CreateBlogPost from "./pages/blog/CreateBlogPost.jsx";
 import Drafts from "./pages/blog/Drafts.jsx";
@@ -23,6 +28,9 @@ import JoinTournament from "./pages/tournament/JoinTournament.jsx";
 import MyTournaments from "./pages/tournament/MyTournaments.jsx";
 import TournamentOverview from "./pages/tournament/TournamentOverview.jsx";
 import ViewTournamentsByGame from "./pages/tournament/ViewTournamentsByGame.jsx";
+import TournamentHistory from "./pages/TournamentHistory.jsx";
+
+
 
 import Login from "./pages/login-register/Login.jsx";
 import Register from "./pages/login-register/Register.jsx";
@@ -59,9 +67,12 @@ const RootComponent = () => (
         <Route path="/tournaments/join" element={<JoinTournament />} />
         <Route path="/my-tournaments" element={<MyTournaments />} />
 
+        <Route path="/teams" element={<TeamsPage />} />
+        <Route path="/team/:teamId" element={<TeamPage />} />
+        <Route path="/create-team" element={<CreateTeamPage />} />
         <Route path="/leave-team" element={<LeaveTeam />} />
         <Route path="/team-dashboard" element={<TeamDashBoard />} />
-        <Route path="test" element={<TestPage />} />
+        <Route path="/test" element={<TestPage />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -73,6 +84,8 @@ const RootComponent = () => (
         <Route path="/blog/:postId/edit" element={<EditBlogPost />} />
 
         <Route path="/profile" element={<Profile />} />
+        <Route path="/tournaments/history" element={<TournamentHistory />} />
+
 
         <Route path="*" element={<NotFound />} />
       </Routes>
