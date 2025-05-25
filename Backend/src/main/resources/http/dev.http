@@ -6,9 +6,9 @@ POST http://localhost:7070/api/auth/register/
 Content-Type: application/json
 
 {
-  "username": "user",
-  "password": "test123",
-  "email": "user123@example.com"
+    "username": "user",
+    "password": "test123",
+    "email": "test@test"
 }
 
 ###
@@ -47,10 +47,6 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
-
-
-
-=======
 //Player Account
 
 GET http://localhost:7070/api/player-accounts
@@ -101,12 +97,12 @@ GET http://localhost:7070/api/teams/1
 Authorization: Bearer {{jwt_token}}
 ###
 
-POST http://localhost:7070/api/teams
+POST http://localhost:7070/api/teams/team-captain/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-    "teamName": "ProGamerTeam"
+  "teamName": "ProGamerTeam"
 }
 
 ###
@@ -225,6 +221,19 @@ Authorization: Bearer {{jwt_token}}
 
 ###
 
+PUT http://localhost:7070/api/users/1/profile_picture
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "profilePicture": "https://example.com/image.jpg"
+}
+
+###
+
+GET http://localhost:7070/api/users/1/profile_picture
+Authorization: Bearer {{jwt_token}}
+
 # Her opretter vi en notifikation for brugeren der er logget ind
 POST http://localhost:7070/api/notifications
 Authorization: Bearer {{jwt_token}}
@@ -287,3 +296,16 @@ Authorization: Bearer {{jwt_token}}
 Content-Type: application/json
 
 
+
+
+###
+
+POST http://localhost:7070/api/blogpost
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "userId": 1,
+  "title": "LOL Update Discussion",
+  "content": "What do u think of the new update?."
+}

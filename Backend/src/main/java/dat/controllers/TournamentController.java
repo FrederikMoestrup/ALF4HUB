@@ -9,7 +9,6 @@ import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 
@@ -110,4 +109,17 @@ public class TournamentController {
                 .get();
     }
 
+
+   public void getByUserId(Context ctx) throws ApiException {
+       try {
+           int userId = Integer.parseInt(ctx.pathParam("userId"));
+           List<TournamentDTO> tournamentDTOs = tournamentDAO.getTournamentsByUserId(userId);
+           ctx.res().setStatus(200);
+           ctx.json(tournamentDTOs, TournamentDTO.class);
+       } catch (NumberFormatException e) {
+           throw new ApiException(400, "Missing or invalid parameter: userId");
+       } catch (ApiException e) {
+           throw new ApiException(404, "Tournaments not found");
+       }
+   }
 }

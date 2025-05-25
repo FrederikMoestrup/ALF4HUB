@@ -1,15 +1,9 @@
 package dat.populator;
 
 import dat.config.HibernateConfig;
-import dat.entities.PlayerAccount;
-import dat.entities.Team;
-import dat.entities.Tournament;
-import dat.entities.User;
+import dat.entities.*;
 import dat.enums.Game;
-import dat.populator.generator.PlayerAccountGenerator;
-import dat.populator.generator.TeamGenerator;
-import dat.populator.generator.TournamentGenerator;
-import dat.populator.generator.UserGenerator;
+import dat.populator.generator.*;
 import dat.security.entities.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -59,6 +53,10 @@ public class Populator {
         // Step 5: Tournaments
         List<Tournament> tournaments = createTournaments(users);
         persist(tournaments);
+
+        // Step 6: Create Blogposts
+        List<BlogPost> blogPosts = createBlogPosts(users);
+        persist(blogPosts);
     }
 
     public List<Role> createRoles() {
@@ -133,6 +131,11 @@ public class Populator {
             entities.forEach(em::persist);
             em.getTransaction().commit();
         }
+    }
+
+    private List<BlogPost> createBlogPosts(List<User> users) {
+        BlogPostGenerator blogPostGenerator = new BlogPostGenerator(users, 2, random); // 2 posts per user
+        return blogPostGenerator.generate();
     }
 
     public void cleanup(Class<?> entityClazz) {

@@ -21,8 +21,8 @@ const LogoutButton = styled.button`
 
 const Navbar = ({ setNotifications }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(apiFacade.loggedIn());
-  const [unreadCount, setUnreadCount] = useState(0); 
-  const [hasNotifications, setHasNotifications] = useState(false); 
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [hasNotifications, setHasNotifications] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -76,9 +76,9 @@ const Navbar = ({ setNotifications }) => {
       </div>
 
       <div className="nav-center">
-        <Link to="#">Turneringer</Link>
-        <Link to="#">Hold</Link>
-        <Link to="#">Forum</Link>
+        <Link to="/tournaments">Turneringer</Link>
+        <Link to="/teams">Hold</Link>
+        <Link to="/blog/forum">Forum</Link>
       </div>
 
       <div className="nav-right">

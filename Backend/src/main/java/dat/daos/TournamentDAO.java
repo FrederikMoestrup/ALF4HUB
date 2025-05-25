@@ -95,6 +95,26 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
         }
     }
 
+       public List<TournamentDTO> getTournamentsByUserId(int userId) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<Tournament> tournaments = em.createQuery("""
+            SELECT t FROM Tournament t
+            JOIN t.tournamentTeams team
+            JOIN team.tournamentTeamAccounts p
+            WHERE p.user.id = :userId
+        """, Tournament.class)
+                    .setParameter("userId", userId)
+                    .getResultList();
+
+            if (tournaments.isEmpty()) {
+                throw new ApiException(404, "No tournaments found for user with ID: " + userId);
+            }
+
+            return tournaments.stream().map(TournamentDTO::new).toList();
+        } catch (Exception e) {
+            throw new ApiException(500, "Failed to retrieve tournaments: " + e.getMessage());
+        }
+    }
     public boolean nameExists(String name) {
         try (EntityManager em = emf.createEntityManager()) {
             List<String> existingNames = em

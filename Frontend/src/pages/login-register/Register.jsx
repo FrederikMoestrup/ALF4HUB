@@ -45,6 +45,7 @@ const Register = () => {
           <input
             type="text"
             id="username"
+            name="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -55,6 +56,7 @@ const Register = () => {
           <input
             type="email"
             id="email"
+            name="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -65,6 +67,7 @@ const Register = () => {
           <input
             type="password"
             id="password"
+            name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required

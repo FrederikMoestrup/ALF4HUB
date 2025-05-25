@@ -1,5 +1,7 @@
 package dat.utils;
 
+import dat.dtos.BlogPostDTO;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +27,34 @@ public class ProfanityFilter {
             }
         }
         return false;
+    }
+
+    public static BlogPostDTO returnCensoredBlogPost(BlogPostDTO blogPostDTO) {
+        blogPostDTO.setTitle(censorText(blogPostDTO.getTitle()));
+        blogPostDTO.setContent(censorText(blogPostDTO.getContent()));
+        return blogPostDTO;
+    }
+
+    private static String censorText(String text) {
+        String[] words = text.split("\\s+");
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            // Strip punctuation from word for comparison
+            String prefix = word.replaceAll("^[^a-zA-Z]+", ""); // non-letter at start
+            String suffix = word.replaceAll("[a-zA-Z]+", "");   // non-letter at end
+            String coreWord = word.replaceAll("[^a-zA-Z]", ""); // only letters
+
+            String censoredWord = BAD_WORDS.contains(coreWord.toLowerCase())
+                    ? "#".repeat(coreWord.length())
+                    : coreWord;
+
+            // Reconstruct the word with original punctuation
+            result.append(word.replace(coreWord, censoredWord));
+            if (i < words.length - 1) result.append(" ");
+        }
+        return result.toString();
     }
 
     public static void addWordsToFilter(Set<String> words) {

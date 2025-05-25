@@ -21,7 +21,6 @@
 # Sensitive or high-churn files
 .idea/**/dataSources/
 .idea/**/dataSources.ids
-.idea/**/dataSources.xml
 .idea/**/dataSources.local.xml
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
@@ -216,3 +215,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,osx,windows,intellij
+/.idea/encodings.xml
+/.idea/vcs.xml
+/.idea/dataSources.xml
