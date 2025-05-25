@@ -49,6 +49,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(BlogPost.class);
         configuration.addAnnotatedClass(TournamentTeam.class);
         configuration.addAnnotatedClass(TeamJoinRequest.class);
+        configuration.addAnnotatedClass(Notification.class);
 
     }
 

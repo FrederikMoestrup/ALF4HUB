@@ -65,3 +65,7 @@ Ferdinand har lavet: Figma mock-up til US-6
 Ingen test BDD til frontend
 
 ## DevTeamD
+
+### DevTeamH
+# Sprint 3
+Scrum master: Marwa

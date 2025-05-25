@@ -115,4 +115,17 @@ public class TournamentDAO implements IDAO<TournamentDTO, Integer> {
             throw new ApiException(500, "Failed to retrieve tournaments: " + e.getMessage());
         }
     }
+    public boolean nameExists(String name) {
+        try (EntityManager em = emf.createEntityManager()) {
+            List<String> existingNames = em
+                    .createQuery("SELECT t.tournamentName FROM Tournament t", String.class)
+                    .getResultList();
+
+            return existingNames.stream()
+                    .anyMatch(existing -> existing.equalsIgnoreCase(name));
+        }
+    }
+
+
+
 }

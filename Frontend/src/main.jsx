@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router";
 
@@ -36,6 +36,10 @@ import Login from "./pages/login-register/Login.jsx";
 import Register from "./pages/login-register/Register.jsx";
 import Profile from "./pages/profile/Profile.jsx";
 
+import NotificationsPage from "./pages/Notifications/NotificationsPage.jsx";
+
+
+const NotFound = () => (
 export const NotFound = () => (
   <div style={{ textAlign: "center", paddingTop: "100px" }}>
     <h1>404 - Page Not Found</h1>
@@ -43,20 +47,25 @@ export const NotFound = () => (
   </div>
 );
 
-const RootComponent = () => (
-  <>
-    <GlobalStyle />
-    <Navbar />
-    <main
-      style={{
-        backgroundColor: "#0e0f13",
-        height: "100vh",
-        color: "white",
-        padding: "20px",
-      }}
-    >
-      <Routes>
-        <Route path="/" element={<Homepage />} />
+const RootComponent = () => {
+  const [notifications, setNotifications] = useState([]);
+
+  return (
+    <>
+      <GlobalStyle />
+      <Navbar
+        setNotifications={setNotifications}
+      />
+      <main
+        style={{
+          backgroundColor: "#0e0f13",
+          height: "100vh",
+          color: "white",
+          padding: "20px",
+        }}
+      >
+        <Routes>
+          <Route path="/" element={<Homepage />} />
 
         <Route path="/tournaments" element={<TournamentOverview />} />
         <Route
@@ -76,6 +85,8 @@ const RootComponent = () => (
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/notifications" element={<NotificationsPage setNotifications={setNotifications} notifications={notifications} />} />
 
         <Route path="/blog/create" element={<CreateBlogPost />} />
         <Route path="/blog/forum" element={<ForumPage />} />
@@ -100,3 +111,4 @@ createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </StrictMode>
 );
+export { RootComponent };

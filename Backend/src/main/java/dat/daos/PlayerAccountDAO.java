@@ -111,6 +111,17 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
         }
     }
 
+    // Henter Player entity via id. fx. bliver brugt i TeamController metoden acceptPlayerApplication().
+    public PlayerAccount getPlayerAccountEntity(int id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            PlayerAccount player = em.find(PlayerAccount.class, id);
+            if (player == null) throw new ApiException(404, "PlayerAccount not found");
+            return player;
+        }
+    }
+
+
+
 
 
 

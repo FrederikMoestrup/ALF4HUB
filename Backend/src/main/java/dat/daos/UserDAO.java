@@ -10,7 +10,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.List;
 
-public class UserDAO implements IDAO<UserDTO, Integer> {
+public class UserDAO implements IDAO<UserDTO, Integer>{
 
     private static UserDAO instance;
     private static EntityManagerFactory emf;
@@ -34,6 +34,17 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
         }
     }
 
+    public User getEntityById(Integer id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.find(User.class, id);
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+            return user;
+        }
+    }
+
+
     public UserDTO getByUsername(String username) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
@@ -43,6 +54,18 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
                 throw new ApiException(404, "User not found");
             }
             return new UserDTO(user);
+        }
+    }
+
+    public User getUserByUsername(String username) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            User user = em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+            if (user == null) {
+                throw new ApiException(404, "User not found");
+            }
+            return user;
         }
     }
 

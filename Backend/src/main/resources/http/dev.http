@@ -3,6 +3,7 @@ GET http://localhost:7070/api/auth/test/
 
 ### Create a new user - this one will only get a USER role by default
 POST http://localhost:7070/api/auth/register/
+Content-Type: application/json
 
 {
     "username": "user",
@@ -174,17 +175,21 @@ Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
 {
-  "tournamentName": "ProGamerTournament",
-  "game": "LEAGUE_OF_LEGENDS",
-  "tournamentSize": 2,
-  "teamSize": 2,
-  "rules": "No cheating, no toxicity",
-  "entryRequirements": "Must be a registered player",
-  "status": "ACTIVE",
-  "startDate": "2023-10-01T10:00:00Z",
-  "startTime": "2023-10-01T10:00:00Z",
-  "endDate": "2023-10-31T10:00:00Z",
-  "endTime": "2023-10-31T10:00:00Z"
+  "tournamentName": "rgege",
+  "game": "COUNTER_STRIKE",
+  "tournamentSize": 16,
+  "teamSize": 5,
+  "prizePool": 10000,
+  "rules": "No cheating",
+  "entryRequirements": "Over 18",
+  "tournamentStatus": "NOT_STARTED",
+  "startDate": "2023-10-01",
+  "startTime": "12:00",
+  "endDate": "2023-10-31",
+  "endTime": "18:00",
+  "host": {
+    "id": 1
+  }
 }
 
 ###
@@ -212,6 +217,7 @@ Authorization: Bearer {{jwt_token}}
 DELETE http://localhost:7070/api/tournaments/1
 Authorization: Bearer {{jwt_token}}
 
+//Notifications
 
 ###
 
@@ -228,38 +234,69 @@ Authorization: Bearer {{jwt_token}}
 GET http://localhost:7070/api/users/1/profile_picture
 Authorization: Bearer {{jwt_token}}
 
-//TeamJoinRequest
-
-GET http://localhost:7070/api/team-join-requests
+# Her opretter vi en notifikation for brugeren der er logget ind
+POST http://localhost:7070/api/notifications
 Authorization: Bearer {{jwt_token}}
-###
+Content-Type: application/json
 
-GET http://localhost:7070/api/team-join-requests/1
-Authorization: Bearer {{jwt_token}}
-###
-
-POST http://localhost:7070/api/team-join-requests/requester/7/team/2/player-account/7
-Authorization: Bearer {{jwt_token}}
-
-###
-
-PATCH http://localhost:7070/api/team-join-requests/responder/2/join-request/1/join-request-status/approved
-Authorization: Bearer {{jwt_token}}
+{
+  "notificationType": "INVITATION",
+  "notificationTitle": "Du er blevet inviteret til holdet",
+  "read": false,
+  "link": "/teams/1",
+  "teamId": 1,
+  "invitationId": 42,
+  "senderId": 1001
+}
 
 ###
 
-GET http://localhost:7070/api/team-join-requests/team/2
+# Her opretter vi en notifikation for accepteret holdansøgning
+POST http://localhost:7070/api/notifications
 Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+{
+  "notificationType": "INVITATION",
+  "notificationTitle": "Du er blevet accepteret på holdet",
+  "read": false,
+  "link": "/teams/1",
+  "teamId": 1,
+  "invitationId": 42,
+  "senderId": 1001
+}
 
 ###
 
-GET http://localhost:7070/api/team-join-requests/team-captain/2
+
+
+# Her henter vi alle notifikationer for brugeren der er logget ind
+GET http://localhost:7070/api/notifications
 Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
 
 ###
 
-DELETE http://localhost:7070/api/team-join-requests/1
+# Her markérer vi en notifikation som læst
+PUT http://localhost:7070/api/notifications/1/read
 Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+###
+
+### Marker alle notifikationer som læst
+PUT http://localhost:7070/api/notifications/markallasread
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+
+### Henting notifikationer af en bestemt type - typerne findes i notificationType route
+GET localhost:7070/api/notifications/type/invitation
+Authorization: Bearer {{jwt_token}}
+Content-Type: application/json
+
+
+
 
 ###
 
