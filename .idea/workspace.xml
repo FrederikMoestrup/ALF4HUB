@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1f73455e-446d-4a93-be2d-58ee9a2fcb20" name="Changes" comment="Frontend og Backend kigget på og sat sammen med DAO Tounement id og endpointet i controlleren. &#10;&#10;Samt sat TournementHistory op så den vises via endpoint, men med dummy data.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/enums/BlogPostStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/enums/BlogPostStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/enums/ProfanityWords.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/routes/BlogRoute.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/routes/BlogRoute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/routes/Routes.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/routes/Routes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/dat/routes/TournamentRoute.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main/java/dat/routes/TournamentRoute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main/java/service/ProfanityFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/BlogPostFrontPage.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/EditBlogPost.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/src/pages/TournamentHistory.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/src/pages/TournamentHistory.jsx" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JUnit5 Test Class" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="devTeamD" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;afstengaard&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/FrederikMoestrup/ALF4HUB.git&quot;,
+    &quot;accountId&quot;: &quot;d08c87fa-b52c-4ee1-ac42-de0b00ce6d9f&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="2wcUu7yLcTf8A8ZLP6xI96ySIyC" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RunCucumberTest (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.RunCucumberTest.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;#107 on devTeamD&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Backend/src/test/java/resources/features" />
+      <recent name="$PROJECT_DIR$/Backend/src/test/java/runner" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="service" />
+    </key>
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="service" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="dat.Main" />
+      <module name="ALF4HUB_Backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="dat.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BlogPostDAOTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ALF4HUB_Backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="US3.dat.daos.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="US3.dat.daos" />
+      <option name="MAIN_CLASS_NAME" value="US3.dat.daos.BlogPostDAOTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ProfanityFilterTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ALF4HUB_Backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="CodeOfConductTest.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="CodeOfConductTest.service" />
+      <option name="MAIN_CLASS_NAME" value="CodeOfConductTest.service.ProfanityFilterTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RunCucumberTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ALF4HUB_Backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="runner.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="runner" />
+      <option name="MAIN_CLASS_NAME" value="runner.RunCucumberTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="RunCucumberTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="ALF4HUB_Backend" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="runner.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="runner" />
+      <option name="MAIN_CLASS_NAME" value="runner.RunCucumberTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+        <item itemvalue="JUnit.ProfanityFilterTest" />
+        <item itemvalue="JUnit.BlogPostDAOTest" />
+        <item itemvalue="JUnit.RunCucumberTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1f73455e-446d-4a93-be2d-58ee9a2fcb20" name="Changes" comment="" />
+      <created>1746340579869</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1746340579869</updated>
+      <workItem from="1746340582735" duration="846000" />
+      <workItem from="1746817660182" duration="1767000" />
+      <workItem from="1747641911911" duration="1230000" />
+      <workItem from="1747849948915" duration="3538000" />
+      <workItem from="1748122626514" duration="1635000" />
+    </task>
+    <task id="LOCAL-00001" summary="Merge med DEV">
+      <option name="closed" value="true" />
+      <created>1747642447159</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1747642447159</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changes">
+      <option name="closed" value="true" />
+      <created>1747642566316</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1747642566316</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Frontend og Backend kigget på og sat sammen med DAO Tounement id og endpointet i controlleren. &#10;&#10;Samt sat TournementHistory op så den vises via endpoint, men med dummy data.">
+      <option name="closed" value="true" />
+      <created>1747854457991</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1747854457991</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merge med DEV" />
+    <MESSAGE value="Changes" />
+    <MESSAGE value="Frontend og Backend kigget på og sat sammen med DAO Tounement id og endpointet i controlleren. &#10;&#10;Samt sat TournementHistory op så den vises via endpoint, men med dummy data." />
+    <option name="LAST_COMMIT_MESSAGE" value="Frontend og Backend kigget på og sat sammen med DAO Tounement id og endpointet i controlleren. &#10;&#10;Samt sat TournementHistory op så den vises via endpoint, men med dummy data." />
+  </component>
+</project>

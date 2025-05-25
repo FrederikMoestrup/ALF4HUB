@@ -96,7 +96,7 @@ GET http://localhost:7070/api/teams/1
 Authorization: Bearer {{jwt_token}}
 ###
 
-POST http://localhost:7070/api/teams
+POST http://localhost:7070/api/teams/team-captain/1
 Content-Type: application/json
 Authorization: Bearer {{jwt_token}}
 
@@ -260,3 +260,15 @@ Authorization: Bearer {{jwt_token}}
 
 DELETE http://localhost:7070/api/team-join-requests/1
 Authorization: Bearer {{jwt_token}}
+
+###
+
+POST http://localhost:7070/api/blogpost
+Content-Type: application/json
+Authorization: Bearer {{jwt_token}}
+
+{
+  "userId": 1,
+  "title": "LOL Update Discussion",
+  "content": "What do u think of the new update?."
+}

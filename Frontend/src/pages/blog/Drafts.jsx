@@ -1,42 +1,27 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
+import apiFacade from "../../util/apiFacade"
 import {
   GlobalStyle,
   Container,
-  Navbar,
-  HomeButton,
-  ProfileButton,
-  NavLinks,
   Content,
-  FormWrapper,
-  FormTitle,
-  Form,
-  Label,
-  Input,
-  Textarea,
-  ButtonsContent,
-  Button,
-  RequiredText,
-  Footer,
-} from "./styles/createBlogPostStyles";
-import {
   BlogCard,
-  ButtonContainer,
   BlogContainer,
-  Section,
   SectionTitle,
   BlogSectionLeft,
-  BlogSectionRight,
-} from "./styles/blogPostFrontPageStyles";
+} from "./styles/draftsPageStyles";
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);
-  const userId = 1; // hardcoded until login works
+  const [userId, setUserId] = useState();
 
   const fetchDrafts = async () => {
     try {
+      const currentUserId = await apiFacade.getUserId();
+      setUserId(currentUserId)
+
       const response = await fetch(
-        "http://localhost:7070/api/blogpost/draft/" + userId,
+        "http://localhost:7070/api/blogpost/draft/" + currentUserId,
         {
           method: "GET",
           headers: {
@@ -56,28 +41,13 @@ function Drafts() {
 
   useEffect(() => {
     fetchDrafts();
-  }, []);
+  }, [userId]);
+
 
   return (
     <>
       <GlobalStyle />
       <Container>
-        <Navbar>
-          <HomeButton>
-            <a href="/">Home</a>
-          </HomeButton>
-
-          <NavLinks>
-            <NavLink to="/teams">Teams</NavLink>
-            <NavLink to="/tournaments">Tournaments</NavLink>
-            <NavLink to="/blogposts">Blog</NavLink>
-          </NavLinks>
-
-          <ProfileButton>
-            <a href="/">Profile</a>
-          </ProfileButton>
-        </Navbar>
-
         <Content>
           <BlogContainer>
             <BlogSectionLeft>
@@ -85,23 +55,21 @@ function Drafts() {
               {drafts.length < 1 ? <p>No recent posts yet.</p> : null}
               <ul Style="list-style-type: none; padding: 0;">
                 {drafts.map((draft) => (
+                  <>
                   <BlogCard key={draft.id} Style="border-left: 5px solid red;">
                     <h3>{draft.title}</h3>
                     <p>{draft.content}</p>
-                    <small>Posted on {draft.createdAt}</small>
+                    <small>Saved on: {draft.createdAt}</small>
+                    <NavLink to={`/blog/${draft.id}/edit`} state={{ draft }}>
+                    <button Style="width: 10%;">Edit & Publish</button>
+                    </NavLink>
                   </BlogCard>
+                  </>
                 ))}
               </ul>
             </BlogSectionLeft>
           </BlogContainer>
         </Content>
-
-        <Footer>
-          <p>
-            © Altf4hub | Firskovvej 18 2800 Lyngby | CVR-nr. 10101010 | Tlf: 36
-            15 45 04 | Mail: turnering@altf4hub.dk
-          </p>
-        </Footer>
       </Container>
     </>
   );

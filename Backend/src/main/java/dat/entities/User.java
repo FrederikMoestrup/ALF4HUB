@@ -1,11 +1,11 @@
 package dat.entities;
 
+import dat.dtos.UserDTO;
 import dat.security.entities.ISecurityUser;
 import dat.security.entities.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.mindrot.jbcrypt.BCrypt;
-import dat.dtos.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -104,7 +104,7 @@ public class User implements Serializable, ISecurityUser {
 
     public User(String username, String password, String email) {
         this.username = username;
-        this.password = password;
+        this.password = BCrypt.hashpw(password, BCrypt.gensalt());
         this.email = email;
     }
 
@@ -118,7 +118,7 @@ public class User implements Serializable, ISecurityUser {
                     .collect(Collectors.toSet());
         }
         if (dto.getPlayerAccounts() != null) {
-            setPlayerAccounts( dto.getPlayerAccounts().stream()
+            setPlayerAccounts(dto.getPlayerAccounts().stream()
                     .map(PlayerAccount::new)
                     .collect(Collectors.toList()));
         }
@@ -157,8 +157,9 @@ public class User implements Serializable, ISecurityUser {
                     role.getUsers().remove(this);
                 });
     }
+
     public void setPlayerAccounts(List<PlayerAccount> playerAccounts) {
-        if(playerAccounts != null) {
+        if (playerAccounts != null) {
             this.playerAccounts = playerAccounts;
             for (PlayerAccount playerAccount : playerAccounts) {
                 playerAccount.setUser(this);
@@ -174,7 +175,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void setTournaments(List<Tournament> tournaments) {
-        if(tournaments != null) {
+        if (tournaments != null) {
             this.tournaments = tournaments;
             for (Tournament tournament : tournaments) {
                 tournament.setHost(this);
@@ -190,7 +191,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void setTeams(List<Team> teams) {
-        if(teams != null) {
+        if (teams != null) {
             this.teams = teams;
             for (Team team : teams) {
                 team.setTeamCaptain(this);
@@ -240,7 +241,7 @@ public class User implements Serializable, ISecurityUser {
     }
 
     public void setBlogPosts(List<BlogPost> blogPosts) {
-        if(blogPosts != null) {
+        if (blogPosts != null) {
             this.blogPosts = blogPosts;
             for (BlogPost blogPost : blogPosts) {
                 blogPost.setUser(this);
@@ -254,7 +255,6 @@ public class User implements Serializable, ISecurityUser {
             blogPost.setUser(this);
         }
     }
-
 
 
 }
