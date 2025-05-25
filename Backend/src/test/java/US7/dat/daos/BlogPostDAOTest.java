@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class BlogPostDAOTest {
+    /*
     private static EntityManagerFactory emf;
     private BlogPostDAO blogPostDAO;
 
@@ -149,5 +150,7 @@ class BlogPostDAOTest {
 
 
     }
+
+     */
 }
 

@@ -49,17 +49,24 @@ public class TeamController {
     }
 
     public void create(Context ctx) throws ApiException {
-        int id = Integer.parseInt(ctx.pathParam("id"));
-        TeamDTO teamDTO = ctx.bodyAsClass(TeamDTO.class);
+        try {
 
-        // Check for existing team name (case-insensitive)
-        if (teamDAO.teamNameAlreadyExist(teamDTO.getTeamName())) {
-            throw new ApiException(409, "Holdnavnet er allerede i brug");
+            int id = Integer.parseInt(ctx.pathParam("id"));
+            TeamDTO teamDTO = ctx.bodyAsClass(TeamDTO.class);
+
+            // Check for existing team name (case-insensitive)
+            if (teamDAO.teamNameAlreadyExist(teamDTO.getTeamName())) {
+                throw new ApiException(409, "Holdnavnet er allerede i brug");
+            }
+
+            TeamDTO createdTeamDTO = teamDAO.create(teamDTO, id);
+            ctx.res().setStatus(201);
+            ctx.json(createdTeamDTO, TeamDTO.class);
+        } catch (NumberFormatException e) {
+            throw new ApiException(400, "Missing or invalid parameter: id");
+        } catch (ApiException e) {
+            throw new ApiException(404, "Teamcaptain not found");
         }
-
-        TeamDTO createdTeamDTO = teamDAO.create(teamDTO, id);
-        ctx.res().setStatus(201);
-        ctx.json(createdTeamDTO, TeamDTO.class);
     }
 
     public void update(Context ctx) throws ApiException {

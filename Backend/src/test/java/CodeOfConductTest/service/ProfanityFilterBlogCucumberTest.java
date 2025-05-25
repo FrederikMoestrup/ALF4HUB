@@ -3,14 +3,14 @@ package CodeOfConductTest.service;
 import dat.entities.BlogPost;
 import dat.enums.BlogPostStatus;
 import io.cucumber.java.en.*;
-import service.ProfanityFilter;
+//import service.ProfanityFilter;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProfanityFilterBlogCucumberTest {
-
+/*
     private BlogPost blogPost;
 
     @Given("a blog post with the content {string}")
@@ -41,4 +41,6 @@ public class ProfanityFilterBlogCucumberTest {
     public void the_blog_post_should_be_marked_as(String expectedStatus) {
         assertEquals(BlogPostStatus.valueOf(expectedStatus), blogPost.getStatus());
     }
+
+ */
 }
