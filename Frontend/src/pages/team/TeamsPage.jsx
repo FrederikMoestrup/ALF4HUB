@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const PageContainer = styled.div`
   margin: 0 auto;
@@ -17,7 +17,7 @@ const Header = styled.div`
 
 const Title = styled.h1`
   color: var(--color-text);
-  font-family: 'Xirod', sans-serif;
+  font-family: "Xirod", sans-serif;
 `;
 
 const Actions = styled.div`
@@ -35,7 +35,7 @@ const Button = styled(Link)`
   text-decoration: none;
   display: inline-block;
   transition: all 0.3s ease;
-  
+
   &:hover {
     background-color: var(--color-accept);
     color: var(--color-main);
@@ -46,7 +46,7 @@ const FiltersContainer = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  
+
   @media (max-width: 768px) {
     flex-direction: column;
     gap: 10px;
@@ -60,18 +60,17 @@ const SearchInput = styled.input`
   padding: 8px 12px;
   border-radius: 5px;
   width: 300px;
-  
+
   &::placeholder {
     color: var(--color-text);
     opacity: 0.7;
   }
-  
+
   &:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(87, 210, 255, 0.5);
   }
 `;
-
 
 const TeamsList = styled.div`
   display: grid;
@@ -86,7 +85,7 @@ const TeamCard = styled.div`
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 0 10px rgba(87, 210, 255, 0.2);
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 0 15px rgba(87, 210, 255, 0.4);
@@ -114,14 +113,14 @@ const TeamLogo = styled.div`
 
 const TeamInfo = styled.div`
   margin-left: 15px;
-  
+
   h3 {
     color: var(--color-text);
-    font-family: 'Xirod', sans-serif;
+    font-family: "Xirod", sans-serif;
     font-size: 18px;
     margin-bottom: 5px;
   }
-  
+
   p {
     color: var(--color-text);
     margin: 0;
@@ -132,7 +131,7 @@ const TeamInfo = styled.div`
 
 const TeamCardBody = styled.div`
   padding: 15px;
-  
+
   p {
     color: var(--color-text);
     margin: 0;
@@ -166,7 +165,7 @@ const TeamsPage = () => {
   const url = "http://localhost:7070/api/teams";
   const [teams, setTeams] = useState([]);
   const [filterActive, setFilterActive] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -190,9 +189,8 @@ const TeamsPage = () => {
     setSearchTerm(e.target.value);
   };
 
-
-  const filteredTeams = teams.filter(team => {
-    const name = team?.teamName ?? '';
+  const filteredTeams = teams.filter((team) => {
+    const name = team?.teamName ?? "";
     const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
@@ -209,9 +207,9 @@ const TeamsPage = () => {
 
         <FiltersContainer>
           <div>
-            <SearchInput 
-              type="text" 
-              placeholder="Søg efter hold..." 
+            <SearchInput
+              type="text"
+              placeholder="Søg efter hold..."
               value={searchTerm}
               onChange={handleSearch}
             />
@@ -222,23 +220,19 @@ const TeamsPage = () => {
           {loading ? (
             <LoadingMessage>Indlæser hold...</LoadingMessage>
           ) : filteredTeams.length > 0 ? (
-            filteredTeams.map(team => (
+            filteredTeams.map((team) => (
               <TeamCard key={team.id}>
                 <TeamCardHeader>
-                  <TeamLogo>
-                    {team.logo || '🏆'}
-                  </TeamLogo>
+                  <TeamLogo>{team.logo || "🏆"}</TeamLogo>
                   <TeamInfo>
-                    <h3>{team.teamName || 'Unavngivet hold'}</h3>
-                    <p>Kaptajn: {team.teamCaptain?.username || 'Ukendt'}</p>
+                    <h3>{team.teamName || "Unavngivet hold"}</h3>
+                    <p>Kaptajn: {team.teamCaptain?.username || "Ukendt"}</p>
                     <p>Medlemmer: {team.teamAccounts?.length || 0}</p>
                   </TeamInfo>
                 </TeamCardHeader>
 
                 <TeamCardFooter>
-                  <Button to={`/team/${team.id}`}>
-                    Se hold
-                  </Button>
+                  <Button to={`/team/${team.id}`}>Se hold</Button>
                 </TeamCardFooter>
               </TeamCard>
             ))

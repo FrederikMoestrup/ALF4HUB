@@ -15,7 +15,7 @@ const Login = () => {
 
     try {
       await apiFacade.login(username, password);
-      navigate("/"); 
+      navigate("/");
     } catch (err) {
       console.error("Fejl ved login:", err);
       setErrorMsg(err.message || "Noget gik galt. Prøv igen.");

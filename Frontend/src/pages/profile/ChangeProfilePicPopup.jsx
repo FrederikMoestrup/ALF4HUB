@@ -8,7 +8,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -19,7 +19,7 @@ const Popup = styled.div`
   background: #fff;
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.2);
   min-width: 320px;
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@ export default function ChangeProfilePicPopup({
   isOpen,
   onClose,
   onSuccess,
-  userId, 
+  userId,
 }) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -74,31 +74,36 @@ export default function ChangeProfilePicPopup({
     e.preventDefault();
     setError("");
     setLoading(true);
-  
+
     // Basic URL validation
     if (!/^https?:\/\/.+\.(jpg|jpeg|png|gif)$/i.test(url)) {
       setError("Indtast et gyldigt billede URL (jpg, jpeg, png eller gif).");
       setLoading(false);
       return;
     }
-  
+
     try {
       const token = localStorage.getItem("token");
-      
-      const res = await fetch(`http://localhost:7070/api/users/${userId}/profile_picture`, {
-        method: "PUT",
-        headers: { 
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ profilePicture: url }),
-      });
-  
+
+      const res = await fetch(
+        `http://localhost:7070/api/users/${userId}/profile_picture`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ profilePicture: url }),
+        }
+      );
+
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.message || "Fejl ved opdatering af profilbillede.");
+        throw new Error(
+          errorData.message || "Fejl ved opdatering af profilbillede."
+        );
       }
-  
+
       setLoading(false);
       setUrl("");
       if (onSuccess) onSuccess(url);
@@ -108,7 +113,7 @@ export default function ChangeProfilePicPopup({
       setLoading(false);
     }
   };
-  
+
   return (
     <Overlay>
       <Popup>

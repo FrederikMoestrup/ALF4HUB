@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import apiFacade from "../util/apiFacade";
+import apiFacade from "../../util/apiFacade";
 
 const PageContainer = styled.div`
   margin: 0 auto;
