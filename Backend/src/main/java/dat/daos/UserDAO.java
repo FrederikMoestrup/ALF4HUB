@@ -112,32 +112,34 @@ public class UserDAO implements IDAO<UserDTO, Integer> {
     }
 
 
-    public void updateProfilePicture(int userId, String url) {
+    public void updateProfilePicture(int userId, String url) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             User user = em.find(User.class, userId);
 
             if (user == null) {
-                throw new EntityNotFoundException("User with ID " + userId + " not found");
+                throw new ApiException(404, "User not found");
             }
 
             user.setProfilePicture(url);
-            em.merge(user); // Use merge to ensure entity is updated
+            em.merge(user);
             em.getTransaction().commit();
+        } catch (ApiException e) {
+            throw e; // propagate
         } catch (Exception e) {
-            throw new RuntimeException("Error updating profile picture: " + e.getMessage(), e);
+            throw new ApiException(500, "Error updating profile picture: " + e.getMessage());
         }
     }
 
-
-    public String getProfilePictureById(int userId) {
+    public String getProfilePictureById(int userId) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             User foundUser = em.find(User.class, userId);
             if (foundUser == null) {
-                throw new EntityNotFoundException("User with ID " + userId + " not found");
+                throw new ApiException(404, "User not found");
             }
             return foundUser.getProfilePicture();
         }
     }
+
 
 }

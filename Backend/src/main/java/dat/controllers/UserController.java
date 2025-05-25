@@ -78,40 +78,30 @@ public class UserController {
         try {
             int userId = Integer.parseInt(ctx.pathParam("id"));
 
-            // Try to get profile picture from JSON body first
             ProfilePictureDTO dto = null;
             try {
                 dto = ctx.bodyAsClass(ProfilePictureDTO.class);
-            } catch (Exception e) {
-                // If parsing as ProfilePictureDTO fails, try getting from form param
-            }
+            } catch (Exception ignored) {}
 
-            String profilePicture = null;
-            if (dto != null && dto.getProfilePicture() != null) {
-                profilePicture = dto.getProfilePicture();
-            } else {
-                profilePicture = ctx.formParam("profilePicture");
-            }
+            String profilePicture = (dto != null && dto.getProfilePicture() != null)
+                    ? dto.getProfilePicture()
+                    : ctx.formParam("profilePicture");
 
             if (profilePicture == null || profilePicture.isEmpty()) {
                 throw new ApiException(400, "Missing profile picture URL");
             }
-
-            // Verify user exists
-            UserDTO userDTO = userDAO.getById(userId);
-            if (userDTO == null) {
-                throw new ApiException(404, "User not found");
-            }
-
+            
             userDAO.updateProfilePicture(userId, profilePicture);
 
-            // Return updated user
             UserDTO updated = userDAO.getById(userId);
             ctx.json(updated, UserDTO.class);
             ctx.status(200);
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
         } catch (ApiException e) {
+            if (e.getStatusCode() == 404) {
+                throw new ApiException(404, "User not found");
+            }
             throw e;
         }
     }
@@ -122,16 +112,14 @@ public class UserController {
             int userId = Integer.parseInt(ctx.pathParam("id"));
             String profilePicture = userDAO.getProfilePictureById(userId);
 
-            if (profilePicture == null) {
-                // Return a default profile picture URL or an empty object
-                ctx.json(Map.of("profilePicture", ""));
-            } else {
-                ctx.json(Map.of("profilePicture", profilePicture));
-            }
+            ctx.json(Map.of("profilePicture", profilePicture != null ? profilePicture : ""));
         } catch (NumberFormatException e) {
             throw new ApiException(400, "Missing or invalid parameter: id");
-        } catch (EntityNotFoundException e) {
-            throw new ApiException(404, "User not found");
+        } catch (ApiException e) {
+            if (e.getStatusCode() == 404) {
+                throw new ApiException(404, "User not found");
+            }
+            throw e;
         }
     }
 
