@@ -1,0 +1,5 @@
+package dat.enums.GameRanks;
+
+public enum CounterStrikeRanks {
+    SILVER, GOLD_NOVA, MASTER_GUARDIAN, DISTINGUISHED_MASTER_GUARDIAN, LEGENDARY_EAGLE, GLOBAL_ELITE;
+}

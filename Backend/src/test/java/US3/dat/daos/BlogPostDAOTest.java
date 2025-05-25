@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 class BlogPostDAOTest {
+
     private static EntityManagerFactory emf;
     private BlogPostDAO blogPostDAO;
 
@@ -40,9 +41,9 @@ class BlogPostDAOTest {
         blogPostDAO = BlogPostDAO.getInstance(emf);
 
         //Create user dto test data
-        UserDTO userDTO1 = new UserDTO("username1", "test1");
-        UserDTO userDTO2 = new UserDTO("username2", "test2");
-        UserDTO userDTO3 = new UserDTO("username3", "test3");
+        UserDTO userDTO1 = new UserDTO("username1", "test1", "test@test");
+        UserDTO userDTO2 = new UserDTO("username2", "test2","test@test");
+        UserDTO userDTO3 = new UserDTO("username3", "test3","test@test");
 
         // Create blog post DTO test data
         BlogPostDTO blogPostDTO = new BlogPostDTO();
@@ -178,4 +179,6 @@ class BlogPostDAOTest {
     @Test
     void delete() {
     }
+
+
 }

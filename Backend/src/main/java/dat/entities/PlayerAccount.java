@@ -101,6 +101,23 @@ public class PlayerAccount {
         }
         teams.remove(team);
     }
+    public void detachFromAllTeams() {
+        if (teams != null) {
+            for (Team team : new ArrayList<>(teams)) {
+                team.removePlayerAccount(this);
+            }
+            teams.clear();
+        }
+    }
+
+    public void detachFromAllTournamentTeams() {
+        if (tournamentTeams != null) {
+            for (TournamentTeam tournamentTeam : new ArrayList<>(tournamentTeams)) {
+                tournamentTeam.removePlayerAccount(this);
+            }
+            tournamentTeams.clear();
+        }
+    }
 
     public void setTournamentTeams(List<TournamentTeam> tournamentTeams) {
         if (tournamentTeams != null) {
