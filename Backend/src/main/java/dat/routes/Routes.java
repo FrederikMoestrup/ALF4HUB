@@ -1,9 +1,6 @@
 package dat.routes;
 
 import io.javalin.apibuilder.EndpointGroup;
-
-import static dat.security.routes.SecurityRoutes.getSecuredRoutes;
-import static dat.security.routes.SecurityRoutes.getSecurityRoutes;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 
