@@ -29,6 +29,10 @@ import java.time.LocalDateTime;
         @NamedQuery(
                 name = "BlogPost.getDraftsByUserId",
                 query = "SELECT bp FROM BlogPost bp WHERE bp.user.id = :userId AND bp.status = 'DRAFT'"
+        ),
+        @NamedQuery(
+                name = "BlogPost.deleteAllOldDrafts",
+                query = "DELETE FROM BlogPost bp WHERE bp.createdAt < :thresholdDate"
         )
 })
 @Table(name = "blog_post")

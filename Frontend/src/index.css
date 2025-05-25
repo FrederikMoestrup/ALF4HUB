@@ -90,7 +90,7 @@ button:focus-visible {
 main {
   background-color: #0e0f13;
   color: white;
-  min-height: 100vh;
+  /* min-height: 100vh;  Den her linje skaber problemmer i min draftsPagestyle */
   padding: 20px;
   box-sizing: border-box;
 }

@@ -7,30 +7,30 @@ const ReadBlogPost = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-    useEffect(() => {
-        fetch(`http://localhost:7070/api/blogpost/${postId}`)
-            .then((res) => {
-                if (!res.ok) throw new Error("Failed to fetch blog post");
-                return res.json();
-            })
-            .then((data) => {
-                setPost(data);
-            })
-            .catch((err) => {
-                setError(err.message);
-            })
-            .finally(() => {
-                setLoading(false);
-            });
-    }, [postId]);
+  useEffect(() => {
+    fetch(`http://localhost:7070/api/blogpost/${postId}`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch blog post");
+        return res.json();
+      })
+      .then((data) => {
+        setPost(data);
+      })
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [postId]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!post) return  <p>Post not found.</p>;
+  if (!post) return <p>Post not found.</p>;
 
   return (
     <div style={{ padding: "20px" }}>
-      <NavLink to="/blog/posts">
+      <NavLink to="/blog/forum">
         <button>← Back to Blogs Frontpage</button>
       </NavLink>
       <h1>{post.title}</h1>

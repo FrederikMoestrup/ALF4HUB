@@ -15,7 +15,7 @@ const Navbar = () => {
       <div className="nav-center">
         <Link to="/tournaments">Turneringer</Link>
         <Link to="/teams">Hold</Link>
-        <Link to="#">Forum</Link>
+        <Link to="/blog/forum">Forum</Link>
       </div>
       <div className="nav-right">
         <Link to="/login">

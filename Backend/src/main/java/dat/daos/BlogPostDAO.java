@@ -4,9 +4,11 @@ import dat.dtos.BlogPostDTO;
 import dat.entities.BlogPost;
 import dat.entities.User;
 import dat.enums.BlogPostStatus;
+import dat.utils.BlogPostCleanupScheduler;
 import dat.exceptions.ApiException;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
@@ -17,6 +19,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         if (instance == null) {
             emf = _emf;
             instance = new BlogPostDAO();
+            BlogPostCleanupScheduler.initialize(emf);
         }
         return instance;
     }
@@ -48,8 +51,7 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
 
     public List<BlogPostDTO> getDraftByUserId(int userId) {
         try (EntityManager em = emf.createEntityManager()) {
-            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.getDraftsByUserId", BlogPost.class);
-            query.setParameter("userId", userId);
+            TypedQuery<BlogPost> query = em.createNamedQuery("BlogPost.getDraftsByUserId", BlogPost.class).setParameter("userId", userId);
             List<BlogPost> blogPosts = query.getResultList();
 
             return blogPosts.stream().map(BlogPostDTO::new).toList();
@@ -163,6 +165,35 @@ public class BlogPostDAO implements IDAO<BlogPostDTO, Long> {
         }
     }
 
+    public static void deleteOldDrafts() {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            LocalDateTime threshold = LocalDateTime.now().minusDays(3);
+            em.createNamedQuery("BlogPost.deleteAllOldDrafts", BlogPost.class).setParameter("thresholdDate", threshold).executeUpdate();
+            em.getTransaction().commit();
+        }
+    }
 
+    public BlogPostDTO publishDraft(BlogPostDTO blogPostDTO, long draftId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            BlogPost blogpost = em.find(BlogPost.class, draftId);
+            blogpost.setStatus(BlogPostStatus.PUBLISHED);
+            blogpost.setTitle(blogPostDTO.getTitle());
+            blogpost.setContent(blogPostDTO.getContent());
+            em.getTransaction().commit();
+            return new BlogPostDTO(blogpost);
+        }
+    }
 
+    public BlogPostDTO updateDraft(BlogPostDTO blogPostDTO, long draftId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            BlogPost blogpost = em.find(BlogPost.class, draftId);
+            blogpost.setTitle(blogPostDTO.getTitle());
+            blogpost.setContent(blogPostDTO.getContent());
+            em.getTransaction().commit();
+            return new BlogPostDTO(blogpost);
+        }
+    }
 }
