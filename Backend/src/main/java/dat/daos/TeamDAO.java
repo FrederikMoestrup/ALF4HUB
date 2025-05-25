@@ -57,11 +57,17 @@ public class TeamDAO implements IDAO<TeamDTO, Integer> {
         }
     }
 
-    public TeamDTO create(TeamDTO teamDTO, int id) {
+    public TeamDTO create(TeamDTO teamDTO, int id) throws ApiException {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             Team team = new Team(teamDTO);
-            team.setTeamCaptain(em.find(User.class, id));
+            User teamCaptain = em.find(User.class, id);
+
+            if (teamCaptain == null) {
+                throw new ApiException(404, "Teamcaptain not found");
+            }
+
+            team.setTeamCaptain(teamCaptain);
             em.persist(team);
             em.getTransaction().commit();
             return new TeamDTO(team);
