@@ -20,6 +20,7 @@ Frederik har lavet:
 Peter har lavet:
 - Sprint 1: Opsætning og administration af AlF4Hub gruppeserver. Opsætning og vedligeholdelse af gruppefigmaboard i samarbejde med Tobias (Team H). Gruppekoordinator rolle sammen med Tobias. Opsætning og vedligeholdelse af Team Figma board. SCM opgaver for teamet (planlægning af standups, ordstyrer, kontakt mellem team og PO, etc.). Planlægning og ordstyrer for gruppemøder. Reserve PO. Vedligeholdelse af Team Taiga. Domænemodel i samarbjede med Masih (Team B).
 - Sprint 2: Gruppekoordinator med Tobias (Team H). Vedligeholdelse af gruppe Figma board. Planlægning og ordstyrer for gruppemøder. Figma Mock Ups til log ind, opret bruger, forside og profil. SCM opgaver for teamet. Vedligeholdelse af Team Taiga. Reserve PO. Klassediagram i samarbejde med Tobias (Team H). Resolved konflikter og arbejdet med rettelser af pull request.
+- Sprint 3: Gruppekoordinator med Tobias (Team H). Vedligeholdelse af gruppe Figma board. Planlægning og ordstyrer for gruppemøder. Vedligeholdelse af Team Taiga. Reserve PO. Kodearbejde til User Story 16. Resolved konflikter og arbejdet med rettelser fra pull request.
   
 Patrick har lavet:
 
@@ -58,5 +59,9 @@ Jeg rettede vores FigJam board til så det indholdte de relevante diagrammer/mod
 
 I sprint 2 var jeg developer og skulle koble dele af backend og frontend sammen. Men grundet problemer med min Docker kunne jeg ikke oprette en database. 
 Christian som var SCM på daværende tidspunkt, overtog derfor mine tasks som dev og jeg overtog hans som SCM for en dag. På den måde sørgede vi for at alle tasks blev taget sig af. 
+
+Ferdinand har lavet: Figma mock-up til US-6  
+
+Ingen test BDD til frontend
 
 ## DevTeamD
