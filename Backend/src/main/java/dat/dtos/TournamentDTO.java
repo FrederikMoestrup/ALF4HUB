@@ -1,5 +1,6 @@
 package dat.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dat.entities.Team;
 import dat.entities.Tournament;
 import dat.entities.TournamentTeam;

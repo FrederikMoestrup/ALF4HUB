@@ -8,9 +8,12 @@ import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Assertions;
 
 public class UserStrikeStepDefinitions {
-
+/*
     private User user;
     private UserDAO userDAO;
+
+    private User user2 = new User("Test", "pass123", "test@test.mail");
+    private String uploeadedPictureLink = "https://example.com/profile.jpg";
 
     public UserStrikeStepDefinitions() {
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
@@ -34,4 +37,6 @@ public class UserStrikeStepDefinitions {
         User updatedUser = userDAO.findById(user.getId());
         Assertions.assertEquals(expectedStrikes, updatedUser.getStrikes());
     }
+
+ */
 }

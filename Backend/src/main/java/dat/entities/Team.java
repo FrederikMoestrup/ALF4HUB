@@ -71,7 +71,7 @@ public class Team {
             }
         }
     }
-
+    //Tilføjer en spiller til teamAccounts-listen
     public void addPlayerAccount(PlayerAccount playerAccount) {
         if (playerAccount != null && !teamAccounts.contains(playerAccount)) {
             teamAccounts.add(playerAccount);
@@ -109,6 +109,15 @@ public class Team {
         }
         tournamentTeams.remove(tournamentTeam);
         tournamentTeam.setTeam(null);
+    }
+
+    public void detachFromAllTournamentTeams() {
+        if (tournamentTeams != null) {
+            for (TournamentTeam tt : new ArrayList<>(tournamentTeams)) {
+                tt.setTeam(null);
+            }
+            tournamentTeams.clear();
+        }
     }
 
 }

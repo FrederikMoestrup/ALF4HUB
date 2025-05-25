@@ -6,6 +6,7 @@ import dat.entities.Team;
 import dat.exceptions.ApiException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -79,6 +80,8 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
                 throw new ApiException(404, "PlayerAccount not found");
             }
             playerAccount.getTeams().size();
+            playerAccount.detachFromAllTeams();
+            playerAccount.detachFromAllTournamentTeams();
             em.remove(playerAccount);
             em.getTransaction().commit();
             return new PlayerAccountDTO(playerAccount);
@@ -107,5 +110,33 @@ public class PlayerAccountDAO implements IDAO<PlayerAccountDTO, Integer> {
             em.getTransaction().commit();
         }
     }
+
+    // Henter Player entity via id. fx. bliver brugt i TeamController metoden acceptPlayerApplication().
+    public PlayerAccount getPlayerAccountEntity(int id) throws ApiException {
+        try (EntityManager em = emf.createEntityManager()) {
+            PlayerAccount player = em.find(PlayerAccount.class, id);
+            if (player == null) throw new ApiException(404, "PlayerAccount not found");
+            return player;
+        }
+    }
+
+
+
+
+
+
+
+//Might work but not sure
+    public List<PlayerAccount> getPlayersByTeamId(int teamId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<PlayerAccount> query = em.createQuery(
+                    "SELECT p FROM Team t JOIN t.teamAccounts p WHERE t.id = :teamId",
+                    PlayerAccount.class
+            );
+            query.setParameter("teamId", teamId);
+            return query.getResultList();
+        }
+    }
+
 
 }

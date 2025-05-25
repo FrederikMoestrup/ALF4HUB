@@ -4,10 +4,13 @@ import dat.config.HibernateConfig;
 import dat.daos.TournamentDAO;
 import dat.dtos.TournamentDTO;
 import dat.exceptions.ApiException;
+import dat.services.OffensiveWordsCheck;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 
 import java.util.List;
+import java.util.Optional;
+
 
 public class TournamentController {
 
@@ -44,10 +47,24 @@ public class TournamentController {
 
     public void create(Context ctx) {
         TournamentDTO tournamentDTO = validateEntity(ctx);
+
+        OffensiveWordsCheck checker = new OffensiveWordsCheck("en_badwords.txt");
+        Optional<String> offensiveWord = checker.findFirstOffensiveWord(tournamentDTO.getTournamentName());
+        if (offensiveWord.isPresent()) {
+            ctx.status(400).result("Tournament name contains offensive word: " + offensiveWord.get());
+            return;
+        }
+
+        if (tournamentDAO.nameExists(tournamentDTO.getTournamentName())) {
+            ctx.status(400).result("Tournament name already exists");
+            return;
+        }
+
         TournamentDTO createdTournamentDTO = tournamentDAO.create(tournamentDTO);
         ctx.res().setStatus(201);
         ctx.json(createdTournamentDTO, TournamentDTO.class);
     }
+
 
     public void update(Context ctx) throws ApiException {
         try {
@@ -91,4 +108,18 @@ public class TournamentController {
                 .check(t -> t.getEndTime() != null && !t.getEndTime().isEmpty(), "End time must be set")
                 .get();
     }
+
+
+   public void getByUserId(Context ctx) throws ApiException {
+       try {
+           int userId = Integer.parseInt(ctx.pathParam("userId"));
+           List<TournamentDTO> tournamentDTOs = tournamentDAO.getTournamentsByUserId(userId);
+           ctx.res().setStatus(200);
+           ctx.json(tournamentDTOs, TournamentDTO.class);
+       } catch (NumberFormatException e) {
+           throw new ApiException(400, "Missing or invalid parameter: userId");
+       } catch (ApiException e) {
+           throw new ApiException(404, "Tournaments not found");
+       }
+   }
 }
