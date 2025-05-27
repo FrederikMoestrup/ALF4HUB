@@ -1,12 +1,12 @@
 Feature: Forum site
 
-Scenario 1: Forum menupunkt vises i navigationen
-Givet at en bruger er på hjemmesiden
-Når brugeren ser menupunkterne
-Så skal menupunktet “Forum” være synlig i navigationen
+Scenario: Forum menu item is visible in the navigation
+  Given the user is on the homepage
+  When the user views the navigation menu
+  Then there should be a visible menu item with the text "Forum"
 
-Scenario 2: Visning af alle blogindlæg
-Givet at en bruger ser et menupunkt “Forum”
-Når brugeren klikker på menupunktet “Forum”
-Så skal brugeren føres til en side med oversigt over eksisterende blogposts
-Og hver blogpost skal vise mindst titel og et kort uddrag
+Scenario: Viewing all blog posts
+  Given the user sees a menu item "Forum"
+  When the user clicks on the "Forum" menu item
+  Then the user should be taken to a page showing an overview of existing blog posts
+  And each blog post should display at least a title and a short preview

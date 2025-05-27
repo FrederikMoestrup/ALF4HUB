@@ -1,12 +1,12 @@
 Feature: See My Drafts
 
-Scenario 1: Knap til kladder vises i Forum siden
-Givet at brugeren befinder sig på Forum siden
-Når siden indlæses
-Så skal der være en synlig knap med teksten “Se mine kladder”
+Scenario: Button to view drafts is shown on the Forum page
+  Given the user is on the Forum page
+  When the page loads
+  Then there should be a visible button with the text "See your drafts"
 
-Scenario 2: Visning af gemte kladder for en bruger
-Givet at brugeren er logget ind og befinder sig på Forum siden
-Når brugeren klikker på knappen  “Se mine kladder”
-Så skal brugeren føres til en side med deres egne gemte kladder
-Og hver kladde skal vise mindst en titel og en oprettelses-/sidst ændret dato
+Scenario: Viewing saved drafts for a user
+  Given the user is logged in and on the Forum page
+  When the user clicks the button "See your drafts"
+  Then the user should be taken to a page with their saved drafts
+  And each draft should display at least a title and a creation or last modified date
