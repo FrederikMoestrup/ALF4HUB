@@ -18,10 +18,8 @@ import {
 
 function Drafts() {
   const [drafts, setDrafts] = useState([]);
-  // const userId = apiFacade.getCurrentUser()?.id;
-  // hardcoded value for test
-  const userId = 1;
-
+  const userId = apiFacade.getCurrentUser()?.id;
+  
   const fetchDrafts = async () => {
     try {
       const response = await fetch(
